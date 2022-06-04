@@ -19,7 +19,7 @@ public class EstorefrontApplication {
 
 	@GetMapping("/error")
 	public String error() {
-		return "Greetings from Spring Boot!";
+		return "Greetings from Heroku!";
 	}
 
 }
