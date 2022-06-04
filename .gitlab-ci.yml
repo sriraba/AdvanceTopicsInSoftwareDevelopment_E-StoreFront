@@ -30,7 +30,7 @@ deploy:
   stage: deploy
   tags: 
     - dalfcs_docker_kvm
-  image: ruby:2.6
+  image: ruby:3.2-rc
   script: 
   - apt-get update -qy
   - apt-get install -y ruby-dev
