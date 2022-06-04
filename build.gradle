@@ -26,3 +26,5 @@ tasks.named('test') {
 jar {
     enabled = false
 }
+
+sourceCompatibility = 1.8
