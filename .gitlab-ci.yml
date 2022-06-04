@@ -24,7 +24,8 @@ build:
 
 deploy:
   stage: deploy
-  tags: dalfcs_gitlab_docker_ci
+  tags: 
+    - dalfcs_gitlab_docker_ci
   image: ruby:2.6
   script: 
   - apt-get update -qy
