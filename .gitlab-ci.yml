@@ -18,7 +18,7 @@ build:
   stage: build
   tags:
     - dalfcs_docker_kvm
-  image: gradle:alpine
+  image: gradle:7.3.3-jdk17-alpine
   script:
   - chmod +x gradlew 
   - ./gradlew assemble --scan
