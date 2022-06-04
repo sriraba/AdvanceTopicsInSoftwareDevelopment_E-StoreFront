@@ -21,7 +21,7 @@ build:
   image: gradle:alpine
   script:
   - chmod +x gradlew 
-  - ./gradlew assemble
+  - ./gradlew assemble --stacktrace
   only:
     refs:
       - branches
