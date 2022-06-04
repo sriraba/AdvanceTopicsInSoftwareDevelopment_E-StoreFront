@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @SpringBootApplication
-public class EStorefrontApplication {
+public class EstorefrontApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(EStorefrontApplication.class, args);
+		SpringApplication.run(EstorefrontApplication.class, args);
 	}
 
 	@GetMapping("/")
