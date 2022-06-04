@@ -12,25 +12,25 @@ test:
     refs:
       - branches
 
-build:
-  stage: build
-  tags:
-    - dalfcs_docker_kvm
-  image: gradle:alpine
-  script: ./gradlew assemble
-  only:
-    refs:
-      - branches
+# build:
+#   stage: build
+#   tags:
+#     - dalfcs_docker_kvm
+#   image: gradle:alpine
+#   script: ./gradlew assemble
+#   only:
+#     refs:
+#       - branches
 
-deploy:
-  stage: deploy
-  tags: 
-    - dalfcs_docker_kvm
-  image: ruby:2.6
-  script: 
-  - apt-get update -qy
-  - apt-get install -y ruby-dev
-  - gem install dp
-  - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
-  only: 
-  - develop
+# deploy:
+#   stage: deploy
+#   tags: 
+#     - dalfcs_docker_kvm
+#   image: ruby:2.6
+#   script: 
+#   - apt-get update -qy
+#   - apt-get install -y ruby-dev
+#   - gem install dp
+#   - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
+#   only: 
+#   - develop
