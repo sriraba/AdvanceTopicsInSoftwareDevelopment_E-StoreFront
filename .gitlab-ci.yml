@@ -7,7 +7,9 @@ test:
   tags:
     - dalfcs_docker_kvm
   image: gradle:alpine
-  script: ./gradlew check
+  script: 
+  - chmod +x gradlew
+  - ./gradlew check
   only:
     refs:
       - branches
