@@ -40,7 +40,7 @@ deploy-int:
   only: 
   - develop
 
-  deploy-prod:
+deploy-prod:
   stage: deploy-prod
   tags: 
     - dalfcs_docker_kvm
