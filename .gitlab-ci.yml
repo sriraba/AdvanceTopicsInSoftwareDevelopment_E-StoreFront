@@ -27,7 +27,7 @@ build:
       - branches
 
 deploy-int:
-  stage: deploy-int
+  stage: deploy
   tags: 
     - dalfcs_docker_kvm
   image: ruby:3.2-rc
@@ -41,7 +41,7 @@ deploy-int:
   - develop
 
 deploy-prod:
-  stage: deploy-prod
+  stage: deploy
   tags: 
     - dalfcs_docker_kvm
   image: ruby:3.2-rc
