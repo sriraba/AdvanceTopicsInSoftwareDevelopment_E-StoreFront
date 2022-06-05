@@ -26,8 +26,22 @@ build:
     refs:
       - branches
 
-deploy:
-  stage: deploy
+deploy-int:
+  stage: deploy-int
+  tags: 
+    - dalfcs_docker_kvm
+  image: ruby:3.2-rc
+  script: 
+  - apt-get update -qy
+  - apt-get install -y ruby-dev
+  - gem install dpl
+  - export PATH=$PATH:/usr/local/bundle/bin
+  - dpl --provider=heroku --app=$HEROKU_APP_NAME_INT --api-key=$HEROKU_API_KEY
+  only: 
+  - develop
+
+  deploy-prod:
+  stage: deploy-prod
   tags: 
     - dalfcs_docker_kvm
   image: ruby:3.2-rc
@@ -38,4 +52,4 @@ deploy:
   - export PATH=$PATH:/usr/local/bundle/bin
   - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
   only: 
-  - develop
+  - main
