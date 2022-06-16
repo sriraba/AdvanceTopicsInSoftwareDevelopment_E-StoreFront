@@ -41,6 +41,4 @@ class NameValidatorTests {
 		assertFalse(nameValidator.validate(validEmail));
 	}
 
-
-
 }
