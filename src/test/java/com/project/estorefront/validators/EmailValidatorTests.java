@@ -26,7 +26,7 @@ class EmailValidatorTests {
 	}
 
 	@Test
-	void testInvalidEmailVariant1() {
+	void testInvalidEmailScenario1() {
 		String validEmail = "hrishipatel99@gmail";
 		IValidator emailValidator = new EmailValidator();
 
@@ -34,7 +34,7 @@ class EmailValidatorTests {
 	}
 
 	@Test
-	void testInvalidEmailVariant2() {
+	void testInvalidEmailScenario2() {
 		String validEmail = "hrishipatel99gmail.com";
 		IValidator emailValidator = new EmailValidator();
 
@@ -42,7 +42,7 @@ class EmailValidatorTests {
 	}
 
 	@Test
-	void testInvalidEmailVariant3() {
+	void testInvalidEmailScenario3() {
 		String validEmail = "@a.com";
 		IValidator emailValidator = new EmailValidator();
 
