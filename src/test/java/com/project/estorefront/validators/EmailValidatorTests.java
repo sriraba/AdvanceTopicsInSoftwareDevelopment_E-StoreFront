@@ -26,27 +26,27 @@ class EmailValidatorTests {
 	}
 
 	@Test
-	void testInvalidEmailScenario1() {
-		String validEmail = "hrishipatel99@gmail";
+	void testInvalidEmailWithInvalidDomain() {
+		String invalidEmail = "hrishipatel99@gmail";
 		IValidator emailValidator = new EmailValidator();
 
-		assertFalse(emailValidator.validate(validEmail));
+		assertFalse(emailValidator.validate(invalidEmail));
 	}
 
 	@Test
-	void testInvalidEmailScenario2() {
-		String validEmail = "hrishipatel99gmail.com";
+	void testInvalidEmailWithoutAt() {
+		String invalidEmail = "hrishipatel99gmail.com";
 		IValidator emailValidator = new EmailValidator();
 
-		assertFalse(emailValidator.validate(validEmail));
+		assertFalse(emailValidator.validate(invalidEmail));
 	}
 
 	@Test
-	void testInvalidEmailScenario3() {
-		String validEmail = "@a.com";
+	void testInvalidEmailWithoutPrefix() {
+		String invalidEmail = "@a.com";
 		IValidator emailValidator = new EmailValidator();
 
-		assertFalse(emailValidator.validate(validEmail));
+		assertFalse(emailValidator.validate(invalidEmail));
 	}
 
 }

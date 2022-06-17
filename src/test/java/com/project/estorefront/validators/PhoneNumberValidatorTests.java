@@ -19,26 +19,26 @@ class PhoneNumberValidatorTests {
 
 	@Test
 	void testValidPhone() {
-		String validEmail = "9029895569";
+		String validPhone = "9029895569";
 		IValidator phoneNumberValidator = new PhoneNumberValidator();
 
-		assertTrue(phoneNumberValidator.validate(validEmail));
+		assertTrue(phoneNumberValidator.validate(validPhone));
 	}
 
 	@Test
-	void testInvalidPhoneScenario1() {
-		String validEmail = "9029895569a";
+	void testInvalidPhoneWithALetter() {
+		String invalidPhone = "9029895569a";
 		IValidator phoneNumberValidator = new PhoneNumberValidator();
 
-		assertFalse(phoneNumberValidator.validate(validEmail));
+		assertFalse(phoneNumberValidator.validate(invalidPhone));
 	}
 
 	@Test
-	void testInvalidPhoneScenario2() {
-		String validEmail = "902989556";
+	void testInvalidPhoneLessThan10Digits() {
+		String invalidPhone = "902989556";
 		IValidator phoneNumberValidator = new PhoneNumberValidator();
 
-		assertFalse(phoneNumberValidator.validate(validEmail));
+		assertFalse(phoneNumberValidator.validate(invalidPhone));
 	}
 
 }

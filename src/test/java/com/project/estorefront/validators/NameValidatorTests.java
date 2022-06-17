@@ -19,26 +19,26 @@ class NameValidatorTests {
 
 	@Test
 	void testValidName() {
-		String validEmail = "hrishi";
+		String validName = "hrishi";
 		IValidator nameValidator = new NameValidator();
 
-		assertTrue(nameValidator.validate(validEmail));
+		assertTrue(nameValidator.validate(validName));
 	}
 
 	@Test
-	void testInvalidNameScenario1() {
-		String validEmail = "hrishi@";
+	void testInvalidNameWithASymbol() {
+		String invalidName = "hrishi@";
 		IValidator nameValidator = new NameValidator();
 
-		assertFalse(nameValidator.validate(validEmail));
+		assertFalse(nameValidator.validate(invalidName));
 	}
 
 	@Test
-	void testInvalidNameScenario2() {
-		String validEmail = "24hrishi";
+	void testInvalidNameWithNumbers() {
+		String invalidName = "24hrishi";
 		IValidator nameValidator = new NameValidator();
 
-		assertFalse(nameValidator.validate(validEmail));
+		assertFalse(nameValidator.validate(invalidName));
 	}
 
 }
