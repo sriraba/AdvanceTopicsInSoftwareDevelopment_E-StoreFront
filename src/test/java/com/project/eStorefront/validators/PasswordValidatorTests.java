@@ -28,25 +28,25 @@ class PasswordValidatorTests {
     @Test
     void testInvalidPasswordWithLessThanEightChars() {
         String invalidPassword = "abs@1";
-        IValidator emailValidator = new EmailValidator();
+        IValidator passwordValidator = new PasswordValidator();
 
-        assertFalse(emailValidator.validate(invalidPassword));
+        assertFalse(passwordValidator.validate(invalidPassword));
     }
 
     @Test
     void testInvalidPasswordWithNoNumber() {
         String invalidPassword = "Aaadsdwewer@";
-        IValidator emailValidator = new EmailValidator();
+        IValidator passwordValidator = new PasswordValidator();
 
-        assertFalse(emailValidator.validate(invalidPassword));
+        assertFalse(passwordValidator.validate(invalidPassword));
     }
 
     @Test
     void testInvalidPasswordWithNoSpecialCharacter() {
         String invalidPassword = "Aaadsdwewer2";
-        IValidator emailValidator = new EmailValidator();
+        IValidator passwordValidator = new PasswordValidator();
 
-        assertFalse(emailValidator.validate(invalidPassword));
+        assertFalse(passwordValidator.validate(invalidPassword));
     }
 
 }
