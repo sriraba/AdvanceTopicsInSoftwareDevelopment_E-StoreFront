@@ -1,4 +1,4 @@
-package com.project.eStorefront.model;
+package com.project.estorefront.model;
 
 /**
  * User interface that defines the methods that a user (seller, buyer) should implement.

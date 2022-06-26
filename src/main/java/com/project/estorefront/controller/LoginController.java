@@ -1,4 +1,4 @@
-package com.project.eStorefront.controller;
+package com.project.estorefront.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
