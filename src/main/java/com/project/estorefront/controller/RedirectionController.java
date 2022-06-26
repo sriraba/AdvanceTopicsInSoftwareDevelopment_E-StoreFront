@@ -1,4 +1,4 @@
-package com.project.eStorefront.controller;
+package com.project.estorefront.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,5 +10,7 @@ public class RedirectionController {
     public String redirectToLogin() {
         return "redirect:/login";
     }
+
+
 
 }

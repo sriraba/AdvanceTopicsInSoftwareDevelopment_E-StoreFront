@@ -1,4 +1,4 @@
-package com.project.eStorefront.controller;
+package com.project.estorefront.controller;
 
 import com.project.eStorefront.validators.EmailValidator;
 import com.project.eStorefront.validators.PasswordValidator;
@@ -21,5 +21,4 @@ public class ValidationController {
             return new ModelAndView("redirect:/login", "error", "Invalid email or password");
         }
     }
-
 }
