@@ -1,4 +1,4 @@
-package com.project.repository;
+package com.project.estorefront.repository;
 
 public interface ISellerPersistence {
 	

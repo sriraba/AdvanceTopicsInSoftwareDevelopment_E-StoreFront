@@ -1,4 +1,4 @@
-package com.project.repository;
+package com.project.estorefront.repository;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,7 +6,11 @@ import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Value;
 
+import javax.annotation.PostConstruct;
+
 public class EstablishDatabaseConnection {
+
+	private static Connection connection;
 
 	@Value("${spring.datasource.driverClassName}")
 	private String driverClassName = "com.mysql.cj.jdbc.Driver";
@@ -20,17 +24,31 @@ public class EstablishDatabaseConnection {
 	@Value("${spring.datasource.password}")
 	private String dataSourcePassword = "uB8c3mUaMW";
 
-	public Connection createDataBaseConnection() {
-		try {
+	@PostConstruct
+	public void init() {
+	createDataBaseConnection();
+	}
 
+	private void createDataBaseConnection() {
+		try {
 			Class.forName(driverClassName);
-			Connection connection = DriverManager.getConnection(dataSourceUrl, dataSourceUsername,
+			connection = DriverManager.getConnection(dataSourceUrl, dataSourceUsername,
 					dataSourcePassword);			
-			return connection;
 		} catch (ClassNotFoundException | SQLException e) {
 			throw new RuntimeException(e);
 		}
+	}
 
+	public String getDataSourceUsername() {
+		return dataSourceUsername;
+	}
+
+	public void closeConnection() {
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }
