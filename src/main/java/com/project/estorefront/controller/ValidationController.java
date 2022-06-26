@@ -20,8 +20,10 @@ public class ValidationController {
 
             if (role.equals("buyer")) {
                 return new ModelAndView("redirect:/buyer");
-            } else {
+            } else if (role.equals("seller")) {
                 return new ModelAndView("redirect:/seller");
+            } else {
+                return new ModelAndView("redirect:/login", "error", "Please select a role");
             }
 
         } else {
