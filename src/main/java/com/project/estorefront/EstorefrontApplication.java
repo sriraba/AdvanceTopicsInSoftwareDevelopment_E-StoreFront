@@ -1,5 +1,6 @@
 package com.project.estorefront;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,9 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 @SpringBootApplication
 public class EstorefrontApplication {
 
+	@Value("${test}")
+	private String environment; // tested and works
 
 	public static void main(String[] args) {
-		SpringApplication.run(EstorefrontApplication.class, args);		
+		SpringApplication.run(EstorefrontApplication.class, args);
 	}
 
 	@GetMapping("/")
