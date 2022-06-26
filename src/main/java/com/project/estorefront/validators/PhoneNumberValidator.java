@@ -1,4 +1,4 @@
-package com.project.eStorefront.validators;
+package com.project.estorefront.validators;
 
 public class PhoneNumberValidator implements IValidator {
     @Override

@@ -1,4 +1,4 @@
-package com.project.eStorefront.model;
+package com.project.estorefront.model;
 
 /**
  * Seller user (Implementation of IUser)
