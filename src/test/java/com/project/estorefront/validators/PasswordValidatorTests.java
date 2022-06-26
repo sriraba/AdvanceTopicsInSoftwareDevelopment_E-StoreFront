@@ -1,4 +1,4 @@
-package com.project.eStorefront.validators;
+package com.project.estorefront.validators;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

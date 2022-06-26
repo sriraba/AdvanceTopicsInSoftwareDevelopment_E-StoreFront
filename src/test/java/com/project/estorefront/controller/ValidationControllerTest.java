@@ -1,4 +1,4 @@
-package com.project.eStorefront.controller;
+package com.project.estorefront.controller;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +33,6 @@ public class ValidationControllerTest {
 
     @Test
     public void testLoginValidEmailPassword() throws Exception {
-        // and submit login button
         this.mockMvc.perform(post("/validate-login").param("email", "asd@asd.com").param("password", "ASDA2@12334d"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
@@ -41,7 +40,6 @@ public class ValidationControllerTest {
 
     @Test
     public void testLoginInvalidEmailValidPassword() throws Exception {
-        // and submit login button
         this.mockMvc.perform(post("/validate-login").param("email", "asd@asd").param("password", "ASDA2@12334d"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login?error=Invalid+email+or+password"));
@@ -49,7 +47,6 @@ public class ValidationControllerTest {
 
     @Test
     public void testLoginValidEmailInvalidPassword() throws Exception {
-        // and submit login button
         this.mockMvc.perform(post("/validate-login").param("email", "asd@asd.com").param("password", "1234"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login?error=Invalid+email+or+password"));

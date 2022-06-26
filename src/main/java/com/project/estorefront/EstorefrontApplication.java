@@ -1,4 +1,4 @@
-package com.project.eStorefront;
+package com.project.estorefront;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -24,4 +24,5 @@ public class EstorefrontApplication {
 	public String error() {
 		return "Greetings from Heroku!";
 	}
+
 }
