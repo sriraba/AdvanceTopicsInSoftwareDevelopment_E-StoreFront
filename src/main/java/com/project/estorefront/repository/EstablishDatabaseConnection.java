@@ -5,12 +5,15 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 
 import javax.annotation.PostConstruct;
 
-public class EstablishDatabaseConnection {
+public class EstablishDatabaseConnection implements CommandLineRunner {
 
 	private static Connection connection;
+	
+	static EstablishDatabaseConnection establishDatabaseConnection = new EstablishDatabaseConnection();
 
 	@Value("${spring.datasource.driverClassName}")
 	private String driverClassName = "com.mysql.cj.jdbc.Driver";
@@ -23,18 +26,27 @@ public class EstablishDatabaseConnection {
 
 	@Value("${spring.datasource.password}")
 	private String dataSourcePassword = "uB8c3mUaMW";
-
+	
+	
+	private EstablishDatabaseConnection() {
+		
+	}
+	
+	public static EstablishDatabaseConnection instance() {
+		 return establishDatabaseConnection;
+	}
+	
 	@PostConstruct
 	public void init() {
 	createDataBaseConnection();
 	}
 
 	private void createDataBaseConnection() {
-		try {
-			Class.forName(driverClassName);
-			connection = DriverManager.getConnection(dataSourceUrl, dataSourceUsername,
-					dataSourcePassword);			
-		} catch (ClassNotFoundException | SQLException e) {
+		try {			
+			Class.forName(getDriverClassName());
+			connection = DriverManager.getConnection(getDataSourceUrl(), getDataSourceUsername(),
+					getDataSourcePassword());			
+		} catch (ClassNotFoundException | SQLException e) {			
 			throw new RuntimeException(e);
 		}
 	}
@@ -43,12 +55,31 @@ public class EstablishDatabaseConnection {
 		return dataSourceUsername;
 	}
 
+	public String getDriverClassName() {
+		return driverClassName;
+	}
+	
+	public String getDataSourceUrl() {
+		return dataSourceUrl;
+	}	
+
+	public String getDataSourcePassword() {
+		return dataSourcePassword;
+	}
+	
 	public void closeConnection() {
 		try {
 			connection.close();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	@Override
+	public void run(String... args) throws Exception {			
+		 EstablishDatabaseConnection db = EstablishDatabaseConnection.instance(); 
+
+		
 	}
 
 }

@@ -1,7 +1,7 @@
 package com.project.estorefront.repository;
 
-public class Database extends EstablishDatabaseConnection implements IBuyerPersistence{
-
+public class Database implements IBuyerPersistence{
+	
 	@Override
 	public void saveBuyer() {
 		// TODO Auto-generated method stub
