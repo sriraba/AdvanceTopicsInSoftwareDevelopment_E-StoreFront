@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+</head>
+<body>
+<!-- start of registration-->
+<form th:action="@{/validate-register}" method="POST">
+    <table>
+        <tr>
+            <td>First Name:</td>
+            <td><input type=”text”  name="firstName"></td>
+        </tr>
+        <tr>
+            <td>Last Name:</td>
+            <td><input type=”text”  name="lastName"></td>
+        </tr>
+
+        <tr>
+            <td>Email Address:</td>
+            <td><input type=”mail”  placeholder=”Email” name="email"></td>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td><input type=”Password” placeholder=”Password” name="password"></td>
+        </tr>
+        <tr>
+            <td>Confirm Password:</td>
+            <td><input type=”Password” placeholder=”Password” name="confirmPassword"></td>
+        </tr>
+        <tr>
+            <td>Contact:</td>
+            <td><input type=”tel” placeholder=”Number” name="contact"></td>
+        </tr>
+       <tr>
+            <td>
+                <label for="seller">Seller</label>
+                <input type="radio" name="role" id="seller" value=seller"">
+                <label for="buyer">Buyer</label>
+                <input type="radio" name="role" id="buyer" value="buyer">
+            </td>
+        </tr>
+        <tr>
+            <td>City:</td>
+            <td><input type=”text” placeholder=”City” name="city"></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Register"></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
