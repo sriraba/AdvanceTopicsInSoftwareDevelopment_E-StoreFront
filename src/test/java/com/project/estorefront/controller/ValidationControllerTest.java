@@ -52,8 +52,6 @@ public class ValidationControllerTest {
                 .andExpect(redirectedUrl("/login?error=Invalid+email+or+password"));
     }
 
-    //Firstname and Lastname
-    // FirstName = Empty, //LastName = NULL
     @Test
     public void testRegistrationFirstNameIsEmptyAndLastNameIsNull() throws Exception {
         this.mockMvc.perform(post("/validate-register").param("firstName","").param("lastName" ,null))
@@ -61,7 +59,6 @@ public class ValidationControllerTest {
                 .andExpect(redirectedUrl(""));
     }
 
-    //FirstName = Null, LastName = Empty
     @Test
     public void testRegistrationFirstNameIsNullAndLastNameIsEmpty() throws Exception {
         this.mockMvc.perform(post("/validate-register").param("First Name",null).param("Last Name" ,""))
@@ -69,8 +66,6 @@ public class ValidationControllerTest {
                 .andExpect(redirectedUrl(""));
     }
 
-
-    //FirstName = Empty, LastName = Empty
     @Test
     public void testRegistrationFirstNameAndLastNameIsEmpty() throws Exception {
         this.mockMvc.perform(post("/validate-register").param("First Name","").param("Last Name" ,""))
@@ -78,15 +73,12 @@ public class ValidationControllerTest {
                 .andExpect(redirectedUrl(""));
     }
 
-    //FirstName = Null, LastName = Null
     @Test
     public void testRegistrationFirstNameAndLastNameIsNull() throws Exception {
         this.mockMvc.perform(post("/validate-register").param("First Name",null).param("Last Name" ,null))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(""));
     }
-
-    //Email and Password
 
     @Test
     public void testRegisterValidEmailPassword() throws Exception {
@@ -109,7 +101,6 @@ public class ValidationControllerTest {
                 .andExpect(redirectedUrl(""));
     }
 
-    //City
     @Test
     public void testResgisterCityIsNull() throws Exception {
         this.mockMvc.perform(post("validate-register").param("city", null))
