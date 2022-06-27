@@ -52,4 +52,74 @@ public class ValidationControllerTest {
                 .andExpect(redirectedUrl("/login?error=Invalid+email+or+password"));
     }
 
+    //Firstname and Lastname
+    // FirstName = Empty, //LastName = NULL
+    @Test
+    public void testRegistrationFirstNameIsEmptyAndLastNameIsNull() throws Exception {
+        this.mockMvc.perform(post("/validate-register").param("firstName","").param("lastName" ,null))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(""));
+    }
+
+    //FirstName = Null, LastName = Empty
+    @Test
+    public void testRegistrationFirstNameIsNullAndLastNameIsEmpty() throws Exception {
+        this.mockMvc.perform(post("/validate-register").param("First Name",null).param("Last Name" ,""))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(""));
+    }
+
+
+    //FirstName = Empty, LastName = Empty
+    @Test
+    public void testRegistrationFirstNameAndLastNameIsEmpty() throws Exception {
+        this.mockMvc.perform(post("/validate-register").param("First Name","").param("Last Name" ,""))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(""));
+    }
+
+    //FirstName = Null, LastName = Null
+    @Test
+    public void testRegistrationFirstNameAndLastNameIsNull() throws Exception {
+        this.mockMvc.perform(post("/validate-register").param("First Name",null).param("Last Name" ,null))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(""));
+    }
+
+    //Email and Password
+
+    @Test
+    public void testRegisterValidEmailPassword() throws Exception {
+        this.mockMvc.perform(post("/validate-register").param("email", "asd@asd.com").param("password", "ASDA2@12334d"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(""));
+    }
+
+    @Test
+    public void testRegisterInvalidEmailValidPassword() throws Exception {
+        this.mockMvc.perform(post("/validate-register").param("email", "asd@asd").param("password", "ASDA2@12334d"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(""));
+    }
+
+    @Test
+    public void testRegisterValidEmailInvalidPassword() throws Exception {
+        this.mockMvc.perform(post("/validate-register").param("email", "asd@asd.com").param("password", "1234"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(""));
+    }
+
+    //City
+    @Test
+    public void testResgisterCityIsNull() throws Exception {
+        this.mockMvc.perform(post("validate-register").param("city", null))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(""));
+    }
+    @Test
+    public void testResgisterCityIsEmpty() throws Exception {
+        this.mockMvc.perform(post("validate-register").param("city", ""))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(""));
+    }
 }

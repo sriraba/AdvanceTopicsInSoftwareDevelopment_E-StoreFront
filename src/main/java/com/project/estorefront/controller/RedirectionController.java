@@ -10,7 +10,4 @@ public class RedirectionController {
     public String redirectToLogin() {
         return "redirect:/login";
     }
-
-
-
 }
