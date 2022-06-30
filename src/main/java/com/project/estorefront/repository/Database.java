@@ -22,6 +22,10 @@ public class Database {
 
 	private static String dataSourceUrl;
 
+	public static String getDriverClassName() {
+		return driverClassName;
+	}
+
 	private static String dataSourceUsername ;
 
 	private static String dataSourcePassword;
@@ -51,6 +55,16 @@ public class Database {
 			connection = DriverManager.getConnection(dataSourceUrl, dataSourceUsername,
 					dataSourcePassword);
 		} catch (ClassNotFoundException | SQLException e) {			
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static void createDataUtilConnection() {
+		try {
+			Class.forName(driverClassName);
+			connection = DriverManager.getConnection(dataSourceUrl, dataSourceUsername,
+					dataSourcePassword);
+		} catch (ClassNotFoundException | SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}
