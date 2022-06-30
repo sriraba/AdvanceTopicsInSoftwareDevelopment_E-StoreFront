@@ -62,7 +62,7 @@ public class Database {
 		return connection;
 	}
 
-	public static void closeConnection() {
+	private void closeConnection() {
 		try {
 			connection.close();
 		} catch (SQLException e) {
