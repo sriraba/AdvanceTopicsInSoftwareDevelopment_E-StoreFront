@@ -1,7 +1,5 @@
 package com.project.estorefront;
 
-import com.project.estorefront.repository.Authentication;
-import com.project.estorefront.repository.IAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -20,7 +18,9 @@ public class EstorefrontApplication  implements CommandLineRunner {
 	@Autowired
 	Database database;
 
-	public static void main(String[] args) {SpringApplication.run(EstorefrontApplication.class, args);}
+	public static void main(String[] args) {
+		SpringApplication.run(EstorefrontApplication.class, args);
+	}
 
 	@GetMapping("/")
 	public String index() {

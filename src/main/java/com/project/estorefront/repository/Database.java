@@ -58,22 +58,11 @@ public class Database {
 			throw new RuntimeException(e);
 		}
 	}
-
-	private static void createDataUtilConnection() {
-		try {
-			Class.forName(driverClassName);
-			connection = DriverManager.getConnection(dataSourceUrl, dataSourceUsername,
-					dataSourcePassword);
-		} catch (ClassNotFoundException | SQLException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	public static Connection getConnection() {
 		return connection;
 	}
 
-	private void closeConnection() {
+	public static void closeConnection() {
 		try {
 			connection.close();
 		} catch (SQLException e) {

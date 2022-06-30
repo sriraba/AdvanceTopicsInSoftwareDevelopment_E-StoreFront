@@ -10,15 +10,9 @@ package com.project.estorefront.model;
 
 public class Buyer extends User {
 
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String address;
-    private String phone;
-    private String password;
 
-    public Buyer(String firstName, String lastName, String email, String address, String phone, String password) {
-        super(firstName, lastName, email, address, phone, password);
+    public Buyer(String firstName, String lastName, String email, String address, String phone, String password, String city, String isSeller) {
+        super(firstName, lastName, email, address, phone, password, city, isSeller);
     }
 
     @Override
