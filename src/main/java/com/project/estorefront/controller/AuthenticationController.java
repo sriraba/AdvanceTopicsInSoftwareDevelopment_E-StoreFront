@@ -5,12 +5,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class LoginController {
+public class AuthenticationController {
 
     @GetMapping("/login")
     public String login(Model model) {
         model.addAttribute("title", "Login");
         return "login-page";
+    }
+
+    @GetMapping("/register")
+    public String register()
+    {
+        return "register-page";
     }
 
 }
