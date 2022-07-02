@@ -22,10 +22,6 @@ public class Database {
 
 	private static String dataSourceUrl;
 
-	public static String getDriverClassName() {
-		return driverClassName;
-	}
-
 	private static String dataSourceUsername ;
 
 	private static String dataSourcePassword;
@@ -58,6 +54,7 @@ public class Database {
 			throw new RuntimeException(e);
 		}
 	}
+
 	public static Connection getConnection() {
 		return connection;
 	}
