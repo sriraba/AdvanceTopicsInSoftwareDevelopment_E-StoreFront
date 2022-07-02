@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Coupons</h2><br>
+<button>Add Coupon</button>
+<table>
+    <tr>
+        <th>#</th>
+        <th>Coupon Name</th>
+        <th>Details</th>
+    </tr>
+    <tr th:each="coupon : ${coupons}">
+        <td th:text="${coupon.getCouponID()}"></td>
+        <td th:text="${coupon.getName()}"></td>
+        <td>Details</td>
+    </tr>
+</table>
+</body>
+</html>

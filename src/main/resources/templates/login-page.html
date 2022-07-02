@@ -1,11 +1,11 @@
 <!DOCTYPE html>
+
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-<!-- form with email and password -->
     <form th:action="@{/validate-login}" method="post">
         <label for="email">Email:</label>
         <input type="email" name="email" id="email">
@@ -16,7 +16,7 @@
         <input type="radio" name="role" id="seller" value="seller">
         <label for="buyer">Buyer</label>
         <input type="radio" name="role" id="buyer" value="buyer">
-        <a href="@{/register}">Register</a>
+        <a th:href="@{/register}">Register</a>
     </form>
 </body>
 </html>

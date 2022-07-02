@@ -8,22 +8,11 @@ package com.project.estorefront.model;
  * @since   15-06-2022
  */
 
-public class Buyer implements IUser {
+public class Buyer extends User {
 
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String address;
-    private String phone;
-    private String password;
 
-    public Buyer(String firstName, String lastName, String email, String address, String phone, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.address = address;
-        this.phone = phone;
-        this.password = password;
+    public Buyer(String firstName, String lastName, String email, String address, String phone, String password, String city, String isSeller) {
+        super(firstName, lastName, email, address, phone, password, city, isSeller);
     }
 
     @Override
