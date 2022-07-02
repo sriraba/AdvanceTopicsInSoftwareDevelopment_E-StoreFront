@@ -10,7 +10,7 @@ package com.project.estorefront.model;
 
 public class Seller extends User {
 
-    public Seller(String firstName, String lastName, String email, String address, String phone, String password, String city, String isSeller) {
+    public Seller(String firstName, String lastName, String email, String address, String phone, String password, String city, boolean isSeller) {
         super(firstName, lastName, email, address, phone, password, city, isSeller);
     }
 
