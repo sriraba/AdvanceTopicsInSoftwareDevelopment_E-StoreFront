@@ -2,6 +2,7 @@ package com.project.estorefront.model;
 
 public abstract class User {
 
+    private String userID;
     private String firstName;
     private String lastName;
     private String email;
@@ -9,9 +10,9 @@ public abstract class User {
     private String city;
     private String phone;
     private String password;
-    private String isSeller;
+    private boolean isSeller;
 
-    public User(String firstName, String lastName, String email, String address, String phone, String password, String city, String isSeller) {
+    public User(String firstName, String lastName, String email, String address, String phone, String password, String city, boolean isSeller) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -20,6 +21,14 @@ public abstract class User {
         this.password = password;
         this.city = city;
         this.isSeller = isSeller;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
     public String getFirstName() {
@@ -86,11 +95,11 @@ public abstract class User {
 
     }
 
-    public String getIsSeller() {
+    public boolean getIsSeller() {
         return isSeller;
     }
 
-    public void setIsSeller(String isSeller) {
+    public void setIsSeller(boolean isSeller) {
         this.isSeller = isSeller;
     }
 }

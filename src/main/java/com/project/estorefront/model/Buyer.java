@@ -11,7 +11,7 @@ package com.project.estorefront.model;
 public class Buyer extends User {
 
 
-    public Buyer(String firstName, String lastName, String email, String address, String phone, String password, String city, String isSeller) {
+    public Buyer(String firstName, String lastName, String email, String address, String phone, String password, String city, boolean isSeller) {
         super(firstName, lastName, email, address, phone, password, city, isSeller);
     }
 
