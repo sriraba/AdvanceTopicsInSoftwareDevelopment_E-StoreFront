@@ -1,5 +1,7 @@
 package com.project.estorefront.validators;
 
+import com.project.estorefront.model.validators.IValidator;
+import com.project.estorefront.model.validators.PasswordValidator;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
