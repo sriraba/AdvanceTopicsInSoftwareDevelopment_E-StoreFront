@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+</head>
+<body>
+<form th:action="@{/seller/items/create}" method="POST">
+    <table>
+        <h1>Add Item</h1>
+        <tr>
+            <td>Item Name:</td>
+            <td><input type=”text” name="itemName"></td>
+        </tr>
+        <tr>
+            <td>Item Description:</td>
+            <td><input type=”text” name="description"></td>
+        </tr>
+        <tr>
+            <td>Item Price:</td>
+            <td><input type=”text” name="price"></td>
+        </tr>
+        <tr>
+            <td>Item Quantity:</td>
+            <td><input type=”text” name="quantity"></td>
+        </tr>
+        <tr>
+            <td>Category:</td>
+            <td>
+                <select name="category" id="category">
+                    <option value="GROCERY">Grocery</option>
+                    <option value="RESTAURANT">Restaurant</option>
+                    <option value="LIQUOR">Liquor</option>
+                    <option value="ELECTRONICS">Electronics</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Register"></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
