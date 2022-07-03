@@ -16,6 +16,19 @@ public class InventoryItem implements IInventoryItem {
     private Double itemPrice;
     private Integer itemQuantity;
 
+    public InventoryItem(String userID, ItemCategory itemCategory, String itemName, String itemDescription, Double itemPrice, Integer itemQuantity) {
+        this.itemID = UUID.randomUUID().toString();
+        this.userID = userID;
+        this.itemCategory = itemCategory;
+        this.itemName = itemName;
+        this.itemDescription = itemDescription;
+        this.itemPrice = itemPrice;
+        this.itemQuantity = itemQuantity;
+    }
+
+    public InventoryItem() {
+    }
+
     @Override
     public String generateItemID() {
         return UUID.randomUUID().toString();

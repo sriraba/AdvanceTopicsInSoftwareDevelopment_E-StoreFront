@@ -9,8 +9,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.UUID;
 
-class InventoryItemPersistence implements IInventoryItemPersistence {
+public class InventoryItemPersistence implements IInventoryItemPersistence {
 
     private Connection connection;
 
@@ -22,6 +23,7 @@ class InventoryItemPersistence implements IInventoryItemPersistence {
     public boolean save(IInventoryItem item) {
         Connection connection = Database.getConnection();
         PreparedStatement preparedStatement = null;
+        item.setItemID(UUID.randomUUID().toString());
         try {
             preparedStatement = connection.prepareStatement("INSERT INTO seller_inventory (item_id, user_id, category_id, quantity, price, item_name, item_description) VALUES (?, ?, ?, ?, ?, ?, ?)");
             preparedStatement.setString(1, item.getItemID());

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html  xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Registration</title>
 </head>
 <body>
-<form th:action="@{/validate-register}" method="POST">
+<form th:action="@{/seller/items/create}" method="POST">
     <table>
         <h1>Add Item</h1>
         <tr>
@@ -23,6 +23,17 @@
         <tr>
             <td>Item Quantity:</td>
             <td><input type=”text” name="quantity"></td>
+        </tr>
+        <tr>
+            <td>Category:</td>
+            <td>
+                <select name="category" id="category">
+                    <option value="GROCERY">Grocery</option>
+                    <option value="RESTAURANT">Restaurant</option>
+                    <option value="LIQUOR">Liquor</option>
+                    <option value="ELECTRONICS">Electronics</option>
+                </select>
+            </td>
         </tr>
         <tr>
             <td><input type="submit" value="Register"></td>
