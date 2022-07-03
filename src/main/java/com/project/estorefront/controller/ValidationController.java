@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class ValidationController {
 
     @PostMapping("/validate-login")
-    public ModelAndView validateLogin(@RequestParam("email") String email, @RequestParam("password") String password, @RequestParam("role") String role) {
+    public ModelAndView validateLogin(@RequestParam("email") String email, @RequestParam("password") String password, @RequestParam("role") String role, HttpSession session) {
         EmailValidator emailValidator = new EmailValidator();
         PasswordValidator passwordValidator = new PasswordValidator();
 
@@ -30,6 +30,10 @@ public class ValidationController {
 
             IAuthentication authentication = new Authentication();
             Integer userID = authentication.login(email, password);
+
+            session.setAttribute("userID", userID);
+            session.setAttribute("role", role);
+
             if (userID == null) {
                 return new ModelAndView("login-page", "error", "Wrong email or password");
             } else {
@@ -95,6 +99,7 @@ public class ValidationController {
             Integer userID = authentication.register(user);
             System.out.println(userID);
             session.setAttribute("userID", userID);
+            session.setAttribute("role", role);
 
             if (role.contains("buyer") && userID != null) {
                 return new ModelAndView("redirect:/buyer");
