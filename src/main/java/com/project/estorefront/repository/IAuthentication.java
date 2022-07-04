@@ -1,8 +1,10 @@
 package com.project.estorefront.repository;
 
+import com.project.estorefront.model.InventoryItem;
 import com.project.estorefront.model.User;
 
 public interface IAuthentication {
-	Integer login(String email, String password);
-	Integer register(User user);
+    Integer login(String email, String password);
+
+    Integer register(User user);
 }
