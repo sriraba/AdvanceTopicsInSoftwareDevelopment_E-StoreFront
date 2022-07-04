@@ -14,64 +14,63 @@ import javax.annotation.PreDestroy;
 @Component
 public class Database {
 
-	private static Connection connection;
-	
-	private static Database establishDatabaseConnection = new Database();
+    private static Connection connection;
 
-	private static String driverClassName;
+    private static Database establishDatabaseConnection = new Database();
 
-	private static String dataSourceUrl;
+    private static final String driverClassName = "com.mysql.jdbc.Driver";
 
-	public static String getDriverClassName() {
-		return driverClassName;
-	}
+    private static String dataSourceUrl;
 
-	private static String dataSourceUsername ;
+    public static String getDriverClassName() {
+        return driverClassName;
+    }
 
-	private static String dataSourcePassword;
+    private static String dataSourceUsername;
 
-	@Autowired
-	public Database(@Value("${spring.datasource.driverClassName}") String driverClassName,
-					@Value("${spring.datasource.url}") String dataSourceUrl,
-					@Value("${spring.datasource.username}") String dataSourceUsername,
-					@Value("${spring.datasource.password}") String dataSourcePassword) {
-		this.driverClassName = driverClassName;
-		this.dataSourceUrl = dataSourceUrl;
-		this.dataSourceUsername = dataSourceUsername;
-		this.dataSourcePassword = dataSourcePassword;
-	}
+    private static String dataSourcePassword;
 
-	public Database() {
-	}
-	
-	@PostConstruct
-	public static void init() {
-		createDataBaseConnection();
-	}
+    @Autowired
+    public Database(
+            @Value("${spring.datasource.url}") String dataSourceUrl,
+            @Value("${spring.datasource.username}") String dataSourceUsername,
+            @Value("${spring.datasource.password}") String dataSourcePassword) {
+        this.dataSourceUrl = dataSourceUrl;
+        this.dataSourceUsername = dataSourceUsername;
+        this.dataSourcePassword = dataSourcePassword;
+    }
 
-	private static void createDataBaseConnection() {
-		try {
-			Class.forName(driverClassName);
-			connection = DriverManager.getConnection(dataSourceUrl, dataSourceUsername,
-					dataSourcePassword);
-		} catch (ClassNotFoundException | SQLException e) {			
-			throw new RuntimeException(e);
-		}
-	}
-	public static Connection getConnection() {
-		return connection;
-	}
+    public Database() {
+    }
 
-	private void closeConnection() {
-		try {
-			connection.close();
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    @PostConstruct
+    public static void init() {
+        createDataBaseConnection();
+    }
 
-	@PreDestroy
-	public void destroy() {
-		this.closeConnection();
-	}
+    private static void createDataBaseConnection() {
+        try {
+            connection = DriverManager.getConnection(dataSourceUrl, dataSourceUsername,
+                    dataSourcePassword);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Connection getConnection() {
+        return connection;
+    }
+
+    private void closeConnection() {
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PreDestroy
+    public void destroy() {
+        this.closeConnection();
+    }
 }
