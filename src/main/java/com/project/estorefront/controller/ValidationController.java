@@ -29,12 +29,12 @@ public class ValidationController {
         if (emailValidator.validate(email) && passwordValidator.validate(password)) {
 
             IAuthentication authentication = new Authentication();
-            Integer userID = authentication.login(email, password);
+            String userID = authentication.login(email, password);
 
             session.setAttribute("userID", userID);
             session.setAttribute("role", role);
 
-            if (userID == null) {
+            if (userID== null || userID.isEmpty()) {
                 return new ModelAndView("login-page", "error", "Wrong email or password");
             } else {
                 if (role.contains("buyer")) {
@@ -96,7 +96,7 @@ public class ValidationController {
 
             System.out.println(role);
 
-            Integer userID = authentication.register(user);
+            String userID = authentication.register(user);
             System.out.println(userID);
             session.setAttribute("userID", userID);
             session.setAttribute("role", role);
