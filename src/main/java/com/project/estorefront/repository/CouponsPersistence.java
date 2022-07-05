@@ -2,12 +2,9 @@ package com.project.estorefront.repository;
 
 import com.project.estorefront.model.Coupon;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Connection;
 
 public class CouponsPersistence implements ICouponsPersistence{
 
@@ -19,6 +16,22 @@ public class CouponsPersistence implements ICouponsPersistence{
     }
     @Override
     public void saveCoupon(Coupon coupon) {
+
+        try {
+
+            String query = "insert into coupons values (?,?,?,?,?)" ;
+
+            PreparedStatement preparedStmt = connection.prepareStatement(query);
+            preparedStmt.setInt(1, coupon.getCouponID());
+            preparedStmt.setInt(2, 1);
+            preparedStmt.setString(3, coupon.getName());
+            preparedStmt.setString(4, Double.toString(coupon.getMaxAmount()));
+            preparedStmt.setString(5, Double.toString(coupon.getPercent()));
+            preparedStmt.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
