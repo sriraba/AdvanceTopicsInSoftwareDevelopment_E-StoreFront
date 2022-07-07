@@ -4,9 +4,7 @@ import com.project.estorefront.model.Coupon;
 import com.project.estorefront.repository.CouponsPersistence;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class CouponsController {
@@ -33,5 +31,14 @@ public class CouponsController {
         persistenceObj.saveCoupon(coupon);
 
         return "redirect:/coupons";
+    }
+
+    @RequestMapping(value= "/coupons/view/{id}", method = RequestMethod.GET)
+    public String view_details(@PathVariable("id") int id, Model model ) {
+
+        CouponsPersistence persistenceObj = new CouponsPersistence();
+        model.addAttribute("coupon", persistenceObj.getCouponById(id));
+
+        return  "coupon-detail";
     }
 }
