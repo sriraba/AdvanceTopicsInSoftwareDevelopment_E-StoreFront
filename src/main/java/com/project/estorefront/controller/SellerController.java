@@ -1,15 +1,15 @@
 package com.project.estorefront.controller;
 
-import com.project.estorefront.model.IInventoryItem;
-import com.project.estorefront.model.InventoryItem;
-import com.project.estorefront.model.ItemCategory;
+import com.project.estorefront.model.*;
 import com.project.estorefront.repository.IInventoryItemPersistence;
 import com.project.estorefront.repository.InventoryItemPersistence;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
@@ -19,6 +19,7 @@ import java.util.ArrayList;
 public class SellerController {
 
     private String mockUserID;
+
     public SellerController() {
         mockUserID = "1";
     }
@@ -34,10 +35,9 @@ public class SellerController {
 
         String userID = (String) session.getAttribute("userID");
 
-        //TODO: Once seller dashboard is created, update 1 param to userID
+        // TODO: Once seller dashboard is created, update 1 param to userID
         ArrayList<IInventoryItem> all = inventoryItemPersistence.getAll(mockUserID);
         model.addAttribute("items", all);
-
 
         return "seller-items";
     }
@@ -48,19 +48,44 @@ public class SellerController {
     }
 
     @PostMapping("/seller/items/create")
-    public String createSellerItem(@RequestParam("itemName") String itemName, @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory, @RequestParam("quantity") int itemQuantity, @RequestParam("price") double itemPrice, HttpSession session) throws SQLException {
+    public String createSellerItem(@RequestParam("itemName") String itemName,
+            @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
+            @RequestParam("quantity") int itemQuantity, @RequestParam("price") double itemPrice, HttpSession session)
+            throws SQLException {
         String userID = (String) session.getAttribute("userID");
 
-        //TODO: Once seller dashboard is created, update 1 param to userID
-        IInventoryItem item = new InventoryItem(mockUserID, ItemCategory.valueOf(itemCategory), itemName, itemDescription, itemPrice, itemQuantity);
+        // TODO: Once seller dashboard is created, update 1 param to userID
+        IInventoryItem item = new InventoryItem(mockUserID, ItemCategory.valueOf(itemCategory), itemName,
+                itemDescription, itemPrice, itemQuantity);
         item.save(new InventoryItemPersistence());
 
         return "seller-items-add";
     }
 
+    @GetMapping("/seller/orders/view/{userID}")
+    public ModelAndView sellerOrdersView(@PathVariable String userID) {
+        ISellerOrderManagement sellerOrder = new OrderDetails();
+        return new ModelAndView("seller-orders", "orders", sellerOrder.getSellerOrders(userID));
+    }
+
+    @GetMapping("/seller/orders/current/{userID}")
+    public String sellerCurrentOrderView(@PathVariable String userID) {
+        ISellerOrderManagement sellerOrder = new OrderDetails();
+        return "view-selected-order";
+    }
+
+    @GetMapping("/seller/orders/previous/{userID}")
+    public String sellerPreviousOrderView(@PathVariable String userID) {
+        ISellerOrderManagement sellerOrder = new OrderDetails();
+        return "view-selected-order";
+    }
+
     @PostMapping("/seller/items/update")
-    public String updateSellerItem(@RequestParam("itemName") String itemName, @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory, @RequestParam("quantity") int itemQuantity, @RequestParam("price") double itemPrice, HttpSession session) throws SQLException {
-        //TODO: To be implemented
+    public String updateSellerItem(@RequestParam("itemName") String itemName,
+            @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
+            @RequestParam("quantity") int itemQuantity, @RequestParam("price") double itemPrice, HttpSession session)
+            throws SQLException {
+        // TODO: To be implemented
         return "seller-items-update";
     }
 
@@ -72,6 +97,5 @@ public class SellerController {
         inventoryItemPersistence.delete(item);
         return "seller-items";
     }
-
 
 }

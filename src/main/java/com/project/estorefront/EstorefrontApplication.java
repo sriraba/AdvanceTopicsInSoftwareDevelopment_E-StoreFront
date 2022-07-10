@@ -12,9 +12,6 @@ import com.project.estorefront.repository.Database;
 @SpringBootApplication
 public class EstorefrontApplication  implements CommandLineRunner {
 
-	@Value("${test}")
-	private String environment; // tested and works
-
 	@Autowired
 	Database database;
 
