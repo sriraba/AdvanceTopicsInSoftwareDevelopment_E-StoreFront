@@ -72,6 +72,30 @@ public class CouponsPersistence implements ICouponsPersistence{
 
     @Override
     public Coupon getCouponById(int id) {
-        return null;
+        Coupon coupon = null;
+
+        Statement stmt = null;
+        try {
+            stmt = connection.createStatement();
+
+            String query = "select * from coupons where coupon_id="+id + ";" ;
+            ResultSet rs = stmt.executeQuery(query) ;
+
+            while(rs.next())
+            {
+                int coupon_id = rs.getInt("coupon_id");
+                String name = rs.getString("name");
+                double max_amt = Double.parseDouble(rs.getString("max_amt"));
+                double percent = Double.parseDouble(rs.getString("percent"));
+
+                coupon = new Coupon(coupon_id, name, max_amt, percent);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return coupon;
     }
 }
