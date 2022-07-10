@@ -31,7 +31,7 @@ public class ValidationController {
             IAuthentication authentication = new Authentication();
             Integer userID = authentication.login(email, password);
 
-            session.setAttribute("userID", userID);
+            session.setAttribute("userID", userID.toString());
             session.setAttribute("role", role);
 
             if (userID == null) {
@@ -98,7 +98,7 @@ public class ValidationController {
 
             Integer userID = authentication.register(user);
             System.out.println(userID);
-            session.setAttribute("userID", userID);
+            session.setAttribute("userID", userID.toString());
             session.setAttribute("role", role);
 
             if (role.contains("buyer") && userID != null) {
