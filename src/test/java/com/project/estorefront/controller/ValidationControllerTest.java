@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 // referred from https://github.com/eea/thymeleaf-test/blob/master/src/test/java/eea/eprtr/controller/UserControllerTest.java
+// TODO: Wait for discussion on how to test controllers
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -35,7 +36,7 @@ public class ValidationControllerTest {
 
     @Test
     public void testLoginValidEmailPassword() throws Exception {
-        this.mockMvc.perform(post("/validate-login").param("email", "asd@asd.com").param("password", "ASDA2@12334d").param("role", "buyer"))
+        this.mockMvc.perform(post("/validate-login").param("email", "hrishipatel99doesntexist@gmail.com").param("password", "Test1234@asdasd").param("role", "buyer"))
                 .andExpect(status().isOk());
     }
 
