@@ -31,12 +31,11 @@ public class ValidationController {
             IAuthentication authentication = new Authentication();
             String userID = authentication.login(email, password);
 
-            session.setAttribute("userID", userID);
-            session.setAttribute("role", role);
-
-            if (userID== null || userID.isEmpty()) {
+            if (userID == null || userID.isEmpty()) {
                 return new ModelAndView("login-page", "error", "Wrong email or password");
             } else {
+                session.setAttribute("userID", userID.toString());
+                session.setAttribute("role", role);
                 if (role.contains("buyer")) {
                     return new ModelAndView("redirect:/buyer");
                 } else if (role.contains("seller")) {
@@ -98,7 +97,7 @@ public class ValidationController {
 
             String userID = authentication.register(user);
             System.out.println(userID);
-            session.setAttribute("userID", userID);
+            session.setAttribute("userID", userID.toString());
             session.setAttribute("role", role);
 
             if (role.contains("buyer") && userID != null) {
