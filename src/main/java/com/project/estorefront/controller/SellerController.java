@@ -65,19 +65,20 @@ public class SellerController {
     @GetMapping("/seller/orders/view/{userID}")
     public ModelAndView sellerOrdersView(@PathVariable String userID) {
         ISellerOrderManagement sellerOrder = new OrderDetails();
-        return new ModelAndView("seller-orders", "orders", sellerOrder.getSellerOrders(userID));
+        return new ModelAndView("seller-orders","orders", sellerOrder.getSellerOrders(userID));
+
     }
 
-    @GetMapping("/seller/orders/current/{userID}")
-    public String sellerCurrentOrderView(@PathVariable String userID) {
+    @GetMapping("/seller/orders/current/{orderID}")
+    public ModelAndView sellerCurrentOrderView(@PathVariable String orderID){
         ISellerOrderManagement sellerOrder = new OrderDetails();
-        return "view-selected-order";
-    }
+        return new ModelAndView("view-selected-order","order", sellerOrder.getOrderAndItemDetails(orderID));
 
-    @GetMapping("/seller/orders/previous/{userID}")
-    public String sellerPreviousOrderView(@PathVariable String userID) {
+    }
+    @GetMapping("/seller/orders/previous/{orderID}")
+    public ModelAndView sellerPreviousOrderView(@PathVariable String orderID) {
         ISellerOrderManagement sellerOrder = new OrderDetails();
-        return "view-selected-order";
+        return new ModelAndView("view-selected-order","order", sellerOrder.getOrderAndItemDetails(orderID));
     }
 
     @PostMapping("/seller/items/update")
