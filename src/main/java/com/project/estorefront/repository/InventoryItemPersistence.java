@@ -102,7 +102,7 @@ public class InventoryItemPersistence implements IInventoryItemPersistence {
             return inventoryItems;
         } catch (SQLException e) {
             e.printStackTrace();
-            return inventoryItems;
+            return null;
         }
     }
 }

@@ -19,6 +19,16 @@ public class OrderDetails implements ISellerOrderManagement{
     private String deliveryAddress;
     private String pincode;
 
+    private ArrayList<ItemDetails> itemDetails;
+
+    public ArrayList<ItemDetails> getItemDetails() {
+        return itemDetails;
+    }
+
+    public void setItemDetails(ArrayList<ItemDetails> itemDetails) {
+        this.itemDetails = itemDetails;
+    }
+
     public String getOrderID() {
         return orderID;
     }
@@ -90,7 +100,7 @@ public class OrderDetails implements ISellerOrderManagement{
     public void setPincode(String pincode) {
         this.pincode = pincode;
     }
-//private ArrayList<ItemDetails> itemDetails;
+
     public boolean isEmpty(){
         if(this.isEmpty()){
             return true;
@@ -103,7 +113,7 @@ public class OrderDetails implements ISellerOrderManagement{
     @Override
     public Map<String, ArrayList<OrderDetails>> getSellerOrders(String sellerID) {
         ISellerOrderPersistence orderPersistence = new SellerOrderPersistence();
-        ArrayList<OrderDetails> allOrderDetails = orderPersistence.load(sellerID);
+        ArrayList<OrderDetails> allOrderDetails = orderPersistence.loadOrders(sellerID);
         ArrayList<OrderDetails> currentOrderDetails = new ArrayList<>();
         ArrayList<OrderDetails> previousOrderDetails = new ArrayList<>();
         Map<String, ArrayList<OrderDetails>> sellerOrders = new HashMap<>();
@@ -119,5 +129,9 @@ public class OrderDetails implements ISellerOrderManagement{
         sellerOrders.put("previous", previousOrderDetails);
 
         return sellerOrders;
+    }
+    public OrderDetails getOrderAndItemDetails(String orderID){
+        ISellerOrderPersistence orderPersistence = new SellerOrderPersistence();
+        return orderPersistence.loadOrderAndItems(orderID);
     }
 }

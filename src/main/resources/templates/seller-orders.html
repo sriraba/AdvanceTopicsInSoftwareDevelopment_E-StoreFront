@@ -2,10 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Seller orders</title>
+    <title>Current And Previous Orders</title>
+    <style>
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+    </style>
 </head>
 <body>
-
 <h2>Current orders:</h2><br>
 <table>
     <thead>
@@ -24,7 +29,6 @@
     </tr>
     </tbody>
 </table>
-
 <h2>Previous orders:</h2><br>
 <table>
     <thead>
@@ -43,6 +47,5 @@
     </tr>
     </tbody>
 </table>
-
 </body>
 </html>
