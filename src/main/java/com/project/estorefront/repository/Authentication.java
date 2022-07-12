@@ -1,14 +1,12 @@
 package com.project.estorefront.repository;
 
+import com.project.estorefront.model.User;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
-
-import com.project.estorefront.model.Buyer;
-import com.project.estorefront.model.Seller;
-import com.project.estorefront.model.User;
 
 public class Authentication implements IAuthentication {
 
