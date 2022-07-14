@@ -28,8 +28,8 @@
         <td th:text="${item.getItemCategory()}"/>
         <td th:text="${item.getItemDescription()}"/>
         <td>
-            <a th:href="@{/seller/items/update?id=${item.getItemId()}}">Edit</a>
-            <a th:href="@{/seller/items/delete} + ${item.getItemID()}">Delete</a>
+            <a th:href="@{/seller/items/edit/} + ${item.getItemID()}">Edit</a>
+            <a th:href="@{/seller/items/delete/} + ${item.getItemID()}">Delete</a>
             <br/>
     </tr>
 </table>

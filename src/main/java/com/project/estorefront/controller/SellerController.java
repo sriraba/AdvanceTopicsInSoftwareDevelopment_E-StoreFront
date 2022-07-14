@@ -47,8 +47,8 @@ public class SellerController {
 
     @PostMapping("/seller/items/create")
     public String createSellerItem(@RequestParam("itemName") String itemName,
-            @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
-            @RequestParam("quantity") int itemQuantity, @RequestParam("price") double itemPrice, HttpSession session)
+                                   @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
+                                   @RequestParam("quantity") int itemQuantity, @RequestParam("price") double itemPrice, HttpSession session)
             throws SQLException {
         String userID = (String) session.getAttribute("userID");
 
@@ -63,38 +63,37 @@ public class SellerController {
     @GetMapping("/seller/orders/view/{userID}")
     public ModelAndView sellerOrdersView(@PathVariable String userID) {
         ISellerOrderManagement sellerOrder = new OrderDetails();
-        return new ModelAndView("seller-orders","orders", sellerOrder.getSellerOrders(userID));
+        return new ModelAndView("seller-orders", "orders", sellerOrder.getSellerOrders(userID));
 
     }
 
     @GetMapping("/seller/orders/current/{orderID}")
-    public ModelAndView sellerCurrentOrderView(@PathVariable String orderID){
+    public ModelAndView sellerCurrentOrderView(@PathVariable String orderID) {
         ISellerOrderManagement sellerOrder = new OrderDetails();
-        return new ModelAndView("view-selected-order","order", sellerOrder.getOrderAndItemDetails(orderID));
+        return new ModelAndView("view-selected-order", "order", sellerOrder.getOrderAndItemDetails(orderID));
 
     }
+
     @GetMapping("/seller/orders/previous/{orderID}")
     public ModelAndView sellerPreviousOrderView(@PathVariable String orderID) {
         ISellerOrderManagement sellerOrder = new OrderDetails();
-        return new ModelAndView("view-selected-order","order", sellerOrder.getOrderAndItemDetails(orderID));
+        return new ModelAndView("view-selected-order", "order", sellerOrder.getOrderAndItemDetails(orderID));
     }
 
-    @PostMapping("/seller/items/update")
-    public String updateSellerItem(@RequestParam("itemName") String itemName,
-            @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
-            @RequestParam("quantity") int itemQuantity, @RequestParam("price") double itemPrice, HttpSession session)
+    @GetMapping("/seller/items/edit/{itemID}")
+    public String editSellerItem(@PathVariable String itemID, Model model)
             throws SQLException {
         // TODO: To be implemented
         return "seller-items-update";
     }
 
-    @GetMapping("/seller/items/delete")
-    public String deleteSellerItem(@RequestParam("itemID") String itemID) throws SQLException {
+    @GetMapping("/seller/items/delete/{itemID}")
+    public String deleteSellerItem(@PathVariable String itemID) throws SQLException {
         IInventoryItemPersistence inventoryItemPersistence = new InventoryItemPersistence();
         IInventoryItem item = new InventoryItem();
         item.setItemID(itemID);
         inventoryItemPersistence.delete(item);
-        return "seller-items";
+        return "redirect:/seller/items";
     }
 
     @GetMapping("/seller/coupons")
@@ -121,13 +120,13 @@ public class SellerController {
         return "redirect:/coupons";
     }
 
-    @RequestMapping(value= "/seller/coupons/view/{id}", method = RequestMethod.GET)
-    public String view_details(@PathVariable("id") int id, Model model ) {
+    @RequestMapping(value = "/seller/coupons/view/{id}", method = RequestMethod.GET)
+    public String view_details(@PathVariable("id") int id, Model model) {
 
         CouponsPersistence persistenceObj = new CouponsPersistence();
         model.addAttribute("coupon", persistenceObj.getCouponById(id));
 
-        return  "coupon-detail";
+        return "coupon-detail";
     }
 
 }
