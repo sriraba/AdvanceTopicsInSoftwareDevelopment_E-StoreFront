@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<body>
+<h1>Profile</h1>
+<form th:action="@{/seller/profile}" method="POST">
+<table>
+  <tr>
+    <td>Business Name:</td>
+    <td><input type=”text”  name="businessName"></td>
+  </tr>
+  <tr>
+    <td>Owner Full Name:</td>
+    <td><input type=”text”  name="ownerFullName"></td>
+  </tr>
+  <tr>
+    <td>Owner DOB:</td>
+    <td><input type=”mail”  placeholder=”Email” name="email"></td>
+  </tr>
+  <tr>
+    <td>Contact:</td>
+    <td><input type=”tel” placeholder=”Number” name="contact"></td>
+  </tr>
+  <tr>
+    <td>
+      <label for="email">Email:</label>
+      <input type="email" name="email" id="email">
+    </td>
+  </tr>
+</table>
+</form>
+</body>
+</html>
