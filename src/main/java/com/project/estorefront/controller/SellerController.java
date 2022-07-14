@@ -4,6 +4,7 @@ import com.project.estorefront.model.IInventoryItem;
 import com.project.estorefront.model.InventoryItem;
 import com.project.estorefront.model.ItemCategory;
 import com.project.estorefront.repository.InventoryItemPersistence;
+import com.project.estorefront.repository.SellerPersistance;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,11 @@ public class SellerController {
     public String sellerItemsAdd() {
         return "seller-items-add";
     }
+    @GetMapping("/seller/profile")
+    public String sellerProfile() {
+        return "seller-profile";
+    }
+
 
     @PostMapping("/seller/items/create")
     public String sellerItemCreate(@RequestParam("itemName") String itemName, @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory, @RequestParam("quantity") int itemQuantity, @RequestParam("price") double itemPrice, HttpSession session) throws SQLException {
@@ -38,6 +44,17 @@ public class SellerController {
         item.save(new InventoryItemPersistence());
 
         return "seller-items-add";
+    }
+
+    @PostMapping("seller/profile")
+    public String sellerProfile(@RequestParam("businessName") String businessName, @RequestParam("ownerFullName") String ownerFullName,
+                                @RequestParam("ownerDOB") String ownerDOB, @RequestParam("phone") String phone, HttpSession session) {
+
+        SellerPersistance sellerPersistanceObj = new SellerPersistance();
+
+
+
+        return "seller-profile";
     }
 
 }

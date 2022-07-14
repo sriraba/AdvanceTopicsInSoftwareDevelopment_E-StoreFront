@@ -115,5 +115,4 @@ public class ValidationController {
 
         return new ModelAndView("redirect:/register", "error", err);
     }
-
 }

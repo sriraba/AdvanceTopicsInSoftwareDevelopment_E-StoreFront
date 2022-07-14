@@ -18,5 +18,4 @@ public class AuthenticationController {
     {
         return "register-page";
     }
-
 }
