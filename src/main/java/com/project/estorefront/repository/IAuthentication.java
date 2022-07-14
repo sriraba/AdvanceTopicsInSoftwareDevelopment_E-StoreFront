@@ -4,7 +4,7 @@ import com.project.estorefront.model.InventoryItem;
 import com.project.estorefront.model.User;
 
 public interface IAuthentication {
-    Integer login(String email, String password);
+    String login(String email, String password);
 
-    Integer register(User user);
+    String register(User user);
 }

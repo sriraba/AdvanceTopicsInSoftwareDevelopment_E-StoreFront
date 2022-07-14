@@ -6,7 +6,7 @@
 </head>
 <body>
 <h2>Coupons</h2><br>
-<button>Add Coupon</button>
+<button type="button" th:onclick="|window.location.href='/add-coupon'|">Add Coupon</button>
 <table>
     <tr>
         <th>#</th>
@@ -16,7 +16,7 @@
     <tr th:each="coupon : ${coupons}">
         <td th:text="${coupon.getCouponID()}"></td>
         <td th:text="${coupon.getName()}"></td>
-        <td>Details</td>
+        <td><a th:href="@{'/coupons/view/' + ${coupon.getCouponID()}}">Details</a></td>
     </tr>
 </table>
 </body>

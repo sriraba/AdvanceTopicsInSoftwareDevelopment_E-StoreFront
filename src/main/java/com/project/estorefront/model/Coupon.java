@@ -24,4 +24,14 @@ public class Coupon {
     {
         return name;
     }
+
+    public double getMaxAmount()
+    {
+        return max_amt;
+    }
+
+    public double getPercent()
+    {
+        return percent;
+    }
 }

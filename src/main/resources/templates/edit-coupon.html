@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Coupon</title>
+</head>
+<body>
+<h2>Edit Coupon</h2>
+<form th:action="@{'/coupons/update/' + ${coupon.getCouponID()}}" method="post">
+    <label for="name">Coupon Name:</label>
+    <input type="text" name="name" id="Name" th:value="${coupon.getName()}"><br><br>
+    <label for="amount">Maximum Amount: </label>
+    <input type="text" name="amount" id="amount" th:value="${coupon.getMaxAmount()}"><br><br>
+    <label for="percent">Percent: </label>
+    <input type="text" name="percent" id="percent" th:value="${coupon.getPercent()}"><br><br>
+    <input type="submit" value="Submit">
+    <input type="button" value="Cancel" th:onclick="|window.location.href='/coupons'|">
+</form>
+</body>
+</html>

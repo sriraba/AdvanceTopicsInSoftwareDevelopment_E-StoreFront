@@ -1,13 +1,12 @@
 package com.project.estorefront.repository;
 
+import com.project.estorefront.model.User;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import com.project.estorefront.model.Buyer;
-import com.project.estorefront.model.Seller;
-import com.project.estorefront.model.User;
+import java.util.UUID;
 
 public class Authentication implements IAuthentication {
 
@@ -15,7 +14,7 @@ public class Authentication implements IAuthentication {
     private ResultSet resultSet = null;
 
     @Override
-    public Integer login(String email, String password) {
+    public String login(String email, String password) {
 
         try {
             User user = null;
@@ -26,7 +25,7 @@ public class Authentication implements IAuthentication {
             preparedStmt.setString(2, password);
             resultSet = preparedStmt.executeQuery();
             while (resultSet.next()) {
-                Integer userID = resultSet.getInt("user_id");
+                String userID = resultSet.getString("user_id");
 				return userID;
             }
 			return null;
@@ -36,7 +35,7 @@ public class Authentication implements IAuthentication {
     }
 
     @Override
-    public Integer register(User user) {
+    public String register(User user) {
 
         try {
             connection = Database.getConnection();
@@ -44,9 +43,9 @@ public class Authentication implements IAuthentication {
                     "values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStmt = connection.prepareStatement(persistUserDetails);
 
-            int userID = generateNewUserID();
+            String userID = UUID.randomUUID().toString();
 
-            preparedStmt.setInt(1, userID);
+            preparedStmt.setString(1, userID);
             preparedStmt.setString(2, user.getFirstName());
             preparedStmt.setString(3, user.getLastName());
             preparedStmt.setString(4, user.getEmail());

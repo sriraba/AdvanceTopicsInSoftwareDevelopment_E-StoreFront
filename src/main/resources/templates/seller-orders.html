@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Current And Previous Orders</title>
+    <style>
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+    </style>
+</head>
+<body>
+<h2>Current orders:</h2><br>
+<table>
+    <thead>
+    <tr>
+        <th> Order Number </th>
+        <th> Link </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${#lists.isEmpty(orders['current'])}">
+        <td colspan="2"> No current orders </td>
+    </tr>
+    <tr th:each="current : ${orders['current']}">
+        <td><span th:text="${current.getOrderID()}"> Order Number </span></td>
+        <td><a th:href="@{/seller/orders/current/{userID}(userID=${current.getOrderID()})}">View Order</a></td>
+    </tr>
+    </tbody>
+</table>
+<h2>Previous orders:</h2><br>
+<table>
+    <thead>
+    <tr>
+        <th> Order Number </th>
+        <th> Link </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${#lists.isEmpty(orders['previous'])}">
+        <td colspan="2"> No previous orders </td>
+    </tr>
+    <tr th:each="previous : ${orders['previous']}">
+        <td><span th:text="${previous.getOrderID()}"> Order Number </span></td>
+        <td><a th:href="@{/seller/orders/previous/{userID}(userID=${previous.getOrderID()})}">View Order</a></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

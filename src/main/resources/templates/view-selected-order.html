@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Seller Order Details</title>
+    <style>
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+    </style>
+</head>
+<body>
+<h2>Order Details:</h2><br>
+<table>
+    <thead>
+    <tr>
+        <th> Order Number </th>
+        <th> Status </th>
+        <th> Total Amount </th>
+        <th> Coupon Applied </th>
+        <th> Coupon Amount </th>
+        <th> Delivery Address </th>
+        <th> Pincode </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><span th:text="${order.getOrderID()}"> Order Number </span></td>
+        <td><span th:text="${order.getOrderStatus()}"> Status </span></td>
+        <td><span th:text="${order.getTotalAmount()}"> Total Amount </span></td>
+        <td><span th:text="${order.getCouponApplied()}"> Coupon Applied </span></td>
+        <td><span th:text="${order.getCouponAmount()}"> Coupon Amount </span></td>
+        <td><span th:text="${order.getDeliveryAddress()}"> Delivery Address </span></td>
+        <td><span th:text="${order.getPincode()}"> Pincode </span></td>
+    </tr>
+    </tbody>
+</table>
+<h2>Items Added:</h2><br>
+<table>
+    <thead>
+    <tr>
+        <th> Item ID </th>
+        <th> Quantity </th>
+        <th> Price </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${#lists.isEmpty(order.getItemDetails())}">
+        <td colspan="2"> No items found </td>
+    </tr>
+    <tr th:each="item : ${order.getItemDetails()}">
+        <td><span th:text="${item.getItemID()}"> Item ID </span></td>
+        <td><span th:text="${item.getQuantity()}"> Quantity </span></td>
+        <td><span th:text="${item.getItemPrice()}"> Price </span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</body>
+</html>

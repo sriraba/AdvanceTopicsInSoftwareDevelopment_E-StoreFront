@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h2>Coupon Details</h2>
+    Coupon Name: <label th:text="${coupon.getName()}" /><br>
+    Maximum Amount: CAD <label th:text="${coupon.getMaxAmount()}" /><br>
+    Discount Percent: <label th:text="${coupon.getPercent()}" />% <br>
+    <button type="button" value="Delete" th:onclick="|window.location.href='@{'/coupons/delete/' + ${coupon.getCouponID()}}'|">Delete</button>
+    <button type="button" value="Edit" th:onclick="|window.location.href='@{'/coupons/edit/' + ${coupon.getCouponID()}}'|">Edit</button>
+</body>
+</html>
