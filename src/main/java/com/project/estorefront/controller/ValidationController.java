@@ -1,15 +1,13 @@
 package com.project.estorefront.controller;
 
-import com.project.estorefront.model.Buyer;
-import com.project.estorefront.model.Seller;
 import com.project.estorefront.model.User;
 import com.project.estorefront.model.UserFactory;
-import com.project.estorefront.repository.Authentication;
-import com.project.estorefront.repository.IAuthentication;
 import com.project.estorefront.model.validators.EmailValidator;
 import com.project.estorefront.model.validators.NameValidator;
 import com.project.estorefront.model.validators.PasswordValidator;
 import com.project.estorefront.model.validators.PhoneNumberValidator;
+import com.project.estorefront.repository.Authentication;
+import com.project.estorefront.repository.IAuthentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
