@@ -4,32 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Seller</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 </head>
-    <body>
-        <table class="table table-striped">
-            <h1>Inventory</h1>
-            <a th:href="@{/seller/items/add}" class="btn btn-primary">Add Item</a>
+<body>
+<div th:replace="fragments/seller-header.html"></div>
+<table class="table table-striped">
+    <h1>Inventory</h1>
+    <a th:href="@{/seller/items/add}" class="btn btn-primary">Add Item</a>
+    <br/>
+    <tr>
+        <th>Item Name</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Category</th>
+        <th>Description</th>
+        <th>Actions</th>
+    </tr>
+    <tr th:each="item: ${items}">
+        <td th:text="${item.getItemName()}"/>
+        <td th:text="${item.getItemPrice()}"/>
+        <td th:text="${item.getItemQuantity()}"/>
+        <td th:text="${item.getItemCategory()}"/>
+        <td th:text="${item.getItemDescription()}"/>
+        <td>
+            <a th:href="@{/seller/items/update?id=${item.getItemId()}}">Edit</a>
+            <a th:href="@{/seller/items/delete} + ${item.getItemID()}">Delete</a>
             <br/>
-            <tr>
-                <th>Item Name</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Category</th>
-                <th>Description</th>
-                <th>Actions</th>
-            </tr>
-            <tr th:each="item: ${items}">
-                <td th:text="${item.getItemName()}" />
-                <td th:text="${item.getItemPrice()}" />
-                <td th:text="${item.getItemQuantity()}" />
-                <td th:text="${item.getItemCategory()}" />
-                <td th:text="${item.getItemDescription()}" />
-                <td>
-                    <a th:href="@{/seller/items/update?id=${item.getItemId()}}">Edit</a>
-                    <a th:href="@{/seller/items/delete} + ${item.getItemID()}">Delete</a>
-                <br/>
-            </tr>
-        </table>
-    </body>
+    </tr>
+</table>
+</body>
 </html>
