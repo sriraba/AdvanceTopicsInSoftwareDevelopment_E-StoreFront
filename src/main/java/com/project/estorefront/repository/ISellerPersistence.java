@@ -1,8 +1,10 @@
 package com.project.estorefront.repository;
 
+import java.sql.SQLException;
+
 public interface ISellerPersistence {
 
 	public void updateProfile();
-	public void deleteSellerAccount();
+	public String deleteSellerAccount() throws SQLException;
 	
 }

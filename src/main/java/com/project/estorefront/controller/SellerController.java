@@ -28,6 +28,11 @@ public class SellerController {
     public String seller() {
         return "seller-page";
     }
+    @GetMapping("/seller/profile")
+    public String sellerProfile() {
+        return "seller-profile";
+    }
+
 
     @GetMapping("/seller/items")
     public String sellerItems(Model model, HttpSession session) {
@@ -98,5 +103,10 @@ public class SellerController {
         inventoryItemPersistence.delete(item);
         return "seller-items";
     }
+
+    @GetMapping("seller/profile")
+    public String seller
+
+
 
 }
