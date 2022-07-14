@@ -3,6 +3,7 @@ package com.project.estorefront.controller;
 import com.project.estorefront.model.Buyer;
 import com.project.estorefront.model.Seller;
 import com.project.estorefront.model.User;
+import com.project.estorefront.model.UserFactory;
 import com.project.estorefront.repository.Authentication;
 import com.project.estorefront.repository.IAuthentication;
 import com.project.estorefront.model.validators.EmailValidator;
@@ -93,10 +94,23 @@ public class ValidationController {
             User user = null;
 
             if (role.contains("buyer")) {
-                user = new Buyer(firstName, lastName, email, address, contact, password, city, false);
+                user = UserFactory.instance().getUser("buyer");
+                user.setIsSeller(false);
             } else if (role.contains("seller")) {
-                user = new Seller(firstName, lastName, email, address, contact, password, city, true);
+                user = UserFactory.instance().getUser("seller");
+                user.setIsSeller(true);
+            } else {
+                errors.add("Please select a role");
             }
+
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setEmail(email);
+            user.setPassword(password);
+            user.setPhone(contact);
+            user.setCity(city);
+            user.setAddress(address);
+            user.setIsSeller(false);
 
             String userID = authentication.register(user);
             session.setAttribute("userID", userID.toString());
