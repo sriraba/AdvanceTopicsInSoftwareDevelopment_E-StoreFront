@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 public class ValidationController {
 
     @PostMapping("/validate-login")
-    public ModelAndView validateLogin(@RequestParam("email") String email, @RequestParam("password") String password, @RequestParam("role") String role, HttpSession session) {
+    public ModelAndView validateLogin(@RequestParam("email") String email, @RequestParam("password") String password, @RequestParam("role") String role, HttpSession session, RedirectAttributes redirAttrs) {
         EmailValidator emailValidator = new EmailValidator();
         PasswordValidator passwordValidator = new PasswordValidator();
 
@@ -32,7 +33,8 @@ public class ValidationController {
             String userID = authentication.login(email, password);
 
             if (userID == null || userID.isEmpty()) {
-                return new ModelAndView("login-page", "error", "Wrong email or password");
+                redirAttrs.addFlashAttribute("error", "Invalid email or password");
+                return new ModelAndView("redirect:/login-page");
             } else {
                 session.setAttribute("userID", userID.toString());
                 session.setAttribute("role", role);
@@ -41,16 +43,19 @@ public class ValidationController {
                 } else if (role.contains("seller")) {
                     return new ModelAndView("redirect:/seller");
                 } else {
-                    return new ModelAndView("redirect:/login", "error", "Please select a role");
+                    redirAttrs.addFlashAttribute("error", "Please select a role");
+                    return new ModelAndView("redirect:/login");
                 }
             }
         } else {
-            return new ModelAndView("redirect:/login", "error", "Invalid email or password");
+            redirAttrs.addFlashAttribute("error", "Invalid email or password");
+            return new ModelAndView("redirect:/login");
         }
     }
+
     @PostMapping("/validate-register")
     public ModelAndView validateRegister(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
-                                         @RequestParam("email") String email, @RequestParam("password") String password, @RequestParam ("confirmPassword") String confirmPassword,
+                                         @RequestParam("email") String email, @RequestParam("password") String password, @RequestParam("confirmPassword") String confirmPassword,
                                          @RequestParam("contact") String contact, @RequestParam("city") String city, @RequestParam String address, @RequestParam("role") String role, HttpSession session) {
         NameValidator nameValidator = new NameValidator();
         EmailValidator emailValidator = new EmailValidator();
@@ -64,7 +69,7 @@ public class ValidationController {
             errors.add("Invalid First name");
         }
 
-        if(nameValidator.validate(city) == false){
+        if (nameValidator.validate(city) == false) {
             errors.add("Invalid City");
         }
         //phone number
@@ -72,13 +77,13 @@ public class ValidationController {
             errors.add("Invalid Phone Number");
 
         }
-        if(emailValidator.validate(email) == false){
+        if (emailValidator.validate(email) == false) {
             errors.add("Invalid email");
         }
-        if(passwordValidator.validate(password) == false) {
+        if (passwordValidator.validate(password) == false) {
             errors.add("Invalid password");
         }
-        if(passwordValidator.comparePassword(password, confirmPassword) == false){
+        if (passwordValidator.comparePassword(password, confirmPassword) == false) {
             errors.add("Password not matched");
         }
 
@@ -93,20 +98,27 @@ public class ValidationController {
                 user = new Seller(firstName, lastName, email, address, contact, password, city, true);
             }
 
-            System.out.println(role);
-
             String userID = authentication.register(user);
-            System.out.println(userID);
             session.setAttribute("userID", userID.toString());
             session.setAttribute("role", role);
 
-            if (role.contains("buyer") && userID != null) {
+            if (userID == null || userID.isEmpty()) {
+                errors.add("Email already exists");
+            } else {
+                if (role.contains("buyer")) {
+                    return new ModelAndView("redirect:/buyer");
+                } else if (role.contains("seller")) {
+                    return new ModelAndView("redirect:/seller");
+                } else {
+                    errors.add("Please select a role");
+                }
+            }
+
+            if (role.contains("buyer")) {
                 return new ModelAndView("redirect:/buyer");
-            } else if (role.contains("seller") && userID != null) {
+            } else if (role.contains("seller")) {
                 return new ModelAndView("redirect:/seller");
-            } else if (userID == null) {
-                return new ModelAndView("redirect:/register", "error", "Something went wrong");
-            }  else {
+            } else {
                 errors.add("Role");
             }
         }

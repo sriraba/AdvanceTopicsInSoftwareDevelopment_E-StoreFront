@@ -38,6 +38,22 @@ public class CouponsPersistence implements ICouponsPersistence{
     @Override
     public void updateCoupon(Coupon coupon) {
 
+        try {
+
+            String query = "update coupons set name=?, max_amt=?, percent=? where coupon_id=?" ;
+
+            PreparedStatement preparedStmt = connection.prepareStatement(query);
+            preparedStmt.setString(1, coupon.getName());
+            preparedStmt.setString(2, Double.toString(coupon.getMaxAmount()));
+            preparedStmt.setString(3, Double.toString(coupon.getPercent()));
+            preparedStmt.setInt(4, coupon.getCouponID());
+
+            preparedStmt.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -97,5 +113,20 @@ public class CouponsPersistence implements ICouponsPersistence{
 
 
         return coupon;
+    }
+
+    public void deleteCoupon(int id) {
+
+        Statement stmt = null;
+        try {
+            stmt = connection.createStatement();
+
+            String query = "delete from coupons where coupon_id="+id + ";" ;
+            stmt.execute(query) ;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 }
