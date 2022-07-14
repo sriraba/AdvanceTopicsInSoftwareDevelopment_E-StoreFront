@@ -12,7 +12,7 @@ import java.util.ArrayList;
 @Controller
 public class BuyerController {
 
-    @GetMapping("/buyers")
+    @GetMapping("/buyer")
     public String seller(Model model) {
         ISellerPersistence persistence = new SellerPersistence();
         ArrayList<User> sellers = persistence.getAllSellersByCity("Halifax");
