@@ -59,4 +59,20 @@ class SellerPersistenceTest {
         assertNull(sellers);
     }
 
+    @Test
+    void testGetSellerByID() {
+        SellerPersistenceMock sellerPersistenceMock = new SellerPersistenceMock();
+        sellerPersistenceMock.addMockSeller();
+        User seller = sellerPersistenceMock.getSellerByID("1");
+        assertEquals(seller.getUserID(), "1");
+    }
+
+    @Test
+    void testGetSellerByIDWithInvalidID() {
+        SellerPersistenceMock sellerPersistenceMock = new SellerPersistenceMock();
+        sellerPersistenceMock.addMockSeller();
+        User seller = sellerPersistenceMock.getSellerByID("2");
+        assertNull(seller);
+    }
+
 }

@@ -9,5 +9,6 @@ public interface ISellerPersistence {
 	
 	ArrayList<User> getAllSellers() throws SQLException;
 	ArrayList<User> getAllSellersByCity(String city);
+	User getSellerByID(String sellerID);
 
 }
