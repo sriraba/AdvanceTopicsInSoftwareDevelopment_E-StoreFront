@@ -81,10 +81,24 @@ public class SellerController {
     }
 
     @GetMapping("/seller/items/edit/{itemID}")
-    public String editSellerItem(@PathVariable String itemID, Model model)
-            throws SQLException {
-        // TODO: To be implemented
+    public String editSellerItem(@PathVariable String itemID, Model model) {
+        //TODO change comparison from string to enum in .html
+        IInventoryItemPersistence inventoryItemPersistence = new InventoryItemPersistence();
+        IInventoryItem item = inventoryItemPersistence.getItemByID(itemID);
+        model.addAttribute("item", item);
         return "seller-items-update";
+    }
+
+    @PostMapping("/seller/items/update/{itemID}")
+    public String updateSellerItem(@RequestParam("itemName") String itemName,
+                                   @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
+                                   @RequestParam("quantity") int itemQuantity, @RequestParam("price") double itemPrice, @PathVariable String itemID, HttpSession session) {
+        IInventoryItemPersistence inventoryItemPersistence = new InventoryItemPersistence();
+        IInventoryItem item = new InventoryItem(mockUserID, ItemCategory.valueOf(itemCategory), itemName,
+                itemDescription, itemPrice, itemQuantity);
+        item.setItemID(itemID);
+        item.update(inventoryItemPersistence);
+        return "redirect:/seller/items";
     }
 
     @GetMapping("/seller/items/delete/{itemID}")
@@ -92,7 +106,7 @@ public class SellerController {
         IInventoryItemPersistence inventoryItemPersistence = new InventoryItemPersistence();
         IInventoryItem item = new InventoryItem();
         item.setItemID(itemID);
-        inventoryItemPersistence.delete(item);
+        item.delete(inventoryItemPersistence);
         return "redirect:/seller/items";
     }
 
