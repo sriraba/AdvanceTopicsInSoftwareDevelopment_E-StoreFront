@@ -16,6 +16,7 @@ public class SellerPersistenceMock implements ISellerPersistence {
 
     public void addMockSeller() {
         Seller seller = new Seller();
+        seller.setUserID("1");
         seller.setEmail("hrishipatel99@gmail.com");
         seller.setBusinessName("ASD");
         seller.setBusinessDescription("ASD");
@@ -54,5 +55,15 @@ public class SellerPersistenceMock implements ISellerPersistence {
             return null;
         }
         return s;
+    }
+
+    @Override
+    public User getSellerByID(String sellerID) {
+        for (User seller : sellers) {
+            if (seller.getUserID().equalsIgnoreCase(sellerID)) {
+                return seller;
+            }
+        }
+        return null;
     }
 }
