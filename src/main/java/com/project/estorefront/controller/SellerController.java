@@ -129,4 +129,32 @@ public class SellerController {
         return "coupon-detail";
     }
 
+    @RequestMapping(value= "/seller/coupons/delete/{id}", method = RequestMethod.GET)
+    public String delete(@PathVariable("id") int id, Model model ) {
+
+        CouponsPersistence persistenceObj = new CouponsPersistence();
+        persistenceObj.deleteCoupon(id);
+        model.addAttribute("coupons", persistenceObj.getCoupons());
+
+        return "view-coupons";
+    }
+    
+    @RequestMapping(value= "/seller/coupons/edit/{id}", method = RequestMethod.GET)
+    public String edit(@PathVariable("id") int id, Model model ) {
+        CouponsPersistence persistenceObj = new CouponsPersistence();
+        model.addAttribute("coupon", persistenceObj.getCouponById(id));
+
+        return  "edit-coupon";
+    }
+
+    @RequestMapping(value= "/seller/coupons/update/{id}", method = RequestMethod.POST)
+    public String update(@PathVariable("id") int id, @RequestParam("name") String couponName, @RequestParam("amount") String amount, @RequestParam("percent") String percent) {
+        CouponsPersistence persistenceObj = new CouponsPersistence();
+
+        Coupon coupon = new Coupon(id, couponName, Double.parseDouble(amount), Double.parseDouble(percent));
+        persistenceObj.updateCoupon(coupon);
+
+        return "redirect:/coupons";
+    }
+
 }
