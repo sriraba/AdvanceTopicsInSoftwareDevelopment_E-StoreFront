@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Buy Items</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+<h1></h1>
+<h5 class="card-title" th:text="${seller.getBusinessName()}"/>
+<p class="card-text" th:text="${seller.getBusinessDescription()}"/>
+<tr th:each="item: ${inventory}">
+    <div class="col-sm-6 mb-4 ml-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="col justify-content-between">
+                    <h5 class="card-title" th:text="${item.getItemName()}"/>
+                    <p class="card-text" th:text="${item.getItemPrice()}"/>
+                </div>
+                <p class="card-text" th:text="${item.getItemDescription()}"/>
+                <input type="number" name="quantity" id="quantity" min="0" max="10" step="1" value="0">
+            </div>
+        </div>
+    </div>
+</tr>
+<input type="submit" value="Add to cart" class="btn btn-primary">
+</div>
+</body>
+</html>
