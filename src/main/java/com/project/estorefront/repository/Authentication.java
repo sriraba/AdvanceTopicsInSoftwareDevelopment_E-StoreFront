@@ -17,7 +17,6 @@ public class Authentication implements IAuthentication {
     public String login(String email, String password) {
 
         try {
-            User user = null;
             connection = Database.getConnection();
             String userDetailsQuery = "select * from user where email =? and password =?";
             PreparedStatement preparedStmt = connection.prepareStatement(userDetailsQuery);
@@ -25,8 +24,7 @@ public class Authentication implements IAuthentication {
             preparedStmt.setString(2, password);
             resultSet = preparedStmt.executeQuery();
             while (resultSet.next()) {
-                String userID = resultSet.getString("user_id");
-				return userID;
+                return resultSet.getString("user_id");
             }
 			return null;
         } catch (SQLException e) {
@@ -40,7 +38,7 @@ public class Authentication implements IAuthentication {
         try {
             connection = Database.getConnection();
             String persistUserDetails = "insert into user (user_id, first_name, last_name, email, password, contact_num, seller, city, business_name, address ) " +
-                    "values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStmt = connection.prepareStatement(persistUserDetails);
 
             String userID = UUID.randomUUID().toString();
@@ -61,22 +59,4 @@ public class Authentication implements IAuthentication {
             throw new RuntimeException(e);
         }
     }
-
-    public Integer generateNewUserID() {
-        try {
-            int userId = 0;
-            connection = Database.getConnection();
-            String userDetailsQuery = "select MAX(user_id) from user";
-            PreparedStatement preparedStmt = connection.prepareStatement(userDetailsQuery);
-            resultSet = preparedStmt.executeQuery();
-            while (resultSet.next()) {
-                userId = resultSet.getInt(1);
-            }
-            return userId + 1;
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 }
