@@ -108,7 +108,7 @@ public class SellerController {
         return "add-coupon";
     }
 
-    @PostMapping("/create-coupon")
+    @PostMapping("/seller/create-coupon")
     public String create(@RequestParam("name") String couponName, @RequestParam("amount") String amount, @RequestParam("percent") String percent) {
         CouponsPersistence persistenceObj = new CouponsPersistence();
 
@@ -117,7 +117,7 @@ public class SellerController {
         Coupon coupon = new Coupon(id, couponName, Double.parseDouble(amount), Double.parseDouble(percent));
         persistenceObj.saveCoupon(coupon);
 
-        return "redirect:/coupons";
+        return "redirect:/seller/coupons";
     }
 
     @RequestMapping(value = "/seller/coupons/view/{id}", method = RequestMethod.GET)
@@ -138,7 +138,7 @@ public class SellerController {
 
         return "view-coupons";
     }
-    
+
     @RequestMapping(value= "/seller/coupons/edit/{id}", method = RequestMethod.GET)
     public String edit(@PathVariable("id") int id, Model model ) {
         CouponsPersistence persistenceObj = new CouponsPersistence();
@@ -154,7 +154,7 @@ public class SellerController {
         Coupon coupon = new Coupon(id, couponName, Double.parseDouble(amount), Double.parseDouble(percent));
         persistenceObj.updateCoupon(coupon);
 
-        return "redirect:/coupons";
+        return "redirect:/seller/coupons";
     }
 
 }
