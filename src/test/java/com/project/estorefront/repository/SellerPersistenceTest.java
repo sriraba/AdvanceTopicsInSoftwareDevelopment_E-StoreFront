@@ -1,7 +1,7 @@
 package com.project.estorefront.repository;
 
+import com.project.estorefront.model.ItemCategory;
 import com.project.estorefront.model.User;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -9,17 +9,8 @@ import org.springframework.test.context.TestPropertySource;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
-
-/**
- * Tests for SellerPersistence
- *
- * @author Hrishi Patel
- * @version 1.0
- * @since 14-07-2022
- */
 
 @SpringBootTest
 @TestPropertySource(properties = {"SPRING_DATASOURCE_URL=jdbc:mysql://db-5308.cs.dal.ca:3306/CSCI5308_1_DEVINT?autoreconnect=true", "SPRING_DATASOURCE_USERNAME=CSCI5308_1_DEVINT_USER", "SPRING_DATASOURCE_PASSWORD=uB8c3mUaMW"})
@@ -72,6 +63,21 @@ class SellerPersistenceTest {
         SellerPersistenceMock sellerPersistenceMock = new SellerPersistenceMock();
         sellerPersistenceMock.addMockSeller();
         User seller = sellerPersistenceMock.getSellerByID("2");
+        assertNull(seller);
+    }
+
+    @Test
+    void testGetSellerByCategory() {
+        SellerPersistenceMock sellerPersistenceMock = new SellerPersistenceMock();
+        sellerPersistenceMock.addMockSellerForCategoryTest();
+        ArrayList<User> seller = sellerPersistenceMock.getAllSellersByCategory(ItemCategory.GROCERY, "Halifax");
+        assertNotNull(seller);
+    }
+
+    @Test
+    void testGetSellerByCategoryWithNoSellers() {
+        SellerPersistenceMock sellerPersistenceMock = new SellerPersistenceMock();
+        ArrayList<User> seller = sellerPersistenceMock.getAllSellersByCategory(ItemCategory.GROCERY, "Halifax");
         assertNull(seller);
     }
 
