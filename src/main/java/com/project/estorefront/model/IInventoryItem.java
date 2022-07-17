@@ -7,28 +7,42 @@ import java.sql.SQLException;
 
 public interface IInventoryItem {
 
-     String generateItemID();
+    String generateItemID();
 
     String getItemID();
-     String getUserID();
-     ItemCategory getItemCategory();
-     String getItemName();
-     String getItemDescription();
-     Double getItemPrice();
-     Integer getItemQuantity();
 
-     void setItemID(String itemID);
-     void setUserID(String userID);
-     void setItemCategory(ItemCategory itemCategory);
-     void setItemName(String itemName);
-     void setItemDescription(String itemDescription);
-     void setItemPrice(Double itemPrice);
-     void setItemQuantity(Integer itemQuantity);
+    String getUserID();
 
-     boolean save(IInventoryItemPersistence persistence) throws SQLException;
-     boolean delete(IInventoryItemPersistence persistence);
-     boolean update(IInventoryItemPersistence persistence);
+    ItemCategory getItemCategory();
 
-     IInventoryItemValidator.InventoryItemValidationStatus validate(IInventoryItemValidator validator);
+    String getItemName();
+
+    String getItemDescription();
+
+    Double getItemPrice();
+
+    Integer getItemQuantity();
+
+    void setItemID(String itemID);
+
+    void setUserID(String userID);
+
+    void setItemCategory(ItemCategory itemCategory);
+
+    void setItemName(String itemName);
+
+    void setItemDescription(String itemDescription);
+
+    void setItemPrice(Double itemPrice);
+
+    void setItemQuantity(Integer itemQuantity);
+
+    boolean save(IInventoryItemPersistence persistence) throws SQLException;
+
+    boolean delete(IInventoryItemPersistence persistence);
+
+    boolean update(IInventoryItemPersistence persistence);
+
+    IInventoryItemValidator.InventoryItemValidationStatus validate(IInventoryItemValidator validator);
 
 }

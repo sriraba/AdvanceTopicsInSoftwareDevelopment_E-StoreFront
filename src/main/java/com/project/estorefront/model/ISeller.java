@@ -6,6 +6,12 @@ import java.util.ArrayList;
 
 public interface ISeller {
 
-    ArrayList<User> getAllSellers(ISellerPersistence persistence, String city);
+    String getBusinessName();
+
+    void setBusinessDescription(String businessDescription);
+
+    String getBusinessDescription();
+
+    void setBusinessName(String businessName);
 
 }

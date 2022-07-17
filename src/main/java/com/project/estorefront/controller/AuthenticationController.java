@@ -68,7 +68,7 @@ public class AuthenticationController {
     @PostMapping("/validate-register")
     public ModelAndView validateRegister(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
                                          @RequestParam("email") String email, @RequestParam("password") String password, @RequestParam("confirmPassword") String confirmPassword,
-                                         @RequestParam("contact") String contact, @RequestParam("city") String city, @RequestParam String address, @RequestParam("role") String role, HttpSession session) {
+                                         @RequestParam("contact") String contact, @RequestParam("city") String city, @RequestParam String address, @RequestParam("role") String role, HttpSession session, RedirectAttributes redirAttrs) {
         NameValidator nameValidator = new NameValidator();
         EmailValidator emailValidator = new EmailValidator();
         PasswordValidator passwordValidator = new PasswordValidator();
@@ -112,6 +112,8 @@ public class AuthenticationController {
                 user.setIsSeller(true);
             } else {
                 errors.add("Please select a role");
+                redirAttrs.addFlashAttribute("error", "Please select a role");
+                return new ModelAndView("redirect:/register");
             }
 
             user.setFirstName(firstName);
@@ -127,7 +129,7 @@ public class AuthenticationController {
             session.setAttribute("userID", userID.toString());
             session.setAttribute("role", role);
 
-            if (userID == null || userID.isEmpty()) {
+            if (userID.isEmpty()) {
                 errors.add("Email already exists");
             } else {
                 if (role.contains("buyer")) {
@@ -148,8 +150,9 @@ public class AuthenticationController {
             }
         }
         String err = String.join(", ", errors);
+        redirAttrs.addFlashAttribute("error", err);
 
-        return new ModelAndView("redirect:/register", "error", err);
+        return new ModelAndView("redirect:/register");
     }
 
 }

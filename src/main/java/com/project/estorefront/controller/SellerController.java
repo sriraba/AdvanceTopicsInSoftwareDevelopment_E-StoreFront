@@ -86,10 +86,24 @@ public class SellerController {
     }
 
     @GetMapping("/seller/items/edit/{itemID}")
-    public String editSellerItem(@PathVariable String itemID, Model model)
-            throws SQLException {
-        // TODO: To be implemented
+    public String editSellerItem(@PathVariable String itemID, Model model) {
+        //TODO change comparison from string to enum in .html
+        IInventoryItemPersistence inventoryItemPersistence = new InventoryItemPersistence();
+        IInventoryItem item = inventoryItemPersistence.getItemByID(itemID);
+        model.addAttribute("item", item);
         return "seller-items-update";
+    }
+
+    @PostMapping("/seller/items/update/{itemID}")
+    public String updateSellerItem(@RequestParam("itemName") String itemName,
+                                   @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
+                                   @RequestParam("quantity") int itemQuantity, @RequestParam("price") double itemPrice, @PathVariable String itemID, HttpSession session) {
+        IInventoryItemPersistence inventoryItemPersistence = new InventoryItemPersistence();
+        IInventoryItem item = new InventoryItem(mockUserID, ItemCategory.valueOf(itemCategory), itemName,
+                itemDescription, itemPrice, itemQuantity);
+        item.setItemID(itemID);
+        item.update(inventoryItemPersistence);
+        return "redirect:/seller/items";
     }
 
     @GetMapping("/seller/items/delete/{itemID}")
@@ -97,7 +111,7 @@ public class SellerController {
         IInventoryItemPersistence inventoryItemPersistence = new InventoryItemPersistence();
         IInventoryItem item = new InventoryItem();
         item.setItemID(itemID);
-        inventoryItemPersistence.delete(item);
+        item.delete(inventoryItemPersistence);
         return "redirect:/seller/items";
     }
 
@@ -113,7 +127,7 @@ public class SellerController {
         return "add-coupon";
     }
 
-    @PostMapping("/create-coupon")
+    @PostMapping("/seller/create-coupon")
     public String create(@RequestParam("name") String couponName, @RequestParam("amount") String amount, @RequestParam("percent") String percent) {
         CouponsPersistence persistenceObj = new CouponsPersistence();
 
@@ -122,7 +136,7 @@ public class SellerController {
         Coupon coupon = new Coupon(id, couponName, Double.parseDouble(amount), Double.parseDouble(percent));
         persistenceObj.saveCoupon(coupon);
 
-        return "redirect:/coupons";
+        return "redirect:/seller/coupons";
     }
 
     @RequestMapping(value = "/seller/coupons/view/{id}", method = RequestMethod.GET)
@@ -138,5 +152,33 @@ public class SellerController {
 //    public String seller
 
 
+
+    @RequestMapping(value= "/seller/coupons/delete/{id}", method = RequestMethod.GET)
+    public String delete(@PathVariable("id") int id, Model model ) {
+
+        CouponsPersistence persistenceObj = new CouponsPersistence();
+        persistenceObj.deleteCoupon(id);
+        model.addAttribute("coupons", persistenceObj.getCoupons());
+
+        return "view-coupons";
+    }
+
+    @RequestMapping(value= "/seller/coupons/edit/{id}", method = RequestMethod.GET)
+    public String edit(@PathVariable("id") int id, Model model ) {
+        CouponsPersistence persistenceObj = new CouponsPersistence();
+        model.addAttribute("coupon", persistenceObj.getCouponById(id));
+
+        return  "edit-coupon";
+    }
+
+    @RequestMapping(value= "/seller/coupons/update/{id}", method = RequestMethod.POST)
+    public String update(@PathVariable("id") int id, @RequestParam("name") String couponName, @RequestParam("amount") String amount, @RequestParam("percent") String percent) {
+        CouponsPersistence persistenceObj = new CouponsPersistence();
+
+        Coupon coupon = new Coupon(id, couponName, Double.parseDouble(amount), Double.parseDouble(percent));
+        persistenceObj.updateCoupon(coupon);
+
+        return "redirect:/seller/coupons";
+    }
 
 }

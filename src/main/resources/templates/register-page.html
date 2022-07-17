@@ -1,62 +1,67 @@
 <!DOCTYPE html>
-<html  xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Registration</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 </head>
+
 <body>
-<!-- start of registration-->
-<form th:action="@{/validate-register}" method="POST">
-    <table>
-        <tr>
-            <td>First Name:</td>
-            <td><input type=”text”  name="firstName"></td>
-        </tr>
-        <tr>
-            <td>Last Name:</td>
-            <td><input type=”text”  name="lastName"></td>
-        </tr>
+    <!-- start of registration-->
+    <div style="display: flex; align-items: center; justify-content: center;">
+        <form th:action="@{/validate-register}" method="POST">
+            <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
+            <table>
+                <tr class="form-group">
+                    <td>First Name:</td>
+                    <td><input type=”text” name="firstName" class="form-control"></td>
+                </tr>
+                <tr class="form-group">
+                    <td>Last Name:</td>
+                    <td><input type=”text” name="lastName" class="form-control"></td>
+                </tr>
 
-        <tr>
-            <td>Email Address:</td>
-            <td><input type=”mail”  placeholder=”Email” name="email"></td>
-        </tr>
-        <tr>
-            <td>Password:</td>
-            <td><input type=”Password” placeholder=”Password” name="password"></td>
-        </tr>
-        <tr>
-            <td>Confirm Password:</td>
-            <td><input type=”Password” placeholder=”Password” name="confirmPassword"></td>
-        </tr>
-        <tr>
-            <td>Contact:</td>
-            <td><input type=”tel” placeholder=”Number” name="contact"></td>
-        </tr>
-       <tr>
-            <td>
-                <label for="seller">Seller</label>
-                <input type="radio" name="role" id="seller" value=seller"">
-                <label for="buyer">Buyer</label>
-                <input type="radio" name="role" id="buyer" value="buyer">
-            </td>
-        </tr>
-        <tr>
-            <td>Address:</td>
-            <td><input type=”text” placeholder=”Address” name="address"></td>
-        </tr>
-        <tr>
-            <td>City:</td>
-            <td><input type=”text” placeholder=”City” name="city"></td>
-        </tr>
-        <!--<tr>-->
-
-            <td><input type="submit" value="Register" th:href="@{/coupons}">Register></td>
-        <!--</tr> -->
-    </table>
-   <!-- <a th:href="@{/coupons}">Register</a> -->
-    <!--<a th:href="@{/seller/profile}">Register</a>-->
-
-</form>
+                <tr class="form-group">
+                    <td>Email Address:</td>
+                    <td><input type=”mail” placeholder=”Email” name="email" class="form-control"></td>
+                </tr>
+                <tr class="form-group">
+                    <td>Password:</td>
+                    <td><input type=”Password” placeholder=”Password” name="password" class="form-control"></td>
+                </tr>
+                <tr class="form-group">
+                    <td>Confirm Password:</td>
+                    <td><input type=”Password” placeholder=”Password” name="confirmPassword" class="form-control"></td>
+                </tr>
+                <tr class="form-group">
+                    <td>Contact:</td>
+                    <td><input type=”tel” placeholder=”Number” name="contact" class="form-control"></td>
+                </tr>
+                <tr class="form-group">
+                    <td>
+                        <label for="buyer">Buyer</label>
+                        <input type="radio" name="role" id="buyer" value="buyer" class="form-check-input" checked>
+                        <label for="seller">Seller</label>
+                        <input type="radio" name="role" id="seller" value="seller" class="form-check-input">
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td>Address:</td>
+                    <td><input type=”text” placeholder=”Address” name="address" class="form-control"></td>
+                </tr>
+                <tr class="form-group">
+                    <td>City:</td>
+                    <td><input type=”text” placeholder=”City” name="city" class="form-control"></td>
+                </tr>
+                <tr class="form-group">
+                    <td><input type="submit" value="Register" class="btn btn-primary"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    </form>
 </body>
+
 </html>
