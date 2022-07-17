@@ -6,7 +6,7 @@
 </head>
 <body>
 <h2>Edit Coupon</h2>
-<form th:action="@{'/coupons/update/' + ${coupon.getCouponID()}}" method="post">
+<form th:action="@{'/seller/coupons/update/' + ${coupon.getCouponID()}}" method="post">
     <label for="name">Coupon Name:</label>
     <input type="text" name="name" id="Name" th:value="${coupon.getName()}"><br><br>
     <label for="amount">Maximum Amount: </label>

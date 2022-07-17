@@ -9,7 +9,7 @@
     Coupon Name: <label th:text="${coupon.getName()}" /><br>
     Maximum Amount: CAD <label th:text="${coupon.getMaxAmount()}" /><br>
     Discount Percent: <label th:text="${coupon.getPercent()}" />% <br>
-    <button type="button" value="Delete" th:onclick="|window.location.href='@{'/coupons/delete/' + ${coupon.getCouponID()}}'|">Delete</button>
-    <button type="button" value="Edit" th:onclick="|window.location.href='@{'/coupons/edit/' + ${coupon.getCouponID()}}'|">Edit</button>
+    <button type="button" value="Delete" th:onclick="|window.location.href='@{'/seller/coupons/delete/' + ${coupon.getCouponID()}}'|">Delete</button>
+    <button type="button" value="Edit" th:onclick="|window.location.href='@{'/seller/coupons/edit/' + ${coupon.getCouponID()}}'|">Edit</button>
 </body>
 </html>

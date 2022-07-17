@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Buy Items</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+<div th:replace="fragments/buyer-header.html"></div>
+<h1>Sellers Nearby</h1>
+<tr th:each="seller: ${sellers}">
+    <div class="col-sm-6 mb-4 ml-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${seller.getBusinessName()}"/>
+                <p class="card-text" th:text="${seller.getBusinessDescription()}"/>
+            </div>
+        </div>
+    </div>
+</tr>
+</body>
+</html>
