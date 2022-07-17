@@ -1,19 +1,23 @@
-package com.project.estorefront;
+package com.project.estorefront.repository;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.TestPropertySource;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @TestPropertySource(properties = {"SPRING_DATASOURCE_URL=jdbc:mysql://db-5308.cs.dal.ca:3306/CSCI5308_1_DEVINT?autoreconnect=true", "SPRING_DATASOURCE_USERNAME=CSCI5308_1_DEVINT_USER", "SPRING_DATASOURCE_PASSWORD=uB8c3mUaMW"})
-class EStorefrontApplicationTests {
-
+public class AuthenticationTest {
+	
+	
 	@Test
-	void contextLoads(ApplicationContext context) {
-		assertThat(context).isNotNull();
+	void testValidUserLogin() {
+		String validEmail = "sriramya@gmail.com";
+		IAuthentication userLoginValidator = new Authentication();		
+
+		//assertTrue(emailValidator.validate(validEmail));
 	}
+	
 
 }
