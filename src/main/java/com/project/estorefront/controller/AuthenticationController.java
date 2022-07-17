@@ -46,7 +46,7 @@ public class AuthenticationController {
 
             if (userID == null || userID.isEmpty()) {
                 redirAttrs.addFlashAttribute("error", "Invalid email or password");
-                return new ModelAndView("redirect:/login-page");
+                return new ModelAndView("redirect:/login");
             } else {
                 session.setAttribute("userID", userID.toString());
                 session.setAttribute("role", role);
