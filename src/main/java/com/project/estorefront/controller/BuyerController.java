@@ -1,6 +1,8 @@
 package com.project.estorefront.controller;
 
 import com.project.estorefront.model.IInventoryItem;
+import com.project.estorefront.model.ItemCategory;
+import com.project.estorefront.model.Seller;
 import com.project.estorefront.model.User;
 import com.project.estorefront.repository.IInventoryItemPersistence;
 import com.project.estorefront.repository.ISellerPersistence;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 
@@ -17,11 +20,25 @@ import java.util.ArrayList;
 public class BuyerController {
 
     @GetMapping("/buyer")
-    public String buyerHome(Model model) {
+    public String buyerHome(@RequestParam(required = false, name = "category") String categoryFilter, Model model) {
         ISellerPersistence persistence = new SellerPersistence();
-        ArrayList<User> sellers = persistence.getAllSellersByCity("Halifax");
-        System.out.println(sellers.get(0).getCity());
+
+
+        ArrayList<User> sellers;
+        if (categoryFilter == null || categoryFilter.isEmpty()) {
+            sellers = Seller.getAllSellers(persistence, "Halifax");
+        } else {
+            sellers = Seller.getAllSellersByCategory(persistence, ItemCategory.valueOf(categoryFilter), "Halifax");
+        }
+
         model.addAttribute("sellers", sellers);
+
+        ArrayList<String> categories = new ArrayList<>();
+        for (ItemCategory category : ItemCategory.values()) {
+            categories.add(category.toString());
+        }
+        model.addAttribute("categories", categories);
+
         return "buyers";
     }
 

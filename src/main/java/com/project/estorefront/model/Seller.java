@@ -4,13 +4,6 @@ import com.project.estorefront.repository.ISellerPersistence;
 
 import java.util.ArrayList;
 
-/**
- * Seller user (Implementation of IUser)
- *
- * @author  Hrishi Patel
- * @version 1.0
- * @since   15-06-2022
- */
 
 public class Seller extends User implements ISeller {
 
@@ -21,18 +14,22 @@ public class Seller extends User implements ISeller {
         super();
     }
 
+    @Override
     public void setBusinessName(String businessName) {
         this.businessName = businessName;
     }
 
+    @Override
     public String getBusinessName() {
         return businessName;
     }
 
+    @Override
     public void setBusinessDescription(String businessDescription) {
         this.businessDescription = businessDescription;
     }
 
+    @Override
     public String getBusinessDescription() {
         return businessDescription;
     }
@@ -45,8 +42,11 @@ public class Seller extends User implements ISeller {
     public void deleteProfile() {
     }
 
-    @Override
-    public ArrayList<User> getAllSellers(ISellerPersistence persistence, String city) {
+    public static ArrayList<User> getAllSellers(ISellerPersistence persistence, String city) {
         return persistence.getAllSellersByCity(city);
+    }
+
+    public static ArrayList<User> getAllSellersByCategory(ISellerPersistence persistence, ItemCategory category, String city) {
+        return persistence.getAllSellersByCategory(category, city);
     }
 }

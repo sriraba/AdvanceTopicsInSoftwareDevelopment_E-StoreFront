@@ -1,5 +1,6 @@
 package com.project.estorefront.repository;
 
+import com.project.estorefront.model.ItemCategory;
 import com.project.estorefront.model.Seller;
 import com.project.estorefront.model.User;
 
@@ -10,6 +11,7 @@ public class SellerPersistenceMock implements ISellerPersistence {
 
     ArrayList<User> sellers = new ArrayList<>();
     ArrayList<User> sellersByCity = new ArrayList<>();
+    ArrayList<User> sellersByCategory = new ArrayList<>();
 
     public SellerPersistenceMock() {
     }
@@ -30,6 +32,15 @@ public class SellerPersistenceMock implements ISellerPersistence {
         seller.setBusinessDescription("ASD");
         seller.setCity(cityName);
         sellersByCity.add(seller);
+    }
+
+    public void addMockSellerForCategoryTest() {
+        Seller seller = new Seller();
+        seller.setEmail("hrishipatel99@gmail.com");
+        seller.setBusinessName("ASD");
+        seller.setBusinessDescription("ASD");
+        seller.setCity("Halifax");
+        sellersByCategory.add(seller);
     }
 
     @Override
@@ -55,6 +66,11 @@ public class SellerPersistenceMock implements ISellerPersistence {
             return null;
         }
         return s;
+    }
+
+    @Override
+    public ArrayList<User> getAllSellersByCategory(ItemCategory itemCategory, String city) {
+        return sellersByCategory.size() > 0 ? sellersByCategory : null;
     }
 
     @Override
