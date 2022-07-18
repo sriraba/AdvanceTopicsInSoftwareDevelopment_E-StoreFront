@@ -12,9 +12,9 @@ public class OrderDetails implements ISellerOrderManagement{
     private String orderID;
     private String sellerID;
     private String orderStatus;
+    private String couponID;
+
     private Float totalAmount;
-    private String couponApplied;
-    private Float couponAmount;
     private String deliveryCharges;
     private String deliveryAddress;
     private String pincode;
@@ -29,6 +29,13 @@ public class OrderDetails implements ISellerOrderManagement{
         this.itemDetails = itemDetails;
     }
 
+    public String getCouponID() {
+        return couponID;
+    }
+
+    public void setCouponID(String couponID) {
+        this.couponID = couponID;
+    }
     public String getOrderID() {
         return orderID;
     }
@@ -59,22 +66,6 @@ public class OrderDetails implements ISellerOrderManagement{
 
     public void setTotalAmount(Float totalAmount) {
         this.totalAmount = totalAmount;
-    }
-
-    public String getCouponApplied() {
-        return couponApplied;
-    }
-
-    public void setCouponApplied(String couponApplied) {
-        this.couponApplied = couponApplied;
-    }
-
-    public Float getCouponAmount() {
-        return couponAmount;
-    }
-
-    public void setCouponAmount(Float couponAmount) {
-        this.couponAmount = couponAmount;
     }
 
     public String getDeliveryCharges() {
@@ -118,11 +109,11 @@ public class OrderDetails implements ISellerOrderManagement{
         ArrayList<OrderDetails> previousOrderDetails = new ArrayList<>();
         Map<String, ArrayList<OrderDetails>> sellerOrders = new HashMap<>();
         allOrderDetails.forEach(orderdetail->{
-            if(orderdetail.getOrderStatus().equalsIgnoreCase("delivered")){
-                previousOrderDetails.add(orderdetail);
+            if(orderdetail.getOrderStatus().equalsIgnoreCase(String.valueOf(OrderStatus.PLACED))){
+                currentOrderDetails.add(orderdetail);
             }
             else{
-                currentOrderDetails.add(orderdetail);
+                previousOrderDetails.add(orderdetail);
             }
         });
         sellerOrders.put("current", currentOrderDetails);

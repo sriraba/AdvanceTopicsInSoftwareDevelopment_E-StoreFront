@@ -63,21 +63,35 @@ public class SellerController {
     @GetMapping("/seller/orders/view/{userID}")
     public ModelAndView sellerOrdersView(@PathVariable String userID) {
         ISellerOrderManagement sellerOrder = new OrderDetails();
-        return new ModelAndView("seller-orders", "orders", sellerOrder.getSellerOrders(userID));
+        return new ModelAndView("seller-orders","orders", sellerOrder.getSellerOrders(userID));
 
     }
 
     @GetMapping("/seller/orders/current/{orderID}")
-    public ModelAndView sellerCurrentOrderView(@PathVariable String orderID) {
+    public ModelAndView sellerCurrentOrderView(@PathVariable String orderID){
         ISellerOrderManagement sellerOrder = new OrderDetails();
-        return new ModelAndView("view-selected-order", "order", sellerOrder.getOrderAndItemDetails(orderID));
-
+        ModelAndView modelAndView = new ModelAndView("view-selected-order","order", sellerOrder.getOrderAndItemDetails(orderID));
+        modelAndView.addObject("page","current");
+        return modelAndView;
     }
 
     @GetMapping("/seller/orders/previous/{orderID}")
     public ModelAndView sellerPreviousOrderView(@PathVariable String orderID) {
         ISellerOrderManagement sellerOrder = new OrderDetails();
-        return new ModelAndView("view-selected-order", "order", sellerOrder.getOrderAndItemDetails(orderID));
+        ModelAndView modelAndView = new ModelAndView("view-selected-order","order", sellerOrder.getOrderAndItemDetails(orderID));
+        modelAndView.addObject("page","previous");
+        return modelAndView;
+    }
+
+    @GetMapping("/seller/orders/assign_delivery_person/{sellerID}")
+    public ModelAndView assignDeliveryPerson(@PathVariable String sellerID) {
+        IDeliveryPerson deliveryPersons = new DeliveryPerson();
+        return new ModelAndView("assign-delivery-person","delivery_persons", deliveryPersons.getDeliveryPersonDetails(sellerID));
+    }
+
+    @PostMapping("/seller/orders/assigned")
+    public String deliveryPersonAssigned() {
+        return "assigned-success";
     }
 
     @GetMapping("/seller/items/edit/{itemID}")
