@@ -6,7 +6,7 @@
 </head>
 <body>
 <h2>Add New Coupon</h2>
-<form th:action="@{/create-coupon}" method="post">
+<form th:action="@{/seller/create-coupon}" method="post">
     <label for="name">Coupon Name:</label>
     <input type="text" name="name" id="Name"><br><br>
     <label for="amount">Maximum Amount: </label>
@@ -14,7 +14,7 @@
     <label for="percent">Percent: </label>
     <input type="text" name="percent" id="percent"><br><br>
     <input type="submit" value="Submit">
-    <input type="button" value="Cancel" th:onclick="|window.location.href='/coupons'|">
+    <input type="button" value="Cancel" th:onclick="|window.location.href='/seller/coupons'|">
 </form>
 </body>
 </html>

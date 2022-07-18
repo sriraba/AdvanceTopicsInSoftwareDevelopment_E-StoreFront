@@ -5,38 +5,38 @@
     <title>Update Item</title>
 </head>
 <body>
-<form th:action="@{/seller/items/create}" method="POST">
-    <table>
+<form th:action="@{/seller/items/update/} + ${item.getItemID()}" method="POST">
+    <table>*
         <h1>Add Item</h1>
         <tr>
             <td>Item Name:</td>
-            <td><input type=”text” name="itemName"></td>
+            <td><input type=”text” name="itemName" th:value="${item.getItemName()}"></td>
         </tr>
         <tr>
             <td>Item Description:</td>
-            <td><input type=”text” name="description"></td>
+            <td><input type=”text” name="description" th:value="${item.getItemDescription()}"></td>
         </tr>
         <tr>
             <td>Item Price:</td>
-            <td><input type=”text” name="price"></td>
+            <td><input type=”text” name="price" th:value="${item.getItemPrice()}"></td>
         </tr>
         <tr>
             <td>Item Quantity:</td>
-            <td><input type=”text” name="quantity"></td>
+            <td><input type=”text” name="quantity" th:value="${item.getItemQuantity()}"></td>
         </tr>
         <tr>
             <td>Category:</td>
             <td>
                 <select name="category" id="category">
-                    <option value="GROCERY">Grocery</option>
-                    <option value="RESTAURANT">Restaurant</option>
-                    <option value="LIQUOR">Liquor</option>
-                    <option value="ELECTRONICS">Electronics</option>
+                    <option value="GROCERY" th:selected="${item.getItemCategory()== 'GROCERY'}">Grocery</option>
+                    <option value="RESTAURANT" th:selected="${item.getItemCategory().toString() == 'RESTAURANT'}">Restaurant</option>
+                    <option value="LIQUOR" th:selected="${item.getItemCategory().toString() == 'LIQUOR'}">Liquor</option>
+                    <option value="ELECTRONICS" th:selected="${item.getItemCategory().toString() == 'ELECTRONICS'}">Electronics</option>
                 </select>
             </td>
         </tr>
         <tr>
-            <td><input type="submit" value="Register"></td>
+            <td><input type="submit" value="Update"></td>
         </tr>
     </table>
 </form>

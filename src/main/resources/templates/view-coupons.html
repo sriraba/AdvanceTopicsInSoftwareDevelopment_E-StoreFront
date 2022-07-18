@@ -2,11 +2,13 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Coupons</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 </head>
 <body>
+<div th:replace="fragments/seller-header.html"></div>
 <h2>Coupons</h2><br>
-<button type="button" th:onclick="|window.location.href='/add-coupon'|">Add Coupon</button>
+<button type="button" th:onclick="|window.location.href='/seller/add-coupon'|">Add Coupon</button>
 <table>
     <tr>
         <th>#</th>
@@ -16,7 +18,7 @@
     <tr th:each="coupon : ${coupons}">
         <td th:text="${coupon.getCouponID()}"></td>
         <td th:text="${coupon.getName()}"></td>
-        <td><a th:href="@{'/coupons/view/' + ${coupon.getCouponID()}}">Details</a></td>
+        <td><a th:href="@{'/seller/coupons/view/' + ${coupon.getCouponID()}}">Details</a></td>
     </tr>
 </table>
 </body>

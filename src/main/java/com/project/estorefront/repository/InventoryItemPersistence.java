@@ -105,4 +105,31 @@ public class InventoryItemPersistence implements IInventoryItemPersistence {
             return null;
         }
     }
+
+    @Override
+    public IInventoryItem getItemByID(String itemID) {
+        PreparedStatement preparedStatement = null;
+        Connection connection = Database.getConnection();
+        IInventoryItem item = new InventoryItem();
+        try {
+            preparedStatement = connection.prepareStatement("SELECT * FROM seller_inventory WHERE item_id = ?");
+            preparedStatement.setString(1, itemID);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                item.setItemID(rs.getString("item_id"));
+                item.setUserID(rs.getString("user_id"));
+                item.setItemCategory(ItemCategory.valueOf(rs.getString("category_id")));
+                item.setItemQuantity(rs.getInt("quantity"));
+                item.setItemPrice(rs.getDouble("price"));
+                item.setItemName(rs.getString("item_name"));
+                item.setItemDescription(rs.getString("item_description"));
+            }
+
+            return item;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

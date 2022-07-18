@@ -23,6 +23,9 @@ public abstract class User {
         this.isSeller = isSeller;
     }
 
+    public User() {
+    }
+
     public String getUserID() {
         return userID;
     }
@@ -87,9 +90,7 @@ public abstract class User {
         this.password = password;
     }
 
-    public void updateProfile() {
-
-    }
+    public abstract void updateProfile();
 
     public void deleteProfile() {
 
