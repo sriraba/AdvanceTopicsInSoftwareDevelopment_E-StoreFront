@@ -18,10 +18,10 @@
         <th> Order Number </th>
         <th> Status </th>
         <th> Total Amount </th>
-        <th> Coupon Applied </th>
-        <th> Coupon Amount </th>
+        <th> Coupon Number </th>
         <th> Delivery Address </th>
         <th> Pincode </th>
+        <th th:if="${page == 'current'}"> Assign delivery person </th>
     </tr>
     </thead>
     <tbody>
@@ -29,10 +29,14 @@
         <td><span th:text="${order.getOrderID()}"> Order Number </span></td>
         <td><span th:text="${order.getOrderStatus()}"> Status </span></td>
         <td><span th:text="${order.getTotalAmount()}"> Total Amount </span></td>
-        <td><span th:text="${order.getCouponApplied()}"> Coupon Applied </span></td>
-        <td><span th:text="${order.getCouponAmount()}"> Coupon Amount </span></td>
+        <td><span th:text="${order.getCouponID()}"> Coupon Number </span></td>
         <td><span th:text="${order.getDeliveryAddress()}"> Delivery Address </span></td>
         <td><span th:text="${order.getPincode()}"> Pincode </span></td>
+        <td>
+            <span th:if="${page == 'current'}"><a th:href="@{/seller/orders/assign_delivery_person/{sellerID}(sellerID=${order.getSellerID()})}">Assign</a></span>
+        </td>
+
+        <td></td>
     </tr>
     </tbody>
 </table>

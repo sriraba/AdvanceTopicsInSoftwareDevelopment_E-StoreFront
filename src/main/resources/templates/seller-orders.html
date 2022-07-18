@@ -27,7 +27,7 @@
     </tr>
     <tr th:each="current : ${orders['current']}">
         <td><span th:text="${current.getOrderID()}"> Order Number </span></td>
-        <td><a th:href="@{/seller/orders/current/{userID}(userID=${current.getOrderID()})}">View Order</a></td>
+        <td><a th:href="@{/seller/orders/current/{orderID}(orderID=${current.getOrderID()})}">View Order</a></td>
     </tr>
     </tbody>
 </table>

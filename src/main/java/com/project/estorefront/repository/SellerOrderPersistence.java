@@ -1,5 +1,6 @@
 package com.project.estorefront.repository;
 
+import com.project.estorefront.model.IDeliveryPerson;
 import com.project.estorefront.model.ItemDetails;
 import com.project.estorefront.model.OrderDetails;
 
@@ -25,11 +26,10 @@ public class SellerOrderPersistence implements ISellerOrderPersistence{
                 OrderDetails orderDetail = new OrderDetails();
                 orderDetail.setOrderID(rs.getString("order_id"));
                 orderDetail.setOrderStatus(rs.getString("order_status"));
+                orderDetail.setCouponID(rs.getString("coupon_id"));
                 orderDetail.setTotalAmount(rs.getFloat("total_amount"));
-                orderDetail.setCouponApplied(rs.getString("is_coupon_applied"));
                 orderDetail.setDeliveryCharges(rs.getString("delivery_charges"));
                 orderDetail.setDeliveryAddress(rs.getString("delivery_address"));
-                orderDetail.setCouponAmount(rs.getFloat("coupon_amt"));
                 orderDetail.setPincode(rs.getString("pincode"));
                 sellerOrderDetails.add(orderDetail);
             }
@@ -53,14 +53,15 @@ public class SellerOrderPersistence implements ISellerOrderPersistence{
             while (rs.next()) {
                 orderDetail.setOrderID(rs.getString("order_id"));
                 orderDetail.setOrderStatus(rs.getString("order_status"));
-                orderDetail.setTotalAmount(rs.getFloat("total_amount"));
-                orderDetail.setCouponApplied(rs.getString("is_coupon_applied"));
                 orderDetail.setDeliveryCharges(rs.getString("delivery_charges"));
+                orderDetail.setCouponID(rs.getString("coupon_id"));
+                orderDetail.setTotalAmount(rs.getFloat("total_amount"));
                 orderDetail.setDeliveryAddress(rs.getString("delivery_address"));
-                orderDetail.setCouponAmount(rs.getFloat("coupon_amt"));
                 orderDetail.setPincode(rs.getString("pincode"));
+                orderDetail.setSellerID(rs.getString("seller_id"));
                 itemDetail.setItemID(rs.getString("item_id"));
                 itemDetail.setQuantity(rs.getInt("quantity"));
+                itemDetail.setItemPrice(rs.getFloat("item_price"));
                 sellerItemDetails.add(itemDetail);
             }
             orderDetail.setItemDetails(sellerItemDetails);
@@ -68,6 +69,21 @@ public class SellerOrderPersistence implements ISellerOrderPersistence{
         }catch (SQLException e) {
             e.printStackTrace();
             return orderDetail;
+        }
+    }
+
+    @Override
+    public void updateDeliveryPerson(String orderID, String charge) {
+        PreparedStatement preparedStatement = null;
+        Connection connection = Database.getConnection();
+        ArrayList<IDeliveryPerson> deliveryPersonDetails = new ArrayList<>();
+        try {
+            preparedStatement = connection.prepareStatement("UPDATE buyer_orders WHERE buyer_orders.order_id = ? AND buyer_orders.delivery_charges = ?");
+            preparedStatement.setString(1, orderID);
+            preparedStatement.setString(2, charge);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 

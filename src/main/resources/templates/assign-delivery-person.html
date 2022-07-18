@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Assign Delivery Person</title>
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th> Names </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+            <form th:action="@{/seller/orders/assigned}" th:object="${selectedOption}" th:method="post">
+                <select name="name" id="name">
+                    <option value="0">select option</option>
+                    <option th:each="delivery_person : ${delivery_persons}" th:value="${delivery_person.getPersonName()}" th:text="${delivery_person.getPersonName()}"></option>
+                </select>
+                <input type="submit" value="submit">
+<!--                <button type="submit">submit</button>-->
+            </form>
+        </td>
+    </tr>
+
+    </tbody>
+</table>
+</body>
+</html>
