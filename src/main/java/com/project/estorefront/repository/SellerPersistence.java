@@ -195,9 +195,10 @@ public class SellerPersistence implements ISellerPersistence {
                 preparedStatement.setString(1, seller.getUserID());
                 preparedStatement.setString(2, seller.getFirstName());
                 preparedStatement.setString(3, seller.getLastName());
-                preparedStatement.setString(4, seller.getEmail());
-                preparedStatement.setString(5, seller.getPhone());
-                preparedStatement.setString(6, ((Seller)seller).getBusinessName());
+                preparedStatement.setString(4, ((Seller)seller).getBusinessName());
+                preparedStatement.setString(5, seller.getEmail());
+                preparedStatement.setString(6, seller.getPhone());
+
                 preparedStatement.executeUpdate();
                 return true;
             } catch (Exception e) {
