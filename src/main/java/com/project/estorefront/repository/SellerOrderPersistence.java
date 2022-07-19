@@ -14,13 +14,13 @@ public class SellerOrderPersistence implements ISellerOrderPersistence{
     private Connection connection;
 
     @Override
-    public ArrayList<OrderDetails> loadOrders(String userID) {
+    public ArrayList<OrderDetails> loadOrders(String sellerID) {
         PreparedStatement preparedStatement = null;
         Connection connection = Database.getConnection();
         ArrayList<OrderDetails> sellerOrderDetails = new ArrayList<>();
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM buyer_orders WHERE buyer_orders.seller_id = ?");
-            preparedStatement.setString(1, userID);
+            preparedStatement.setString(1, sellerID);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 OrderDetails orderDetail = new OrderDetails();

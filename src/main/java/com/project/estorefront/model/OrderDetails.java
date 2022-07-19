@@ -1,5 +1,7 @@
 package com.project.estorefront.model;
 
+import com.project.estorefront.repository.BuyerOrderPersistence;
+import com.project.estorefront.repository.IBuyerOrderPersistence;
 import com.project.estorefront.repository.ISellerOrderPersistence;
 import com.project.estorefront.repository.SellerOrderPersistence;
 
@@ -7,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OrderDetails implements ISellerOrderManagement{
+public class OrderDetails implements ISellerOrderManagement, IBuyerOrderManagement{
 
     private String orderID;
     private String sellerID;
@@ -121,6 +123,28 @@ public class OrderDetails implements ISellerOrderManagement{
 
         return sellerOrders;
     }
+
+    @Override
+    public Map<String, ArrayList<OrderDetails>> getBuyerOrders(String buyerID) {
+        IBuyerOrderPersistence orderPersistence = new BuyerOrderPersistence();
+        ArrayList<OrderDetails> allOrderDetails = orderPersistence.loadOrders(buyerID);
+        ArrayList<OrderDetails> currentOrderDetails = new ArrayList<>();
+        ArrayList<OrderDetails> previousOrderDetails = new ArrayList<>();
+        Map<String, ArrayList<OrderDetails>> sellerOrders = new HashMap<>();
+        allOrderDetails.forEach(orderdetail->{
+            if(orderdetail.getOrderStatus().equalsIgnoreCase(String.valueOf(OrderStatus.PLACED)) || orderdetail.getOrderStatus().equalsIgnoreCase(String.valueOf(OrderStatus.DELIVERY_PERSON_ASSIGNED))){
+                currentOrderDetails.add(orderdetail);
+            }
+            else{
+                previousOrderDetails.add(orderdetail);
+            }
+        });
+        sellerOrders.put("current", currentOrderDetails);
+        sellerOrders.put("previous", previousOrderDetails);
+
+        return sellerOrders;
+    }
+
     public OrderDetails getOrderAndItemDetails(String orderID){
         ISellerOrderPersistence orderPersistence = new SellerOrderPersistence();
         return orderPersistence.loadOrderAndItems(orderID);
