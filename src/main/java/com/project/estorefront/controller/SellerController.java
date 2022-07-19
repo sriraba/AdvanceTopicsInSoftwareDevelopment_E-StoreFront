@@ -26,22 +26,34 @@ public class SellerController {
     }
     @GetMapping("/seller/account")
     public String sellerAccount(Model model, HttpSession session) {
-        ISellerPersistence iSellerPersistence = new SellerPersistence();
+        ISellerPersistence sellerPersistence = new SellerPersistence();
         String userID = (String) session.getAttribute("userID");
-        //implement
-
+        User seller = new Seller();
+        seller = ((Seller)seller).getSellerByID(sellerPersistence, userID);
+        model.addAttribute("seller", seller);
         return "seller-account";
     }
     @GetMapping("/seller/account/edit/{userID}")
     public String editSellerAccount(@PathVariable String userID, Model model) {
-        //implementation
+        ISellerPersistence sellerPersistence = new SellerPersistence();
+        User seller = new Seller();
+        seller = ((Seller)seller).getSellerByID(sellerPersistence, userID);
+        model.addAttribute("seller", seller);
         return "seller-account-update";
     }
     @PostMapping("/seller/account/update/{userID}")
     public String updateSellerAccount(@RequestParam("firstName") String firstName,
                                       @RequestParam("lastName") String lastName, @RequestParam("businessName") String businessName,
                                       @RequestParam("email") String email, @RequestParam("phone") String phone, @PathVariable String userID, HttpSession session) {
-     // implementation
+        User seller = new Seller();
+        seller.setFirstName(firstName);
+        seller.setLastName(lastName);
+        ((Seller)seller).setBusinessName(businessName);
+        seller.setEmail(email);
+        seller.setPhone(phone);
+        seller.setUserID(userID);
+        ISellerPersistence sellerPersistence = new SellerPersistence();
+        ((Seller) seller).updateProfile(sellerPersistence);
         return "redirect:/seller/account";
     }
     @GetMapping("/seller/account/deactivate/{userID}")
@@ -49,7 +61,6 @@ public class SellerController {
         //implementation
         return "redirect:/seller/account";
     }
-
 
     @GetMapping("/seller/items")
     public String sellerItems(Model model, HttpSession session) {

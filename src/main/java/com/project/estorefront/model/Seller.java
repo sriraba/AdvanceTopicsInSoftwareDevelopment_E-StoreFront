@@ -2,9 +2,7 @@ package com.project.estorefront.model;
 
 import com.project.estorefront.repository.ISellerPersistence;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
-
 
 public class Seller extends User implements ISeller {
 
@@ -15,29 +13,10 @@ public class Seller extends User implements ISeller {
         super();
     }
 
-    @Override
-    public void updateProfile() {
-
-    }
-
-//    public String updateProfile(ISellerPersistence persistence, int seller_id, String business_name, String first_name, String last_name, String phone_number, String email) throws SQLException {
-//        return persistence.updateSellerProfile(seller_id, business_name,  first_name, last_name,  phone_number, email);
-//
-//    }
 
     @Override
     public void setBusinessName(String businessName) {
         this.businessName = businessName;
-    }
-
-    @Override
-    public boolean updateProfile(ISellerPersistence persistence) {
-        return false;
-    }
-
-    @Override
-    public boolean deleteProfile(ISellerPersistence persistence) {
-        return false;
     }
 
     @Override
@@ -55,9 +34,6 @@ public class Seller extends User implements ISeller {
         return businessDescription;
     }
 
-//    public String deleteProfile(ISellerPersistence persistence , int id) throws SQLException {
-//        return persistence.deleteSellerAccount(id);
-//    }
 
     public static ArrayList<User> getAllSellers(ISellerPersistence persistence, String city) {
         return persistence.getAllSellersByCity(city);
@@ -65,5 +41,21 @@ public class Seller extends User implements ISeller {
 
     public static ArrayList<User> getAllSellersByCategory(ISellerPersistence persistence, ItemCategory category, String city) {
         return persistence.getAllSellersByCategory(category, city);
+    }
+    @Override
+    public boolean updateProfile(ISellerPersistence persistence) {
+        return persistence.updateSellerProfile(this);
+    }
+
+    @Override
+    public boolean deleteProfile(ISellerPersistence persistence) {
+        return false;
+    }
+    @Override
+    public void updateProfile() {
+
+    }
+    public User getSellerByID(ISellerPersistence persistence ,String sellerID){
+        return persistence.getSellerByID(sellerID);
     }
 }

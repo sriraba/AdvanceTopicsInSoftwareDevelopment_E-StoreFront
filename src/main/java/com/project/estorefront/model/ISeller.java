@@ -15,5 +15,6 @@ public interface ISeller {
     void setBusinessName(String businessName);
     boolean updateProfile(ISellerPersistence persistence);
     boolean deleteProfile(ISellerPersistence persistence);
+    User getSellerByID(ISellerPersistence persistence ,String sellerID);
 
 }

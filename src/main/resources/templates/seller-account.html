@@ -16,35 +16,27 @@
   </tr>
   <tr>
     <td>First Name:</td>
-    <td th:text="${ seller.getFirstName()}"/>
-    <td>
-      <a th:href="@{/seller/account/edit/} + ${seller.getUserID()}">Edit</a>
-     <!-- <a th:href="@{/seller/account//} + ${seller.getUserID()}">Edit</a> -->
-
-    </td>
+    <td th:text="${seller.getFirstName()}"/>
   </tr>
   <tr>
     <td>Last Name:</td>
     <td th:text="${seller.getLastName()}"/>
-    <a th:href="@{/seller/account/edit/} + ${seller.getUserID()}">Edit</a>
   </tr>
   <tr>
   <tr>
     <td>Business Name:</td>
     <td th:text="${seller.getBusinessName()}"/>
-    <a th:href="@{/seller/account/edit/} + ${seller.getUserID()}">Edit</a>
   </tr>
   <tr>
   <tr>
     <td>Email id:</td>
     <td th:text="${seller.getEmail()}"/>
-  <a th:href="@{/seller/account/edit/} + ${seller.getUserID()}">Edit</a>
   </tr>
   <tr>
     <td>Contact:</td>
     <td th:text="${seller.getPhone()}"/>
-    <a th:href="@{/seller/account/edit/} + ${seller.getUserID()}">Edit</a>
   </tr>
+  <a th:href="@{/seller/account/edit/} + ${seller.getUserID()}">Edit</a>
 </table>
 </body>
 </html>
