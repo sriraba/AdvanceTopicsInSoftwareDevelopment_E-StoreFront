@@ -1,9 +1,6 @@
 package com.project.estorefront.repository;
 
-import com.project.estorefront.model.ItemCategory;
-import com.project.estorefront.model.Seller;
-import com.project.estorefront.model.User;
-import com.project.estorefront.model.UserFactory;
+import com.project.estorefront.model.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
