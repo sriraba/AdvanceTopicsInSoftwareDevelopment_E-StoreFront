@@ -2,20 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Current And Previous Orders</title>
-    <style>
-    table, th, td {
-      border: 1px solid black;
-      border-collapse: collapse;
-    }
-    </style>
+    <title>Seller Orders</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 </head>
 <body>
 <div th:replace="fragments/seller-header.html"></div>
-<h2>Current orders:</h2><br>
-<table>
+<table class="table table-striped">
     <thead>
+    <h2>Current orders:</h2>
+    <br/>
     <tr>
         <th> Order Number </th>
         <th> Link </th>
@@ -27,13 +22,14 @@
     </tr>
     <tr th:each="current : ${orders['current']}">
         <td><span th:text="${current.getOrderID()}"> Order Number </span></td>
-        <td><a th:href="@{/seller/orders/current/{userID}(userID=${current.getOrderID()})}">View Order</a></td>
+        <td><a th:href="@{/seller/orders/current/{orderID}(orderID=${current.getOrderID()})}">View Order</a></td>
     </tr>
     </tbody>
 </table>
-<h2>Previous orders:</h2><br>
-<table>
+<table class="table table-striped">
     <thead>
+    <h2>Previous orders:</h2>
+    <br/>
     <tr>
         <th> Order Number </th>
         <th> Link </th>
@@ -45,7 +41,7 @@
     </tr>
     <tr th:each="previous : ${orders['previous']}">
         <td><span th:text="${previous.getOrderID()}"> Order Number </span></td>
-        <td><a th:href="@{/seller/orders/previous/{userID}(userID=${previous.getOrderID()})}">View Order</a></td>
+        <td><a th:href="@{/seller/orders/previous/{orderID}(orderID=${previous.getOrderID()})}">View Order</a></td>
     </tr>
     </tbody>
 </table>
