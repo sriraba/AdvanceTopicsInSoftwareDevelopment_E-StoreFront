@@ -1,5 +1,6 @@
 package com.project.estorefront.controller;
 
+import com.project.estorefront.model.SellerFactory;
 import com.project.estorefront.model.User;
 import com.project.estorefront.model.UserFactory;
 import com.project.estorefront.model.validators.EmailValidator;
@@ -105,10 +106,10 @@ public class AuthenticationController {
             User user = null;
 
             if (role.contains("buyer")) {
-                user = UserFactory.instance().getUser("buyer");
+                user = SellerFactory.instance().makeUser("buyer");
                 user.setIsSeller(false);
             } else if (role.contains("seller")) {
-                user = UserFactory.instance().getUser("seller");
+                user = SellerFactory.instance().makeUser("seller");
                 user.setIsSeller(true);
             } else {
                 errors.add("Please select a role");
