@@ -5,4 +5,5 @@ import java.util.Map;
 
 public interface IBuyerOrderManagement extends IOrderManagement{
     Map<String, ArrayList<OrderDetails>> getBuyerOrders(String userID);
+    void submitReview(String userID, String orderID, String description);
 }

@@ -33,6 +33,7 @@ public class OrderPersistence implements IOrderPersistence{
                 itemDetail.setItemID(rs.getString("item_id"));
                 itemDetail.setQuantity(rs.getInt("quantity"));
                 itemDetail.setItemPrice(rs.getFloat("item_price"));
+                orderDetail.setBuyerID(rs.getString("user_id"));
                 sellerItemDetails.add(itemDetail);
             }
             orderDetail.setItemDetails(sellerItemDetails);

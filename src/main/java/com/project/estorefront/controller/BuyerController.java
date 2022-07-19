@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -62,11 +63,24 @@ public class BuyerController {
 
     @GetMapping("/buyer/order/details/{orderID}")
     public ModelAndView buyerItems(@PathVariable String orderID) {
-        System.out.println("inside /buyer/order/details/{orderID}");
         IBuyerOrderManagement buyerOrder = new OrderDetails();
         ModelAndView modelAndView = new ModelAndView("view-selected-order","order", buyerOrder.getOrderAndItemDetails(orderID));
         modelAndView.addObject("page","buyer");
         return modelAndView;
+    }
+
+    @GetMapping("/buyer/order/add-review/{userID}/{orderID}")
+    public String addReview(@PathVariable("userID") String userID,@PathVariable("orderID") String orderID,Model model) {
+        model.addAttribute("userID",userID);
+        model.addAttribute("orderID",orderID);
+        return "add-review";
+    }
+    @GetMapping("/buyer/order/submit-review/{userID}/{orderID}")
+    public String submitReview(@PathVariable("userID") String userID,@PathVariable("orderID") String orderID, @RequestParam("review") String description, Model model) {
+        IBuyerOrderManagement buyerOrder = new OrderDetails();
+        buyerOrder.submitReview(userID,orderID,description);
+        model.addAttribute("page","buyer");
+        return "submit-success";
     }
 
 }
