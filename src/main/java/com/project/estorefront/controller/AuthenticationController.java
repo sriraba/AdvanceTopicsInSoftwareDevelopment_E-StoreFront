@@ -106,10 +106,10 @@ public class AuthenticationController {
             User user = null;
 
             if (role.contains("buyer")) {
-                user = SellerFactory.instance().makeUser("buyer");
+                user = UserFactory.instance().getUser("buyer");
                 user.setIsSeller(false);
             } else if (role.contains("seller")) {
-                user = SellerFactory.instance().makeUser("seller");
+                user = UserFactory.instance().getUser("seller");
                 user.setIsSeller(true);
             } else {
                 errors.add("Please select a role");

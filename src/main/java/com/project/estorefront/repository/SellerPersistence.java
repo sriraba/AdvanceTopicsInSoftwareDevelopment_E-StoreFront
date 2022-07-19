@@ -29,7 +29,7 @@ public class SellerPersistence implements ISellerPersistence {
                 String address = rs.getString("address");
                 String businessDescription = rs.getString("business_description");
 
-                User seller = SellerFactory.instance().makeUser("seller");
+                User seller = UserFactory.instance().getUser("seller");
                 seller.setFirstName(firstName);
                 seller.setLastName(lastName);
                 seller.setEmail(email);
@@ -70,7 +70,7 @@ public class SellerPersistence implements ISellerPersistence {
                 String address = rs.getString("address");
                 String businessDescription = rs.getString("business_description");
 
-                User seller = SellerFactory.instance().makeUser("seller");
+                User seller = UserFactory.instance().getUser("seller");
                 seller.setFirstName(firstName);
                 seller.setLastName(lastName);
                 seller.setEmail(email);
@@ -111,7 +111,7 @@ public class SellerPersistence implements ISellerPersistence {
                 String businessDescription = rs.getString("business_description");
                 ItemCategory category = ItemCategory.valueOf(rs.getString("category_id"));
 
-                User seller = SellerFactory.instance().makeUser("seller");
+                User seller = UserFactory.instance().getUser("seller");
                 seller.setEmail(email);
                 seller.setAddress(address);
                 seller.setPhone(contactNumber);
@@ -149,7 +149,7 @@ public class SellerPersistence implements ISellerPersistence {
                 String address = rs.getString("address");
                 String businessDescription = rs.getString("business_description");
 
-                User seller = SellerFactory.instance().makeUser("seller");
+                User seller = UserFactory.instance().getUser("seller");
                 seller.setFirstName(firstName);
                 seller.setLastName(lastName);
                 seller.setEmail(email);
