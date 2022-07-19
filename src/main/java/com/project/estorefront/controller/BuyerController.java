@@ -1,9 +1,6 @@
 package com.project.estorefront.controller;
 
-import com.project.estorefront.model.IInventoryItem;
-import com.project.estorefront.model.ItemCategory;
-import com.project.estorefront.model.Seller;
-import com.project.estorefront.model.User;
+import com.project.estorefront.model.*;
 import com.project.estorefront.repository.IInventoryItemPersistence;
 import com.project.estorefront.repository.ISellerPersistence;
 import com.project.estorefront.repository.InventoryItemPersistence;
@@ -13,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 
@@ -54,6 +52,21 @@ public class BuyerController {
         model.addAttribute("inventory", inventory);
 
         return "seller-details";
+    }
+
+    @GetMapping("/buyer/orders/view/{userID}")
+    public ModelAndView buyerOrdersView(@PathVariable String userID) {
+        IBuyerOrderManagement buyerOrder = new OrderDetails();
+        return new ModelAndView("buyer-orders","orders", buyerOrder.getBuyerOrders(userID));
+    }
+
+    @GetMapping("/buyer/order/details/{orderID}")
+    public ModelAndView buyerItems(@PathVariable String orderID) {
+        System.out.println("inside /buyer/order/details/{orderID}");
+        IBuyerOrderManagement buyerOrder = new OrderDetails();
+        ModelAndView modelAndView = new ModelAndView("view-selected-order","order", buyerOrder.getOrderAndItemDetails(orderID));
+        modelAndView.addObject("page","buyer");
+        return modelAndView;
     }
 
 }
