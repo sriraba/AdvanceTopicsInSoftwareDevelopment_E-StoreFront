@@ -1,9 +1,6 @@
 package com.project.estorefront.model;
 
-import com.project.estorefront.repository.BuyerOrderPersistence;
-import com.project.estorefront.repository.IBuyerOrderPersistence;
-import com.project.estorefront.repository.ISellerOrderPersistence;
-import com.project.estorefront.repository.SellerOrderPersistence;
+import com.project.estorefront.repository.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -146,7 +143,7 @@ public class OrderDetails implements ISellerOrderManagement, IBuyerOrderManageme
     }
 
     public OrderDetails getOrderAndItemDetails(String orderID){
-        ISellerOrderPersistence orderPersistence = new SellerOrderPersistence();
+        IOrderPersistence orderPersistence = new OrderPersistence();
         return orderPersistence.loadOrderAndItems(orderID);
     }
 }

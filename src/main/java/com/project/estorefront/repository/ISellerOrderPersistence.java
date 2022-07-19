@@ -4,9 +4,7 @@ import com.project.estorefront.model.OrderDetails;
 
 import java.util.ArrayList;
 
-public interface ISellerOrderPersistence {
+public interface ISellerOrderPersistence extends IOrderPersistence{
     public ArrayList<OrderDetails> loadOrders(String userID);
-    public OrderDetails loadOrderAndItems(String orderID);
     public void updateDeliveryPerson(String orderID, String name);
-
 }

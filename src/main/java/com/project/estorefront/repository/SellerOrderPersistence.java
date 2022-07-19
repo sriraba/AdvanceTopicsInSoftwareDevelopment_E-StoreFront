@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class SellerOrderPersistence implements ISellerOrderPersistence{
+public class SellerOrderPersistence extends OrderPersistence implements ISellerOrderPersistence  {
     private Connection connection;
 
     @Override
@@ -37,38 +37,6 @@ public class SellerOrderPersistence implements ISellerOrderPersistence{
         }catch (SQLException e) {
             e.printStackTrace();
             return sellerOrderDetails;
-        }
-    }
-    @Override
-    public OrderDetails loadOrderAndItems(String orderID) {
-        PreparedStatement preparedStatement = null;
-        Connection connection = Database.getConnection();
-        OrderDetails orderDetail = new OrderDetails();
-        ArrayList<ItemDetails> sellerItemDetails = new ArrayList<>();
-        try {
-            preparedStatement = connection.prepareStatement("SELECT * FROM buyer_orders JOIN order_items ON buyer_orders.order_id = order_items.order_id AND buyer_orders.order_id = ?");
-            preparedStatement.setString(1, orderID);
-            ResultSet rs = preparedStatement.executeQuery();
-            ItemDetails itemDetail = new ItemDetails();
-            while (rs.next()) {
-                orderDetail.setOrderID(rs.getString("order_id"));
-                orderDetail.setOrderStatus(rs.getString("order_status"));
-                orderDetail.setDeliveryCharges(rs.getString("delivery_charges"));
-                orderDetail.setCouponID(rs.getString("coupon_id"));
-                orderDetail.setTotalAmount(rs.getFloat("total_amount"));
-                orderDetail.setDeliveryAddress(rs.getString("delivery_address"));
-                orderDetail.setPincode(rs.getString("pincode"));
-                orderDetail.setSellerID(rs.getString("seller_id"));
-                itemDetail.setItemID(rs.getString("item_id"));
-                itemDetail.setQuantity(rs.getInt("quantity"));
-                itemDetail.setItemPrice(rs.getFloat("item_price"));
-                sellerItemDetails.add(itemDetail);
-            }
-            orderDetail.setItemDetails(sellerItemDetails);
-            return orderDetail;
-        }catch (SQLException e) {
-            e.printStackTrace();
-            return orderDetail;
         }
     }
 

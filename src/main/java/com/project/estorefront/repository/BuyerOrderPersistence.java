@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class BuyerOrderPersistence implements IBuyerOrderPersistence{
+public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrderPersistence{
     @Override
     public ArrayList<OrderDetails> loadOrders(String buyerID) {
         PreparedStatement preparedStatement = null;
