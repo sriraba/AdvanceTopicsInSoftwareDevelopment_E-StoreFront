@@ -1,5 +1,6 @@
 package com.project.estorefront.repository;
 
+import com.project.estorefront.model.IInventoryItem;
 import com.project.estorefront.model.ItemCategory;
 import com.project.estorefront.model.User;
 
@@ -15,10 +16,14 @@ public interface ISellerPersistence {
     ArrayList<User> getAllSellersByCategory(ItemCategory itemCategory, String city);
 
     User getSellerByID(String sellerID);
+    boolean deactivateSellerAccount();
 
-    String updateSellerProfile(int seller_id, String business_name, String first_name, String last_name, String phone_number, String email) throws SQLException;
+    boolean updateSellerProfile(User seller);
 
-    String deleteSellerAccount(int id) throws SQLException;
+
+//    String updateSellerProfile(int seller_id, String business_name, String first_name, String last_name, String phone_number, String email) throws SQLException;
+//
+//    String deleteSellerAccount(int id) throws SQLException;
 }
 
 

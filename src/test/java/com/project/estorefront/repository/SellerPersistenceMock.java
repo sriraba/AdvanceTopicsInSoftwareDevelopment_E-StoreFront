@@ -42,15 +42,15 @@ public class SellerPersistenceMock implements ISellerPersistence {
         sellersByCategory.add(seller);
     }
 
-    @Override
-    public String updateSellerProfile(int seller_id, String business_name, String first_name, String last_name, String phone_number, String email) {
-        return "success" ; //check for return
-    }
-
-    @Override
-    public String deleteSellerAccount(int id) {
-        return null;
-    }
+//    @Override
+//    public String updateSellerProfile(int seller_id, String business_name, String first_name, String last_name, String phone_number, String email) {
+//        return "success" ; //check for return
+//    }
+//
+//    @Override
+//    public String deleteSellerAccount(int id) {
+//        return null;
+//    }
 
     @Override
     public ArrayList<User> getAllSellers() {
@@ -90,5 +90,15 @@ public class SellerPersistenceMock implements ISellerPersistence {
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean deactivateSellerAccount() {
+        return false;
+    }
+
+    @Override
+    public boolean updateSellerProfile(User seller) {
+        return false;
     }
 }

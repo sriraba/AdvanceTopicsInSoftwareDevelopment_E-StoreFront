@@ -1,9 +1,7 @@
 package com.project.estorefront.controller;
 
 import com.project.estorefront.model.*;
-import com.project.estorefront.repository.CouponsPersistence;
-import com.project.estorefront.repository.IInventoryItemPersistence;
-import com.project.estorefront.repository.InventoryItemPersistence;
+import com.project.estorefront.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +24,30 @@ public class SellerController {
     public String seller() {
         return "seller-page";
     }
-    @GetMapping("/seller/profile")
-    public String sellerProfile() {
-        return "seller-profile";
+    @GetMapping("/seller/account")
+    public String sellerAccount(Model model, HttpSession session) {
+        ISellerPersistence iSellerPersistence = new SellerPersistence();
+        String userID = (String) session.getAttribute("userID");
+        //implement
+
+        return "seller-account";
+    }
+    @GetMapping("/seller/account/edit/{userID}")
+    public String editSellerAccount(@PathVariable String userID, Model model) {
+        //implementation
+        return "seller-account-update";
+    }
+    @PostMapping("/seller/account/update/{userID}")
+    public String updateSellerAccount(@RequestParam("firstName") String firstName,
+                                      @RequestParam("lastName") String lastName, @RequestParam("businessName") String businessName,
+                                      @RequestParam("email") String email, @RequestParam("phone") String phone, @PathVariable String userID, HttpSession session) {
+     // implementation
+        return "redirect:/seller/account";
+    }
+    @GetMapping("/seller/account/deactivate/{userID}")
+    public String deactivateSellerAccount(@PathVariable String userID) throws SQLException {
+        //implementation
+        return "redirect:/seller/account";
     }
 
 
@@ -147,11 +166,6 @@ public class SellerController {
 
         return "coupon-detail";
     }
-//
-//    @GetMapping("seller/profile")
-//    public String seller
-
-
 
     @RequestMapping(value= "/seller/coupons/delete/{id}", method = RequestMethod.GET)
     public String delete(@PathVariable("id") int id, Model model ) {

@@ -13,5 +13,7 @@ public interface ISeller {
     String getBusinessDescription();
 
     void setBusinessName(String businessName);
+    boolean updateProfile(ISellerPersistence persistence);
+    boolean deleteProfile(ISellerPersistence persistence);
 
 }

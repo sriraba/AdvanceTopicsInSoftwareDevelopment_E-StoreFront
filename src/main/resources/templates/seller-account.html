@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Seller</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+<div th:replace="fragments/seller-header.html"></div>
+<table class="table table-striped">
+  <h1>Account Details</h1>
+  <tr>
+    <th>Personal Information</th>
+  </tr>
+  <tr>
+    <td>First Name:</td>
+    <td th:text="${ seller.getFirstName()}"/>
+    <td>
+      <a th:href="@{/seller/account/edit/} + ${seller.getUserID()}">Edit</a>
+     <!-- <a th:href="@{/seller/account//} + ${seller.getUserID()}">Edit</a> -->
+
+    </td>
+  </tr>
+  <tr>
+    <td>Last Name:</td>
+    <td th:text="${seller.getLastName()}"/>
+    <a th:href="@{/seller/account/edit/} + ${seller.getUserID()}">Edit</a>
+  </tr>
+  <tr>
+  <tr>
+    <td>Business Name:</td>
+    <td th:text="${seller.getBusinessName()}"/>
+    <a th:href="@{/seller/account/edit/} + ${seller.getUserID()}">Edit</a>
+  </tr>
+  <tr>
+  <tr>
+    <td>Email id:</td>
+    <td th:text="${seller.getEmail()}"/>
+  <a th:href="@{/seller/account/edit/} + ${seller.getUserID()}">Edit</a>
+  </tr>
+  <tr>
+    <td>Contact:</td>
+    <td th:text="${seller.getPhone()}"/>
+    <a th:href="@{/seller/account/edit/} + ${seller.getUserID()}">Edit</a>
+  </tr>
+</table>
+</body>
+</html>
+

@@ -90,96 +90,6 @@ public class SellerPersistence implements ISellerPersistence {
             return sellerList;
         }
     }
- /* Reference:
-  [1]https://docs.oracle.com/cd/E11882_01/appdev.112/e12137/upddata.htm#TDPJD204
- */
-    public User findSellerById(int id) throws SQLException {
-
-        User selectedSeller = new Seller();
-        Connection connection = Database.getConnection();
-        Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
-                ResultSet.CONCUR_READ_ONLY);
-        String query = "SELECT * FROM Seller WHERE seller_id = " + id;
-        System.out.println("\nExecuting: " + query);
-        ResultSet rset = stmt.executeQuery(query);
-        while (rset.next()) {
-            selectedSeller.setUserID(rset.getString("user_id"));
-            ((Seller) selectedSeller).setBusinessName(rset.getString("business_name"));
-            selectedSeller.setFirstName(rset.getString("first_name"));
-            selectedSeller.setLastName(rset.getString("last_name"));
-            selectedSeller.setEmail(rset.getString("email"));
-            selectedSeller.setPhone(rset.getString("phone_number"));
-//          selectedSeller.setDob(rset.getString("Dob"));
-
-        }
-        return selectedSeller;
-    }
-
-    // logic to update profile
-    public String updateSellerProfile(int seller_id, String business_name, String first_name, String last_name, String phone_number, String email) throws SQLException {
-        Seller oldSeller = null;
-        try {
-            oldSeller = (Seller) findSellerById(seller_id);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        Connection connection = Database.getConnection();
-        Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        StringBuffer columns = new StringBuffer(255);
-        if (first_name != null &&
-                !first_name.equals(oldSeller.getFirstName())) {
-            columns.append("first_name = '" + first_name + "'");
-        }
-        if (last_name != null &&
-                !last_name.equals(oldSeller.getLastName())) {
-            if (columns.length() > 0) {
-                columns.append(", ");
-            }
-            columns.append("last_name = '" + last_name + "'");
-        }
-        if (business_name != null &&
-                !first_name.equals(oldSeller.getBusinessName())) {
-            columns.append("business_name = '" + business_name + "'");
-        }
-//        if (Dob != null &&
-//                !Dob.equals(oldSeller.getDob())) {
-//            columns.append("Dob = '" + Dob + "'");
-//        }
-        if (email != null &&
-                !email.equals(oldSeller.getEmail())) {
-            if (columns.length() > 0) {
-                columns.append(", ");
-            }
-            columns.append("email = '" + email + "'");
-        }
-        if (phone_number != null &&
-                !phone_number.equals(oldSeller.getPhone())) {
-            if (columns.length() > 0) {
-                columns.append(", ");
-            }
-            columns.append("phone_number = '" + phone_number + "'");
-        }
-        if (columns.length() > 0) {
-            String sqlString =
-                    "UPDATE Sellers SET " + columns.toString() +
-                            " WHERE seller_id= " + oldSeller;
-            System.out.println("\nExecuting: " + sqlString);
-            stmt.execute(sqlString);
-        } else {
-            System.out.println("Nothing to do to update Seller Id: " +oldSeller);
-        }
-        return "success";
-    }
-
-    @Override
-    public String deleteSellerAccount(int id) throws SQLException {
-        Connection connection = Database.getConnection();
-        Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        String sqlString = "DELETE FROM Seller WHERE seller_id = " + id;
-        System.out.println("\nExecuting: " + sqlString);
-        stmt.execute(sqlString);
-        return "success";
-    }
 
     @Override
     public ArrayList<User> getAllSellersByCategory(ItemCategory itemCategory, String city) {
@@ -259,4 +169,41 @@ public class SellerPersistence implements ISellerPersistence {
             return null;
         }
     }
+
+    @Override
+    public boolean deactivateSellerAccount() {
+        User seller = new Seller();
+        PreparedStatement preparedStatement = null;
+        Connection connection = Database.getConnection();
+        try {
+            preparedStatement = connection.prepareStatement("update FROM user WHERE user_id = ?");
+            preparedStatement.setString(1, seller.getUserID());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+
+        }
+        return false;
+    }
+    @Override
+    public boolean updateSellerProfile(User seller) {
+
+            PreparedStatement preparedStatement = null;
+            Connection connection = Database.getConnection();
+            try {
+                preparedStatement = connection.prepareStatement("UPDATE user SET user_id = ?, first_name = ?, last_name = ?, email = ?, contact_num = ?, business_name = ? WHERE user_id = ?");
+                preparedStatement.setString(1, seller.getUserID());
+                preparedStatement.setString(2, seller.getFirstName());
+                preparedStatement.setString(3, seller.getLastName());
+                preparedStatement.setString(4, seller.getEmail());
+                preparedStatement.setString(5, seller.getPhone());
+                preparedStatement.setString(6, ((Seller)seller).getBusinessName());
+                preparedStatement.executeUpdate();
+                return true;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+    }
 }
+
+
