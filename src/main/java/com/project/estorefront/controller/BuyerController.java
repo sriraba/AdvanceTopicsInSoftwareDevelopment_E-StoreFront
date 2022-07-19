@@ -20,7 +20,7 @@ public class BuyerController {
 
     @GetMapping("/buyer")
     public String buyerHome(@RequestParam(required = false, name = "category") String categoryFilter, Model model) {
-        ISellerPersistence persistence = new SellerPersistence();
+        ISellerPersistence persistence = SellerFactory.instance().makeSellerPersistence();
 
 
         ArrayList<User> sellers;
@@ -43,7 +43,7 @@ public class BuyerController {
 
     @GetMapping("/buyer/view-seller/{sellerID}")
     public String sellerDetails(Model model, @PathVariable int sellerID) {
-        ISellerPersistence persistence = new SellerPersistence();
+        ISellerPersistence persistence = SellerFactory.instance().makeSellerPersistence();
         User seller = persistence.getSellerByID(String.valueOf(sellerID));
 
         IInventoryItemPersistence inventoryPersistence = new InventoryItemPersistence();
