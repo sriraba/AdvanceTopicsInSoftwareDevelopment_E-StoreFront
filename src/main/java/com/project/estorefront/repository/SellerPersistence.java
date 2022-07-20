@@ -1,12 +1,16 @@
 package com.project.estorefront.repository;
 
-import com.project.estorefront.model.*;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import com.project.estorefront.model.DatabaseFactory;
+import com.project.estorefront.model.ItemCategory;
+import com.project.estorefront.model.Seller;
+import com.project.estorefront.model.User;
+import com.project.estorefront.model.UserFactory;
 
 public class SellerPersistence implements ISellerPersistence {
 
@@ -107,7 +111,8 @@ public class SellerPersistence implements ISellerPersistence {
 
         PreparedStatement preparedStatement;
         try {
-            preparedStatement = connection.prepareStatement("SELECT DISTINCT user.user_id, email, contact_num, seller, city, business_name, address, business_description, seller_inventory.category_id FROM user RIGHT JOIN seller_inventory on user.user_id = seller_inventory.user_id where user.seller = 1 AND category_id = ? AND city = ?;");
+            preparedStatement = connection.prepareStatement(
+                    "SELECT DISTINCT user.user_id, email, contact_num, seller, city, business_name, address, business_description, seller_inventory.category_id FROM user RIGHT JOIN seller_inventory on user.user_id = seller_inventory.user_id where user.seller = 1 AND category_id = ? AND city = ?;");
             preparedStatement.setString(1, itemCategory.toString());
             preparedStatement.setString(2, city);
             ResultSet rs = preparedStatement.executeQuery();

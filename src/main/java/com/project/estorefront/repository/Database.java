@@ -5,12 +5,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import com.project.estorefront.model.PropertiesReader;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 
 public class Database implements IDatabase {
 

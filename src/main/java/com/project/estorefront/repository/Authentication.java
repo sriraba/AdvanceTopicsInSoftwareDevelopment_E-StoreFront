@@ -1,13 +1,13 @@
 package com.project.estorefront.repository;
 
-import com.project.estorefront.model.DatabaseFactory;
-import com.project.estorefront.model.User;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
+
+import com.project.estorefront.model.DatabaseFactory;
+import com.project.estorefront.model.User;
 
 public class Authentication implements IAuthentication {
 
@@ -41,7 +41,8 @@ public class Authentication implements IAuthentication {
         Connection connection = database.getConnection();
 
         try {
-            String persistUserDetails = "insert into user (user_id, first_name, last_name, email, password, contact_num, seller, city, business_name, address ) " +
+            String persistUserDetails = "insert into user (user_id, first_name, last_name, email, password, contact_num, seller, city, business_name, address ) "
+                    +
                     "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStmt = connection.prepareStatement(persistUserDetails);
 

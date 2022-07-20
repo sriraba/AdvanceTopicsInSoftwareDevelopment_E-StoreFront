@@ -1,14 +1,14 @@
 package com.project.estorefront.repository;
 
-import com.project.estorefront.model.DatabaseFactory;
-import com.project.estorefront.model.DeliveryPerson;
-import com.project.estorefront.model.IDeliveryPerson;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import com.project.estorefront.model.DatabaseFactory;
+import com.project.estorefront.model.DeliveryPerson;
+import com.project.estorefront.model.IDeliveryPerson;
 
 public class DeliveryPersonPersistence implements IDeliveryPersonPersistence {
     private Connection connection;
