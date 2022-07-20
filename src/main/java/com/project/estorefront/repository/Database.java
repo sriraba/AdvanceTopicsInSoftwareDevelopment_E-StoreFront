@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import com.project.estorefront.model.PropertiesReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -11,66 +12,33 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-@Component
-public class Database {
+public class Database implements IDatabase {
 
-    private static Connection connection;
-
-    private static Database establishDatabaseConnection = new Database();
-
-    private static final String driverClassName = "com.mysql.jdbc.Driver";
-
-    private static String dataSourceUrl;
-
-    public static String getDriverClassName() {
-        return driverClassName;
-    }
-
-    private static String dataSourceUsername;
-
-    private static String dataSourcePassword;
-
-    @Autowired
-    public Database(
-            @Value("${spring.datasource.url}") String dataSourceUrl,
-            @Value("${spring.datasource.username}") String dataSourceUsername,
-            @Value("${spring.datasource.password}") String dataSourcePassword) {
-        this.dataSourceUrl = dataSourceUrl;
-        this.dataSourceUsername = dataSourceUsername;
-        this.dataSourcePassword = dataSourcePassword;
-    }
+    private Connection connection;
 
     public Database() {
+        init();
     }
 
-    @PostConstruct
-    public static void init() {
-        createDataBaseConnection();
-    }
-
-    private static void createDataBaseConnection() {
+    private void init() {
         try {
-            connection = DriverManager.getConnection(dataSourceUrl, dataSourceUsername,
-                    dataSourcePassword);
+            connection = DriverManager.getConnection(PropertiesReader.instance().getSpringDataSourceURL(),
+                    PropertiesReader.instance().getSpringDatasourceUsername(),
+                    PropertiesReader.instance().getSpringDatasourcePassword());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static Connection getConnection() {
+    public Connection getConnection() {
         return connection;
     }
 
-    private void closeConnection() {
+    public void closeConnection() {
         try {
             connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @PreDestroy
-    public void destroy() {
-        this.closeConnection();
     }
 }

@@ -1,5 +1,6 @@
 package com.project.estorefront.repository;
 
+import com.project.estorefront.model.DatabaseFactory;
 import com.project.estorefront.model.IDeliveryPerson;
 import com.project.estorefront.model.ItemDetails;
 import com.project.estorefront.model.OrderDetails;
@@ -10,13 +11,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class SellerOrderPersistence extends OrderPersistence implements ISellerOrderPersistence  {
+public class SellerOrderPersistence extends OrderPersistence implements ISellerOrderPersistence {
     private Connection connection;
 
     @Override
     public ArrayList<OrderDetails> loadOrders(String sellerID) {
         PreparedStatement preparedStatement = null;
-        Connection connection = Database.getConnection();
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
+
         ArrayList<OrderDetails> sellerOrderDetails = new ArrayList<>();
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM buyer_orders WHERE buyer_orders.seller_id = ?");
@@ -34,16 +37,20 @@ public class SellerOrderPersistence extends OrderPersistence implements ISellerO
                 sellerOrderDetails.add(orderDetail);
             }
             return sellerOrderDetails;
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return sellerOrderDetails;
+        } finally {
+            database.closeConnection();
         }
     }
 
     @Override
     public void updateDeliveryPerson(String orderID, String charge) {
         PreparedStatement preparedStatement = null;
-        Connection connection = Database.getConnection();
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
+
         ArrayList<IDeliveryPerson> deliveryPersonDetails = new ArrayList<>();
         try {
             preparedStatement = connection.prepareStatement("UPDATE buyer_orders WHERE buyer_orders.order_id = ? AND buyer_orders.delivery_charges = ?");
@@ -52,6 +59,8 @@ public class SellerOrderPersistence extends OrderPersistence implements ISellerO
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            database.closeConnection();
         }
     }
 

@@ -1,5 +1,6 @@
 package com.project.estorefront.repository;
 
+import com.project.estorefront.model.DatabaseFactory;
 import com.project.estorefront.model.User;
 
 import java.sql.Connection;
@@ -15,9 +16,9 @@ public class Authentication implements IAuthentication {
 
     @Override
     public String login(String email, String password) {
-
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
         try {
-            connection = Database.getConnection();
             String userDetailsQuery = "select * from user where email =? and password =?";
             PreparedStatement preparedStmt = connection.prepareStatement(userDetailsQuery);
             preparedStmt.setString(1, email);
@@ -26,17 +27,20 @@ public class Authentication implements IAuthentication {
             while (resultSet.next()) {
                 return resultSet.getString("user_id");
             }
-			return null;
+            return null;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            database.closeConnection();
         }
     }
 
     @Override
     public String register(User user) {
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
 
         try {
-            connection = Database.getConnection();
             String persistUserDetails = "insert into user (user_id, first_name, last_name, email, password, contact_num, seller, city, business_name, address ) " +
                     "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStmt = connection.prepareStatement(persistUserDetails);
@@ -57,6 +61,8 @@ public class Authentication implements IAuthentication {
             return userID;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            database.closeConnection();
         }
     }
 }

@@ -1,25 +1,20 @@
 package com.project.estorefront.repository;
 
 import com.project.estorefront.model.Coupon;
+import com.project.estorefront.model.DatabaseFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CouponsPersistence implements ICouponsPersistence{
+public class CouponsPersistence implements ICouponsPersistence {
 
-    Connection connection;
-
-    public CouponsPersistence()
-    {
-        connection = Database.getConnection();
-    }
     @Override
     public void saveCoupon(Coupon coupon) {
-
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
         try {
-
-            String query = "insert into coupons values (?,?,?,?,?)" ;
+            String query = "insert into coupons values (?,?,?,?,?)";
 
             PreparedStatement preparedStmt = connection.prepareStatement(query);
             preparedStmt.setInt(1, coupon.getCouponID());
@@ -31,16 +26,18 @@ public class CouponsPersistence implements ICouponsPersistence{
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            database.closeConnection();
         }
 
     }
 
     @Override
     public void updateCoupon(Coupon coupon) {
-
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
         try {
-
-            String query = "update coupons set name=?, max_amt=?, percent=? where coupon_id=?" ;
+            String query = "update coupons set name=?, max_amt=?, percent=? where coupon_id=?";
 
             PreparedStatement preparedStmt = connection.prepareStatement(query);
             preparedStmt.setString(1, coupon.getName());
@@ -52,23 +49,28 @@ public class CouponsPersistence implements ICouponsPersistence{
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            database.closeConnection();
         }
 
     }
 
     @Override
     public List<Coupon> getCoupons() {
-        ArrayList<Coupon> coupons = new ArrayList<>();
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
 
-        Statement stmt = null;
+        Statement stmt;
+        ArrayList<Coupon> coupons = new ArrayList<>();
         try {
+
+
             stmt = connection.createStatement();
 
-            String query = "select * from coupons;" ;
-            ResultSet rs = stmt.executeQuery(query) ;
+            String query = "select * from coupons;";
+            ResultSet rs = stmt.executeQuery(query);
 
-            while(rs.next())
-            {
+            while (rs.next()) {
                 int coupon_id = rs.getInt("coupon_id");
                 String name = rs.getString("name");
                 double max_amt = Double.parseDouble(rs.getString("max_amt"));
@@ -80,6 +82,8 @@ public class CouponsPersistence implements ICouponsPersistence{
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            database.closeConnection();
         }
 
 
@@ -88,17 +92,20 @@ public class CouponsPersistence implements ICouponsPersistence{
 
     @Override
     public Coupon getCouponById(int id) {
-        Coupon coupon = null;
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
 
-        Statement stmt = null;
+        Coupon coupon = null;
+        Statement stmt;
         try {
+
+
             stmt = connection.createStatement();
 
-            String query = "select * from coupons where coupon_id="+id + ";" ;
-            ResultSet rs = stmt.executeQuery(query) ;
+            String query = "select * from coupons where coupon_id=" + id + ";";
+            ResultSet rs = stmt.executeQuery(query);
 
-            while(rs.next())
-            {
+            while (rs.next()) {
                 int coupon_id = rs.getInt("coupon_id");
                 String name = rs.getString("name");
                 double max_amt = Double.parseDouble(rs.getString("max_amt"));
@@ -109,6 +116,8 @@ public class CouponsPersistence implements ICouponsPersistence{
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            database.closeConnection();
         }
 
 
@@ -116,16 +125,20 @@ public class CouponsPersistence implements ICouponsPersistence{
     }
 
     public void deleteCoupon(int id) {
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
 
         Statement stmt = null;
         try {
             stmt = connection.createStatement();
 
-            String query = "delete from coupons where coupon_id="+id + ";" ;
-            stmt.execute(query) ;
+            String query = "delete from coupons where coupon_id=" + id + ";";
+            stmt.execute(query);
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            database.closeConnection();
         }
 
     }

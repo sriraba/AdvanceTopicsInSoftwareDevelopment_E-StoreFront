@@ -1,5 +1,6 @@
 package com.project.estorefront.repository;
 
+import com.project.estorefront.model.DatabaseFactory;
 import com.project.estorefront.model.IInventoryItem;
 import com.project.estorefront.model.InventoryItem;
 import com.project.estorefront.model.ItemCategory;
@@ -21,9 +22,12 @@ public class InventoryItemPersistence implements IInventoryItemPersistence {
 
     @Override
     public boolean save(IInventoryItem item) {
-        Connection connection = Database.getConnection();
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
+
         PreparedStatement preparedStatement = null;
         item.setItemID(UUID.randomUUID().toString());
+
         try {
             preparedStatement = connection.prepareStatement("INSERT INTO seller_inventory (item_id, user_id, category_id, quantity, price, item_name, item_description) VALUES (?, ?, ?, ?, ?, ?, ?)");
             preparedStatement.setString(1, item.getItemID());
@@ -38,13 +42,17 @@ public class InventoryItemPersistence implements IInventoryItemPersistence {
         } catch (SQLException e) {
             e.printStackTrace();
             return true;
+        } finally {
+            database.closeConnection();
         }
     }
 
     @Override
     public boolean delete(IInventoryItem item) {
-        PreparedStatement preparedStatement = null;
-        Connection connection = Database.getConnection();
+        PreparedStatement preparedStatement;
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
+
         try {
             preparedStatement = connection.prepareStatement("DELETE FROM seller_inventory WHERE item_id = ?");
             preparedStatement.setString(1, item.getItemID());
@@ -53,13 +61,17 @@ public class InventoryItemPersistence implements IInventoryItemPersistence {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } finally {
+            database.closeConnection();
         }
     }
 
     @Override
     public boolean update(IInventoryItem item) {
         PreparedStatement preparedStatement = null;
-        Connection connection = Database.getConnection();
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
+
         try {
             preparedStatement = connection.prepareStatement("UPDATE seller_inventory SET user_id = ?, category_id = ?, quantity = ?, price = ?, item_name = ?, item_description = ? WHERE item_id = ?");
             preparedStatement.setString(1, item.getUserID());
@@ -74,13 +86,17 @@ public class InventoryItemPersistence implements IInventoryItemPersistence {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } finally {
+            database.closeConnection();
         }
     }
 
     @Override
     public ArrayList<IInventoryItem> getAll(String userID) {
         PreparedStatement preparedStatement = null;
-        Connection connection = Database.getConnection();
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
+
         ArrayList<IInventoryItem> inventoryItems = new ArrayList<>();
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM seller_inventory WHERE user_id = ?");
@@ -103,13 +119,17 @@ public class InventoryItemPersistence implements IInventoryItemPersistence {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            database.closeConnection();
         }
     }
 
     @Override
     public IInventoryItem getItemByID(String itemID) {
-        PreparedStatement preparedStatement = null;
-        Connection connection = Database.getConnection();
+        PreparedStatement preparedStatement;
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
+
         IInventoryItem item = new InventoryItem();
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM seller_inventory WHERE item_id = ?");
@@ -130,6 +150,8 @@ public class InventoryItemPersistence implements IInventoryItemPersistence {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            database.closeConnection();
         }
     }
 }

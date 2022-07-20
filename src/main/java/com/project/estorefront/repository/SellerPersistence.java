@@ -13,7 +13,9 @@ public class SellerPersistence implements ISellerPersistence {
     @Override
     public ArrayList<User> getAllSellers() {
         ArrayList<User> sellerList = new ArrayList<>();
-        Connection connection = Database.getConnection();
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
+
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE seller = 1");
@@ -47,13 +49,17 @@ public class SellerPersistence implements ISellerPersistence {
         } catch (SQLException e) {
             e.printStackTrace();
             return sellerList;
+        } finally {
+            database.closeConnection();
         }
     }
 
     @Override
     public ArrayList<User> getAllSellersByCity(String city) {
         ArrayList<User> sellerList = new ArrayList<>();
-        Connection connection = Database.getConnection();
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
+
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE seller = 1 AND city = ?");
@@ -88,13 +94,17 @@ public class SellerPersistence implements ISellerPersistence {
         } catch (SQLException e) {
             e.printStackTrace();
             return sellerList;
+        } finally {
+            database.closeConnection();
         }
     }
 
     @Override
     public ArrayList<User> getAllSellersByCategory(ItemCategory itemCategory, String city) {
         ArrayList<User> sellerList = new ArrayList<>();
-        Connection connection = Database.getConnection();
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
+
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement("SELECT DISTINCT user.user_id, email, contact_num, seller, city, business_name, address, business_description, seller_inventory.category_id FROM user RIGHT JOIN seller_inventory on user.user_id = seller_inventory.user_id where user.seller = 1 AND category_id = ? AND city = ?;");
@@ -127,12 +137,16 @@ public class SellerPersistence implements ISellerPersistence {
         } catch (SQLException e) {
             e.printStackTrace();
             return sellerList;
+        } finally {
+            database.closeConnection();
         }
     }
 
     @Override
     public User getSellerByID(String sellerID) {
-        Connection connection = Database.getConnection();
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
+
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE user_id = ?");
@@ -167,6 +181,8 @@ public class SellerPersistence implements ISellerPersistence {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            database.closeConnection();
         }
     }
 }
