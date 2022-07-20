@@ -29,6 +29,12 @@
   </tr>
   <tr>
   <tr>
+    <td>Business Description:</td>
+    <td th:text="${seller.getBusinessDescription}"/>
+  </tr>
+  <tr>
+
+  <tr>
     <td>Email id:</td>
     <td th:text="${seller.getEmail()}"/>
   </tr>
@@ -37,6 +43,8 @@
     <td th:text="${seller.getPhone()}"/>
   </tr>
   <a th:href="@{/seller/account/edit/} + ${seller.getUserID()}">Edit</a>
+  <br>
+  <a th:href="@{/seller/account/deactivate/}">Deactivate</a>
 </table>
 </body>
 </html>

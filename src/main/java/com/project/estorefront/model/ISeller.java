@@ -13,8 +13,8 @@ public interface ISeller {
     String getBusinessDescription();
 
     void setBusinessName(String businessName);
-    boolean updateProfile(ISellerPersistence persistence);
-    boolean deleteProfile(ISellerPersistence persistence);
+    boolean updateSellerAccount(ISellerPersistence persistence);
+    boolean deactivateSellerAccount(ISellerPersistence persistence);
     User getSellerByID(ISellerPersistence persistence ,String sellerID);
 
 }

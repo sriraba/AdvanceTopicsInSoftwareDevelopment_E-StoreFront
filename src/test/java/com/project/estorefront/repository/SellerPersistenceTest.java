@@ -1,6 +1,7 @@
 package com.project.estorefront.repository;
 
 import com.project.estorefront.model.ItemCategory;
+import com.project.estorefront.model.Seller;
 import com.project.estorefront.model.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -80,5 +81,4 @@ class SellerPersistenceTest {
         ArrayList<User> seller = sellerPersistenceMock.getAllSellersByCategory(ItemCategory.GROCERY, "Halifax");
         assertNull(seller);
     }
-
 }

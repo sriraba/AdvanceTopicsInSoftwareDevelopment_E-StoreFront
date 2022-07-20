@@ -16,14 +16,14 @@ public interface ISellerPersistence {
     ArrayList<User> getAllSellersByCategory(ItemCategory itemCategory, String city);
 
     User getSellerByID(String sellerID);
-    boolean deactivateSellerAccount();
-
-    boolean updateSellerProfile(User seller);
 
 
-//    String updateSellerProfile(int seller_id, String business_name, String first_name, String last_name, String phone_number, String email) throws SQLException;
-//
-//    String deleteSellerAccount(int id) throws SQLException;
+    //boolean deactivateSellerAccount(User seller);
+
+    boolean deactivateSellerAccount(User seller);
+
+    boolean updateSellerAccount(User seller);
+
 }
 
 

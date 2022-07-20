@@ -29,7 +29,7 @@ public class SellerController {
         ISellerPersistence sellerPersistence = new SellerPersistence();
         String userID = (String) session.getAttribute("userID");
         User seller = new Seller();
-        seller = ((Seller)seller).getSellerByID(sellerPersistence, userID);
+        seller = ((Seller)seller).getSellerByID(sellerPersistence, "1");
         model.addAttribute("seller", seller);
         return "seller-account";
     }
@@ -43,23 +43,27 @@ public class SellerController {
     }
     @PostMapping("/seller/account/update/{userID}")
     public String updateSellerAccount(@RequestParam("firstName") String firstName,
-                                      @RequestParam("lastName") String lastName, @RequestParam("businessName") String businessName,
+                                      @RequestParam("lastName") String lastName, @RequestParam("businessName") String businessName, @RequestParam("businessDescription") String businessDescription,
                                       @RequestParam("email") String email, @RequestParam("phone") String phone, @PathVariable String userID, HttpSession session) {
         User seller = new Seller();
         seller.setFirstName(firstName);
         seller.setLastName(lastName);
         ((Seller)seller).setBusinessName(businessName);
+        ((Seller)seller).setBusinessDescription(businessDescription);
         seller.setEmail(email);
         seller.setPhone(phone);
         seller.setUserID(userID);
         ISellerPersistence sellerPersistence = new SellerPersistence();
-        ((Seller) seller).updateProfile(sellerPersistence);
+        ((Seller) seller).updateSellerAccount(sellerPersistence);
         return "redirect:/seller/account";
     }
-    @GetMapping("/seller/account/deactivate/{userID}")
-    public String deactivateSellerAccount(@PathVariable String userID) throws SQLException {
-        //implementation
-        return "redirect:/seller/account";
+    @GetMapping("/seller/account/deactivate")
+    public String deactivateSellerAccount() throws SQLException {
+        User seller = new Seller();
+        seller.setUserID("1");
+        ISellerPersistence sellerPersistence = new SellerPersistence();
+        ((Seller) seller).deactivateSellerAccount(sellerPersistence);
+        return "redirect:/login";
     }
 
     @GetMapping("/seller/items")

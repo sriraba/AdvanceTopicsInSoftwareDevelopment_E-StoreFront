@@ -13,7 +13,6 @@ public class Seller extends User implements ISeller {
         super();
     }
 
-
     @Override
     public void setBusinessName(String businessName) {
         this.businessName = businessName;
@@ -43,13 +42,13 @@ public class Seller extends User implements ISeller {
         return persistence.getAllSellersByCategory(category, city);
     }
     @Override
-    public boolean updateProfile(ISellerPersistence persistence) {
-        return persistence.updateSellerProfile(this);
+    public boolean updateSellerAccount(ISellerPersistence persistence) {
+        return persistence.updateSellerAccount(this);
     }
 
     @Override
-    public boolean deleteProfile(ISellerPersistence persistence) {
-        return false;
+    public boolean deactivateSellerAccount(ISellerPersistence persistence) {
+        return persistence.deactivateSellerAccount(this);
     }
     @Override
     public void updateProfile() {
