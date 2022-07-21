@@ -60,7 +60,6 @@ public class BuyerController {
 
     @GetMapping("/buyer/order/details/{orderID}")
     public ModelAndView buyerItems(@PathVariable String orderID) {
-        System.out.println("inside /buyer/order/details/{orderID}");
         IBuyerOrderManagement buyerOrder = new OrderDetails();
         ModelAndView modelAndView = new ModelAndView("view-selected-order","order", buyerOrder.getOrderAndItemDetails(orderID));
         modelAndView.addObject("page","buyer");

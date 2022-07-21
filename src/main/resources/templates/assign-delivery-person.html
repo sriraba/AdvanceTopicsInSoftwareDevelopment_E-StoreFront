@@ -16,7 +16,7 @@
     <tbody>
     <tr>
         <td>
-            <form th:action="@{/seller/orders/assigned}" th:object="${selectedOption}" th:method="post">
+            <form th:action="@{/seller/orders/assigned}" th:object="${selectedOption}">
                 <select name="name" id="name">
                     <option value="0">select option</option>
                     <option th:each="delivery_person : ${delivery_persons}" th:value="${delivery_person.getPersonName()}" th:text="${delivery_person.getPersonName()}"></option>
@@ -26,7 +26,6 @@
             </form>
         </td>
     </tr>
-
     </tbody>
 </table>
 </body>

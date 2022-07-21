@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrderPersistence{
     @Override
@@ -27,6 +28,7 @@ public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrd
                 orderDetail.setDeliveryCharges(rs.getString("delivery_charges"));
                 orderDetail.setDeliveryAddress(rs.getString("delivery_address"));
                 orderDetail.setPincode(rs.getString("pincode"));
+                orderDetail.setBuyerID(rs.getString("user_id"));
                 sellerOrderDetails.add(orderDetail);
             }
             return sellerOrderDetails;
@@ -34,5 +36,27 @@ public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrd
             e.printStackTrace();
             return sellerOrderDetails;
         }
+    }
+
+    @Override
+    public void submitReview(String userID, String orderID, String description) {
+        PreparedStatement preparedStatement = null;
+        Connection connection = Database.getConnection();
+        try{
+
+            String persistReview = "insert into reviews (review_id, description, user_id, order_id ) " +
+                    "values (?, ?, ?, ?)";
+            preparedStatement = connection.prepareStatement(persistReview);
+
+            String reviewID = UUID.randomUUID().toString();
+            preparedStatement.setString(1, reviewID);
+            preparedStatement.setString(2, description);
+            preparedStatement.setString(3, userID);
+            preparedStatement.setString(4, orderID);
+            preparedStatement.execute();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
     }
 }

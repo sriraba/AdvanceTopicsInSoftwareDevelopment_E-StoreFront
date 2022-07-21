@@ -18,6 +18,16 @@ public class OrderDetails implements ISellerOrderManagement, IBuyerOrderManageme
     private String deliveryAddress;
     private String pincode;
 
+    private  String buyerID;
+
+    public String getBuyerID() {
+        return buyerID;
+    }
+
+    public void setBuyerID(String buyerID) {
+        this.buyerID = buyerID;
+    }
+
     private ArrayList<ItemDetails> itemDetails;
 
     public ArrayList<ItemDetails> getItemDetails() {
@@ -140,6 +150,12 @@ public class OrderDetails implements ISellerOrderManagement, IBuyerOrderManageme
         sellerOrders.put("previous", previousOrderDetails);
 
         return sellerOrders;
+    }
+
+    @Override
+    public void submitReview(String userID, String orderID, String description) {
+        IBuyerOrderPersistence orderPersistence = new BuyerOrderPersistence();
+        orderPersistence.submitReview(userID,orderID,description);
     }
 
     public OrderDetails getOrderAndItemDetails(String orderID){
