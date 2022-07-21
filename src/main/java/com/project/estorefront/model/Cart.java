@@ -75,6 +75,11 @@ public class Cart implements ICart{
     }
 
     @Override
+    public ArrayList<IInventoryItem> getCartItems() {
+        return items;
+    }
+
+    @Override
     public void pay() {
     }
 }

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table border="1" style="border-collapse:collapse">
+    <tr>
+        <th>Product Name</th>
+        <th>Item Price</th>
+        <th>Item Quantity</th>
+        <th>Sub Total</th>
+        <th>Action</th>
+    </tr>
+    <tr th:each="item: ${inventory}">
+        <td  th:text="${item.getItemName()}"/>
+        <td  th:text="${item.getItemPrice()}"/>
+        <td  th:text="${item.getItemQuantity()}"/>
+        <td  th:text="${item.getItemPrice() * item.getItemQuantity()}"/>
+        <td>
+            <button type="button" value="Edit" th:onclick="|window.location.href='@{'/buyer/cart/edit/' + ${item.getItemID()}}'|">Edit</button>
+            <button type="button" value="Delete" th:onclick="|window.location.href='@{'/buyer/cart/delete/' + ${item.getItemID()}}'|">Delete</button>
+        </td>
+    </tr>
+    <tr>
+        <th colspan="3">Cart Total</th>
+        <td colspan="2">CAD 500</td>
+    </tr>
+</table>
+<input type="submit" value="Continue Shopping" class="btn btn-primary">
+<input type="submit" value="Place Order" class="btn btn-primary">
+</body>
+</html>
