@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 
 @Controller
@@ -79,12 +80,47 @@ public class BuyerController {
         model.addAttribute("page","buyer");
         return "submit-success";
     }
+
     //public ModelAndView addToCart()
     @RequestMapping(value= "/buyer/cart/add/{itemID}", method = RequestMethod.POST)
-    public String addToCart(@PathVariable String itemID, @RequestParam("quantity") String qty)
+    public String addToCart(@PathVariable String itemID, @RequestParam("quantity") String qty, HttpSession session)
     {
-        System.out.println(itemID + " " + qty);
+        ICart cart = null;
+        if(session.getAttribute("cart") == null)
+        {
+            cart = Cart.instance();
+        }
+        else
+        {
+            cart = (ICart)session.getAttribute("cart");
+        }
+
+        IInventoryItemPersistence inventoryPersistence = new InventoryItemPersistence();
+        IInventoryItem inventory = inventoryPersistence.getItemByID(itemID);
+        inventory.setItemQuantity(Integer.parseInt(qty));
+
+        cart.addItem(inventory);
+        session.setAttribute("cart", cart);
 
         return "redirect:/buyer";
+    }
+
+    //public ModelAndView addToCart()
+    @RequestMapping(value= "/buyer/cart/view", method = RequestMethod.GET)
+    public String viewCart(Model model, HttpSession session)
+    {
+        ICart cart = null;
+        if(session.getAttribute("cart") == null)
+        {
+            cart = Cart.instance();
+        }
+        else
+        {
+            cart = (ICart)session.getAttribute("cart");
+        }
+
+        model.addAttribute("inventory", cart.getCartItems());
+
+        return "view-cart";
     }
 }

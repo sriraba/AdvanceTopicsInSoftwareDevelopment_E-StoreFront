@@ -62,6 +62,24 @@ public class Cart implements ICart{
     }
 
     @Override
+    public int getTotalItems()
+    {
+        int totalItems = 0;
+
+        for(IInventoryItem item : items)
+        {
+            totalItems += item.getItemQuantity();
+        }
+
+        return totalItems;
+    }
+
+    @Override
+    public ArrayList<IInventoryItem> getCartItems() {
+        return items;
+    }
+
+    @Override
     public void pay() {
     }
 }
