@@ -8,5 +8,4 @@ public interface IDeliveryPerson {
     public String getPersonName();
     public void setPersonName(String personName);
     public ArrayList<IDeliveryPerson> getDeliveryPersonDetails(String sellerID);
-    public void save(String name);
 }

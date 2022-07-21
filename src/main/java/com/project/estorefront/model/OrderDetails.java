@@ -12,12 +12,10 @@ public class OrderDetails implements ISellerOrderManagement, IBuyerOrderManageme
     private String sellerID;
     private String orderStatus;
     private String couponID;
-
     private Float totalAmount;
     private String deliveryCharges;
     private String deliveryAddress;
     private String pincode;
-
     private  String buyerID;
 
     public String getBuyerID() {
