@@ -22,7 +22,7 @@ class DeliveryPersonTest {
         ArrayList<IDeliveryPerson> deliveryPeople =deliveryPersonMock.getDeliveryPersonDetails("5");
         assertEquals(deliveryPeople.size(),2);
     }
-    /*@Test
+    @Test
     void testGetDeliveryPersonDetailsByEmptySellerID() {
         DeliveryPersonMock deliveryPersonMock = new DeliveryPersonMock();
         ArrayList<IDeliveryPerson> deliveryPeople =deliveryPersonMock.getDeliveryPersonDetails("");
@@ -33,7 +33,7 @@ class DeliveryPersonTest {
         DeliveryPersonMock deliveryPersonMock = new DeliveryPersonMock();
         ArrayList<IDeliveryPerson> deliveryPeople =deliveryPersonMock.getDeliveryPersonDetails("15");
         assertNull(deliveryPeople);
-    }*/
+    }
 
 
 
