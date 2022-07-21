@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 
 @Controller
@@ -79,12 +80,29 @@ public class BuyerController {
         model.addAttribute("page","buyer");
         return "submit-success";
     }
-    //public ModelAndView addToCart()
-    @RequestMapping(value= "/buyer/cart/add/{itemID}", method = RequestMethod.POST)
-    public String addToCart(@PathVariable String itemID, @RequestParam("quantity") String qty)
-    {
-        System.out.println(itemID + " " + qty);
+   //public ModelAndView addToCart()
+   @RequestMapping(value= "/buyer/cart/add/{itemID}", method = RequestMethod.POST)
+   public String addToCart(@PathVariable String itemID, @RequestParam("quantity") String qty, HttpSession session)
+   {
+       System.out.println(itemID);
+       ICart cart = null;
+       if(session.getAttribute("cart") == null)
+       {
+           cart = Cart.instance();
+       }
+       else
+       {
+           cart = (ICart)session.getAttribute("cart");
+       }
 
-        return "redirect:/buyer";
-    }
+       IInventoryItemPersistence inventoryPersistence = new InventoryItemPersistence();
+       IInventoryItem inventory = inventoryPersistence.getItemByID(itemID);
+       inventory.setItemQuantity(Integer.parseInt(qty));
+       System.out.println("Before: " + cart.getTotalItems());
+       cart.addItem(inventory);
+       System.out.println("After: " + cart.getTotalItems());
+       session.setAttribute("cart", cart);
+
+       return "redirect:/buyer";
+   }
 }
