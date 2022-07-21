@@ -169,20 +169,17 @@ public class SellerPersistence implements ISellerPersistence {
 
     @Override
     public boolean deactivateSellerAccount(User seller) {
-       // User seller = new Seller();
         PreparedStatement preparedStatement = null;
         Connection connection = Database.getConnection();
         try {
             preparedStatement = connection.prepareStatement("UPDATE user SET seller =? WHERE user_id = ?");
             preparedStatement.setBoolean(1, seller.getIsSeller());
             preparedStatement.setString(2, seller.getUserID());
-            int x =preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
             throw new RuntimeException(e);
-
         }
-
     }
     @Override
     public boolean updateSellerAccount(User seller) {
