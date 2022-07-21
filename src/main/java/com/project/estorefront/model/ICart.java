@@ -11,4 +11,6 @@ public interface ICart {
     void clearCart();
 
     void pay();
+
+    int getTotalItems();
 }
