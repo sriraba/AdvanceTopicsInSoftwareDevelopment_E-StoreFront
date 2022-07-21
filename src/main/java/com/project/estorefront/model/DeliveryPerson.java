@@ -28,7 +28,7 @@ public class DeliveryPerson implements IDeliveryPerson{
     }
 
     public ArrayList<IDeliveryPerson> getDeliveryPersonDetails(String sellerID){
-        IDeliveryPersonPersistence deliveryPersonPersistence = new DeliveryPersonPersistence();
+        IDeliveryPersonPersistence deliveryPersonPersistence = DeliveryPersonFactory.instance().makeDeliveryPersonPersistence();
         return deliveryPersonPersistence.getAll(sellerID);
     }
 
