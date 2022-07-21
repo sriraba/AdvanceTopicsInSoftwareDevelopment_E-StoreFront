@@ -7,9 +7,7 @@ import com.project.estorefront.repository.InventoryItemPersistence;
 import com.project.estorefront.repository.SellerPersistence;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -19,7 +17,7 @@ public class BuyerController {
 
     @GetMapping("/buyer")
     public String buyerHome(@RequestParam(required = false, name = "category") String categoryFilter, Model model) {
-        ISellerPersistence persistence = SellerFactory.instance().makeSellerPersistence();
+        ISellerPersistence persistence = new SellerPersistence();
 
 
         ArrayList<User> sellers;
@@ -42,7 +40,7 @@ public class BuyerController {
 
     @GetMapping("/buyer/view-seller/{sellerID}")
     public String sellerDetails(Model model, @PathVariable int sellerID) {
-        ISellerPersistence persistence = SellerFactory.instance().makeSellerPersistence();
+        ISellerPersistence persistence = new SellerPersistence();
         User seller = persistence.getSellerByID(String.valueOf(sellerID));
 
         IInventoryItemPersistence inventoryPersistence = new InventoryItemPersistence();
@@ -69,4 +67,12 @@ public class BuyerController {
         return modelAndView;
     }
 
+    //public ModelAndView addToCart()
+    @RequestMapping(value= "/buyer/cart/add/{itemID}", method = RequestMethod.POST)
+    public String addToCart(@PathVariable String itemID, @RequestParam("quantity") String qty)
+    {
+        System.out.println(itemID + " " + qty);
+
+        return "redirect:/buyer";
+    }
 }
