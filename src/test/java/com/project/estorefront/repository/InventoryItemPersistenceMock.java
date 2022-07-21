@@ -26,7 +26,7 @@ public class InventoryItemPersistenceMock implements IInventoryItemPersistence {
 
     @Override
     public boolean update(IInventoryItem item) {
-        InventoryItem current;
+        IInventoryItem current;
         for (IInventoryItem i: inventoryItems) {
             if (i.getItemID().equals(item.getItemID())) {
                 current = (InventoryItem) i;

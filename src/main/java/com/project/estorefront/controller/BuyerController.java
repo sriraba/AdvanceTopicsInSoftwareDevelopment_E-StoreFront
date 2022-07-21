@@ -29,7 +29,7 @@ public class BuyerController {
 
         ArrayList<User> sellers;
         if (categoryFilter == null || categoryFilter.isEmpty()) {
-            sellers = Seller.getAllSellers(persistence, "Halifax");
+            sellers = Seller.getAllSellersByCity(persistence, "Halifax");
         } else {
             sellers = Seller.getAllSellersByCategory(persistence, ItemCategory.valueOf(categoryFilter), "Halifax");
         }
