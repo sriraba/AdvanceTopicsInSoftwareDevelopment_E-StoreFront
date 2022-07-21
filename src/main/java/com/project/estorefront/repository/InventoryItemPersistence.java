@@ -21,7 +21,7 @@ public class InventoryItemPersistence implements IInventoryItemPersistence {
     }
 
     @Override
-    public boolean save(IInventoryItem item) {
+    public InventoryItemPersistenceOperationStatus save(IInventoryItem item) {
         IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
 
@@ -37,18 +37,23 @@ public class InventoryItemPersistence implements IInventoryItemPersistence {
             preparedStatement.setDouble(5, item.getItemPrice());
             preparedStatement.setString(6, item.getItemName());
             preparedStatement.setString(7, item.getItemDescription());
-            preparedStatement.executeUpdate();
-            return true;
+
+            int changed = preparedStatement.executeUpdate();
+            if (changed > 0) {
+                return InventoryItemPersistenceOperationStatus.SUCCESS;
+            } else {
+                return InventoryItemPersistenceOperationStatus.FAILURE;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            return true;
+            return InventoryItemPersistenceOperationStatus.SQL_EXCEPTION;
         } finally {
             database.closeConnection();
         }
     }
 
     @Override
-    public boolean delete(IInventoryItem item) {
+    public InventoryItemPersistenceOperationStatus delete(IInventoryItem item) {
         PreparedStatement preparedStatement;
         IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
@@ -56,18 +61,23 @@ public class InventoryItemPersistence implements IInventoryItemPersistence {
         try {
             preparedStatement = connection.prepareStatement("DELETE FROM seller_inventory WHERE item_id = ?");
             preparedStatement.setString(1, item.getItemID());
-            preparedStatement.executeUpdate();
-            return true;
+            int status = preparedStatement.executeUpdate();
+
+            if (status > 0) {
+                return InventoryItemPersistenceOperationStatus.SUCCESS;
+            } else {
+                return InventoryItemPersistenceOperationStatus.FAILURE;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return InventoryItemPersistenceOperationStatus.SQL_EXCEPTION;
         } finally {
             database.closeConnection();
         }
     }
 
     @Override
-    public boolean update(IInventoryItem item) {
+    public InventoryItemPersistenceOperationStatus update(IInventoryItem item) {
         PreparedStatement preparedStatement = null;
         IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
@@ -81,11 +91,17 @@ public class InventoryItemPersistence implements IInventoryItemPersistence {
             preparedStatement.setString(5, item.getItemName());
             preparedStatement.setString(6, item.getItemDescription());
             preparedStatement.setString(7, item.getItemID());
-            preparedStatement.executeUpdate();
-            return true;
+
+            int status = preparedStatement.executeUpdate();
+            if (status > 0) {
+                return InventoryItemPersistenceOperationStatus.SUCCESS;
+            } else {
+                return InventoryItemPersistenceOperationStatus.FAILURE;
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return InventoryItemPersistenceOperationStatus.SQL_EXCEPTION;
         } finally {
             database.closeConnection();
         }
