@@ -22,6 +22,7 @@
         <td>Last Name:</td>
         <td th:text="${buyer.getLastName()}"/>
     </tr>
+
     <tr>
         <td>Email id:</td>
         <td th:text="${buyer.getEmail()}"/>
@@ -29,6 +30,10 @@
     <tr>
         <td>Contact:</td>
         <td th:text="${buyer.getPhone()}"/>
+    </tr>
+    <tr>
+        <td>Address:</td>
+        <td th:text="${buyer.getAddress()}"/>
     </tr>
     <a th:href="@{/buyer/account/edit/} + ${buyer.getUserID()}">Edit</a>
     <br>

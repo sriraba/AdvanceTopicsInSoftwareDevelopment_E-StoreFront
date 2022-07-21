@@ -98,16 +98,15 @@ public class BuyerController {
         return "buyer-account-update";
     }
 
-    @PostMapping("/Buyer/account/update/{userID}")
+    @PostMapping("/buyer/account/update/{userID}")
     public String updateBuyerAccount(@RequestParam("firstName") String firstName,
                                       @RequestParam("lastName") String lastName,
-                                      @RequestParam("email") String email,
-                                     @RequestParam("phone") String phone, @PathVariable String userID, HttpSession session) {
+                                     @RequestParam("phone") String phone, @RequestParam("address") String address, @PathVariable String userID, HttpSession session) {
         User buyer = new Buyer();
         buyer.setFirstName(firstName);
         buyer.setLastName(lastName);
-        buyer.setEmail(email);
         buyer.setPhone(phone);
+        buyer.setAddress(address);
         buyer.setUserID(userID);
         IBuyerPersistence buyerPersistence = new BuyerPersistence();
         ((Buyer) buyer).updateBuyerAccount(buyerPersistence);

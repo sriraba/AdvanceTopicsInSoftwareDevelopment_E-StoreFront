@@ -34,7 +34,7 @@ public class BuyerPersistence implements IBuyerPersistence {
                 buyer.setAddress(address);
                 buyer.setPhone(contactNumber);
                 buyer.setCity(city);
-                buyer.setIsBuyer(true);
+                buyer.setIsUserEnabled(true);
                 buyer.setUserID(userID);
                 return buyer;
             }
@@ -49,11 +49,12 @@ public class BuyerPersistence implements IBuyerPersistence {
         PreparedStatement preparedStatement = null;
         Connection connection = Database.getConnection();
         try {
-            preparedStatement = connection.prepareStatement("UPDATE user SET first_name = ?, last_name = ?, contact_num = ?, email = ? WHERE user_id = ?");
+            preparedStatement = connection.prepareStatement("UPDATE user SET first_name = ?, last_name = ?, contact_num = ?, address  =? WHERE user_id = ?");
             preparedStatement.setString(1, buyer.getFirstName());
             preparedStatement.setString(2, buyer.getLastName());
             preparedStatement.setString(3, buyer.getPhone());
-            preparedStatement.setString(4, buyer.getEmail());
+            preparedStatement.setString(4, buyer.getAddress());
+            //preparedStatement.setString(, buyer.getEmail());
             preparedStatement.setString(5, buyer.getUserID());
             preparedStatement.executeUpdate();
             return false;
@@ -68,8 +69,8 @@ public class BuyerPersistence implements IBuyerPersistence {
             PreparedStatement preparedStatement = null;
             Connection connection = Database.getConnection();
             try {
-                preparedStatement = connection.prepareStatement("UPDATE user SET buyer =? WHERE user_id = ?");
-                preparedStatement.setBoolean(1, buyer.getIsBuyer());
+                preparedStatement = connection.prepareStatement("UPDATE user SET isUserEnabled =? WHERE user_id = ?");
+                preparedStatement.setBoolean(1, buyer.getIsUserEnabled());
                 preparedStatement.setString(2, buyer.getUserID());
                 preparedStatement.executeUpdate();
                 return true;

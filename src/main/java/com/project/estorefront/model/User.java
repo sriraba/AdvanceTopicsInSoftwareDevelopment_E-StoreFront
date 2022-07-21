@@ -11,9 +11,9 @@ public abstract class User {
     private String phone;
     private String password;
     private boolean isSeller;
-    private boolean isBuyer;
+    private boolean isUserEnabled;
 
-    public User(String firstName, String lastName, String email, String address, String phone, String password, String city, boolean isSeller) {
+    public User(String firstName, String lastName, String email, String address, String phone, String password, String city, boolean isSeller, boolean isUserEnabled) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -22,7 +22,7 @@ public abstract class User {
         this.password = password;
         this.city = city;
         this.isSeller = isSeller;
-        this.isBuyer = isBuyer;
+        this.isUserEnabled = isUserEnabled;
     }
 
     public User() {
@@ -110,12 +110,12 @@ public abstract class User {
         this.isSeller = isSeller;
     }
 
-    public boolean getIsBuyer(){
-        return isBuyer;
+    public boolean getIsUserEnabled(){
+        return isUserEnabled;
     }
 
-    public void setIsBuyer(boolean isBuyer)
+    public void setIsUserEnabled(boolean isUserEnabled)
     {
-        this.isBuyer = isBuyer;
+        this.isUserEnabled = isUserEnabled;
     }
 }
