@@ -1,16 +1,14 @@
 package com.project.estorefront.controller;
 
 import com.project.estorefront.model.*;
-import com.project.estorefront.repository.IInventoryItemPersistence;
-import com.project.estorefront.repository.ISellerPersistence;
-import com.project.estorefront.repository.InventoryItemPersistence;
-import com.project.estorefront.repository.SellerPersistence;
+import com.project.estorefront.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 @Controller
@@ -79,6 +77,50 @@ public class BuyerController {
         buyerOrder.submitReview(userID,orderID,description);
         model.addAttribute("page","buyer");
         return "submit-success";
+    }
+
+    @GetMapping("/buyer/account")
+    public String buyerAccount(Model model, HttpSession session) {
+        IBuyerPersistence buyerPersistence = new BuyerPersistence();
+        String userID = (String) session.getAttribute("userID");
+        User buyer = new Buyer();
+        buyer = ((Buyer)buyer).getBuyerByID(buyerPersistence, "1");
+        model.addAttribute("buyer", buyer);
+        return "buyer-account";
+    }
+
+    @GetMapping("/buyer/account/edit/{userID}")
+    public String editSellerAccount(@PathVariable String userID, Model model) {
+        IBuyerPersistence buyerPersistence = new BuyerPersistence();
+        User buyer = new Buyer();
+        buyer = ((Buyer)buyer).getBuyerByID(buyerPersistence, userID);
+        model.addAttribute("buyer", buyer);
+        return "buyer-account-update";
+    }
+
+    @PostMapping("/Buyer/account/update/{userID}")
+    public String updateBuyerAccount(@RequestParam("firstName") String firstName,
+                                      @RequestParam("lastName") String lastName,
+                                      @RequestParam("email") String email,
+                                     @RequestParam("phone") String phone, @PathVariable String userID, HttpSession session) {
+        User buyer = new Buyer();
+        buyer.setFirstName(firstName);
+        buyer.setLastName(lastName);
+        buyer.setEmail(email);
+        buyer.setPhone(phone);
+        buyer.setUserID(userID);
+        IBuyerPersistence buyerPersistence = new BuyerPersistence();
+        ((Buyer) buyer).updateBuyerAccount(buyerPersistence);
+        return "redirect:/buyer/account";
+    }
+
+    @GetMapping("/buyer/account/deactivate")
+    public String deactivateBuyerAccount() throws SQLException {
+        User buyer = new Buyer();
+        buyer.setUserID("1");
+        IBuyerPersistence buyerPersistence = new BuyerPersistence();
+        ((Buyer) buyer).deactivateBuyerAccount(buyerPersistence);
+        return "redirect:/login";
     }
 
     //public ModelAndView addToCart()
