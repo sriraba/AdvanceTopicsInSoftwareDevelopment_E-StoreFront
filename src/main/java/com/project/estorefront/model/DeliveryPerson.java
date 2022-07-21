@@ -8,12 +8,6 @@ import java.util.ArrayList;
 public class DeliveryPerson implements IDeliveryPerson{
     private String sellerID;
 
-    /*public DeliveryPerson(String sellerID, String charge, String personName) {
-        this.sellerID = sellerID;
-        this.charge = charge;
-        this.personName = personName;
-    }*/
-
     private String personName;
 
     public String getSellerID() {
@@ -36,11 +30,6 @@ public class DeliveryPerson implements IDeliveryPerson{
     public ArrayList<IDeliveryPerson> getDeliveryPersonDetails(String sellerID){
         IDeliveryPersonPersistence deliveryPersonPersistence = new DeliveryPersonPersistence();
         return deliveryPersonPersistence.getAll(sellerID);
-    }
-
-    @Override
-    public void save(String name) {
-
     }
 
 }
