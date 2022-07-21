@@ -10,15 +10,29 @@ public class Database implements IDatabase {
 
     private Connection connection;
 
+    private String springDataSourceUrl;
+    private String springDataSourceUsername;
+    private String springDataSourcePassword;
+
     public Database() {
+        springDataSourceUrl = PropertiesReader.instance().getSpringDataSourceURL();
+        springDataSourceUsername = PropertiesReader.instance().getSpringDatasourceUsername();
+        springDataSourcePassword = PropertiesReader.instance().getSpringDatasourcePassword();
+        init();
+    }
+
+    public Database(String springDataSourceUrl, String springDataSourceUsername, String springDataSourcePassword) {
+        this.springDataSourceUrl = springDataSourceUrl;
+        this.springDataSourceUsername = springDataSourceUsername;
+        this.springDataSourcePassword = springDataSourcePassword;
         init();
     }
 
     private void init() {
         try {
-            connection = DriverManager.getConnection(PropertiesReader.instance().getSpringDataSourceURL(),
-                    PropertiesReader.instance().getSpringDatasourceUsername(),
-                    PropertiesReader.instance().getSpringDatasourcePassword());
+            connection = DriverManager.getConnection(springDataSourceUrl,
+                    springDataSourceUsername,
+                    springDataSourcePassword);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -9,12 +9,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class BuyerFactoryTest {
 
     @Test
-    void testBuyerFactoryInstance() {
+    public void testBuyerFactoryInstance() {
         assertNotNull(BuyerFactory.instance());
     }
 
     @Test
-    void testMakeBuyer() {
+    public void testMakeBuyer() {
         User buyer = BuyerFactory.instance().makeBuyer();
         assertNotNull(buyer);
     }

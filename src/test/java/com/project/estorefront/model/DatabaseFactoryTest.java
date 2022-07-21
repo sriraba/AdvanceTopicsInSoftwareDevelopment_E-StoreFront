@@ -10,14 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class DatabaseFactoryTest {
 
     @Test
-    void testDatabaseFactoryInstance() {
+    public void testDatabaseFactoryInstance() {
         assertNotNull(DatabaseFactory.instance());
-    }
-
-    @Test
-    void testMakeDatabase() {
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
-        assertNotNull(database);
     }
 
 }
