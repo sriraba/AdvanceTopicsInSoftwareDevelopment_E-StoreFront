@@ -1,7 +1,5 @@
 package com.project.estorefront.repository;
 
-import com.project.estorefront.model.IDeliveryPerson;
-import com.project.estorefront.model.ItemDetails;
 import com.project.estorefront.model.OrderDetails;
 
 import java.sql.Connection;
@@ -9,18 +7,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.UUID;
 
-public class SellerOrderPersistence extends OrderPersistence implements ISellerOrderPersistence  {
-    private Connection connection;
-
+public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrderPersistence{
     @Override
-    public ArrayList<OrderDetails> loadOrders(String sellerID) {
+    public ArrayList<OrderDetails> loadOrders(String buyerID) {
         PreparedStatement preparedStatement = null;
         Connection connection = Database.getConnection();
         ArrayList<OrderDetails> sellerOrderDetails = new ArrayList<>();
         try {
-            preparedStatement = connection.prepareStatement("SELECT * FROM buyer_orders WHERE buyer_orders.seller_id = ?");
-            preparedStatement.setString(1, sellerID);
+            preparedStatement = connection.prepareStatement("SELECT * FROM buyer_orders WHERE buyer_orders.user_id = ?");
+            preparedStatement.setString(1, buyerID);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 OrderDetails orderDetail = new OrderDetails();
@@ -42,18 +39,24 @@ public class SellerOrderPersistence extends OrderPersistence implements ISellerO
     }
 
     @Override
-    public void updateDeliveryPerson(String orderID, String charge) {
+    public void submitReview(String userID, String orderID, String description) {
         PreparedStatement preparedStatement = null;
         Connection connection = Database.getConnection();
-        ArrayList<IDeliveryPerson> deliveryPersonDetails = new ArrayList<>();
-        try {
-            preparedStatement = connection.prepareStatement("UPDATE buyer_orders WHERE buyer_orders.order_id = ? AND buyer_orders.delivery_charges = ?");
-            preparedStatement.setString(1, orderID);
-            preparedStatement.setString(2, charge);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+        try{
 
+            String persistReview = "insert into reviews (review_id, description, user_id, order_id ) " +
+                    "values (?, ?, ?, ?)";
+            preparedStatement = connection.prepareStatement(persistReview);
+
+            String reviewID = UUID.randomUUID().toString();
+            preparedStatement.setString(1, reviewID);
+            preparedStatement.setString(2, description);
+            preparedStatement.setString(3, userID);
+            preparedStatement.setString(4, orderID);
+            preparedStatement.execute();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+    }
 }
