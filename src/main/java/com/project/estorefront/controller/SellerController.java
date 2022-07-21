@@ -95,9 +95,10 @@ public class SellerController {
         return new ModelAndView("assign-delivery-person", "delivery_persons", deliveryPersons.getDeliveryPersonDetails(sellerID));
     }
 
-    @PostMapping("/seller/orders/assigned")
-    public String deliveryPersonAssigned() {
-        return "assigned-success";
+    @GetMapping("/seller/orders/assigned")
+    public String deliveryPersonAssigned(Model model) {
+        model.addAttribute("page","seller");
+        return "submit-success";
     }
 
     @GetMapping("/seller/items/edit/{itemID}")

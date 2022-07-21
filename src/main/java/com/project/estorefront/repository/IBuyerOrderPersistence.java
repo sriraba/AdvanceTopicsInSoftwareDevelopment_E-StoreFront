@@ -6,4 +6,6 @@ import java.util.ArrayList;
 
 public interface IBuyerOrderPersistence {
     ArrayList<OrderDetails> loadOrders(String userID);
+
+    void submitReview(String userID, String orderID, String description);
 }

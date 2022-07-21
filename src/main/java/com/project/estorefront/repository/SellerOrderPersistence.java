@@ -34,6 +34,7 @@ public class SellerOrderPersistence extends OrderPersistence implements ISellerO
                 orderDetail.setDeliveryCharges(rs.getString("delivery_charges"));
                 orderDetail.setDeliveryAddress(rs.getString("delivery_address"));
                 orderDetail.setPincode(rs.getString("pincode"));
+                orderDetail.setBuyerID(rs.getString("user_id"));
                 sellerOrderDetails.add(orderDetail);
             }
             return sellerOrderDetails;
