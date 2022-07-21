@@ -192,14 +192,15 @@ public class SellerPersistence implements ISellerPersistence {
             PreparedStatement preparedStatement = null;
             Connection connection = Database.getConnection();
             try {
-                preparedStatement = connection.prepareStatement("UPDATE user SET first_name = ?, last_name = ?, contact_num = ?, business_name =?, business_description=? WHERE user_id = ?");
+                preparedStatement = connection.prepareStatement("UPDATE user SET first_name = ?, last_name = ?, contact_num = ?, email = ?, business_name =?, business_description=? WHERE user_id = ?");
                 //preparedStatement.setString(1, seller.getUserID());
                 preparedStatement.setString(1, seller.getFirstName());
                 preparedStatement.setString(2, seller.getLastName());
                 preparedStatement.setString(3, seller.getPhone());
-                preparedStatement.setString(4, ((Seller)seller).getBusinessName());
-                preparedStatement.setString(5, ((Seller) seller).getBusinessDescription());
-                preparedStatement.setString(6, seller.getUserID());
+                preparedStatement.setString(4,seller.getEmail());
+                preparedStatement.setString(5, ((Seller)seller).getBusinessName());
+                preparedStatement.setString(6, ((Seller) seller).getBusinessDescription());
+                preparedStatement.setString(7, seller.getUserID());
                 preparedStatement.executeUpdate();
                 return true;
             } catch (Exception e) {
