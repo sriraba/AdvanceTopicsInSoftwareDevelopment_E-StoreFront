@@ -66,6 +66,19 @@ public class BuyerController {
         return modelAndView;
     }
 
+    @GetMapping("/buyer/order/add-review/{userID}/{orderID}")
+    public String addReview(@PathVariable("userID") String userID,@PathVariable("orderID") String orderID,Model model) {
+        model.addAttribute("userID",userID);
+        model.addAttribute("orderID",orderID);
+        return "add-review";
+    }
+    @GetMapping("/buyer/order/submit-review/{userID}/{orderID}")
+    public String submitReview(@PathVariable("userID") String userID,@PathVariable("orderID") String orderID, @RequestParam("review") String description, Model model) {
+        IBuyerOrderManagement buyerOrder = new OrderDetails();
+        buyerOrder.submitReview(userID,orderID,description);
+        model.addAttribute("page","buyer");
+        return "submit-success";
+    }
     //public ModelAndView addToCart()
     @RequestMapping(value= "/buyer/cart/add/{itemID}", method = RequestMethod.POST)
     public String addToCart(@PathVariable String itemID, @RequestParam("quantity") String qty)
