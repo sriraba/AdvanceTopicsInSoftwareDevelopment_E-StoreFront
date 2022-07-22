@@ -123,4 +123,26 @@ public class BuyerController {
 
         return "view-cart";
     }
+    @RequestMapping(value= "/buyer/cart/delete/{itemID}", method = RequestMethod.GET)
+    public String deleteItemFromCart(@PathVariable String itemID, Model model, HttpSession session)
+    {
+        ICart cart = null;
+        if(session.getAttribute("cart") == null)
+        {
+            cart = Cart.instance();
+        }
+        else
+        {
+            cart = (ICart)session.getAttribute("cart");
+        }
+
+        IInventoryItemPersistence inventoryPersistence = new InventoryItemPersistence();
+        IInventoryItem inventory = inventoryPersistence.getItemByID(itemID);
+
+        cart.removeItem(inventory);
+        session.setAttribute("cart", cart);
+        model.addAttribute("inventory", cart.getCartItems());
+
+        return "view-cart";
+    }
 }
