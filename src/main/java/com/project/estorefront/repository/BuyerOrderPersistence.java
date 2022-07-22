@@ -3,6 +3,7 @@ package com.project.estorefront.repository;
 import com.project.estorefront.model.DatabaseFactory;
 import com.project.estorefront.model.OrderDetails;
 
+import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,7 +47,8 @@ public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrd
     @Override
     public void submitReview(String userID, String orderID, String description) {
         PreparedStatement preparedStatement = null;
-        Connection connection = Database.getConnection();
+        Database database = (Database) DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
         try{
 
             String persistReview = "insert into reviews (review_id, description, user_id, order_id ) " +

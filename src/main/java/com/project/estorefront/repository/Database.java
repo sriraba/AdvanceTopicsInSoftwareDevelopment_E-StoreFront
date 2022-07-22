@@ -10,9 +10,9 @@ public class Database implements IDatabase {
 
     private Connection connection;
 
-    private String springDataSourceUrl;
-    private String springDataSourceUsername;
-    private String springDataSourcePassword;
+    private final String springDataSourceUrl;
+    private final String springDataSourceUsername;
+    private final String springDataSourcePassword;
 
     public Database() {
         springDataSourceUrl = PropertiesReader.instance().getSpringDataSourceURL();

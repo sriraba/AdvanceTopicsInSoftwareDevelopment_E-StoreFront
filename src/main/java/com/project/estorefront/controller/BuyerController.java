@@ -1,31 +1,22 @@
 package com.project.estorefront.controller;
 
-import java.util.ArrayList;
-
+import com.project.estorefront.model.*;
+import com.project.estorefront.repository.IInventoryItemPersistence;
+import com.project.estorefront.repository.ISellerPersistence;
+import com.project.estorefront.repository.InventoryItemPersistence;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.project.estorefront.model.IBuyerOrderManagement;
-import com.project.estorefront.model.IInventoryItem;
-import com.project.estorefront.model.ItemCategory;
-import com.project.estorefront.model.OrderDetails;
-import com.project.estorefront.model.Seller;
-import com.project.estorefront.model.SellerFactory;
-import com.project.estorefront.model.User;
-import com.project.estorefront.repository.IInventoryItemPersistence;
-import com.project.estorefront.repository.ISellerPersistence;
-import com.project.estorefront.repository.InventoryItemPersistence;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-
 @Controller
 public class BuyerController {
 
     @GetMapping("/buyer")
     public String buyerHome(@RequestParam(required = false, name = "category") String categoryFilter, Model model) {
-        ISellerPersistence persistence = new SellerPersistence();
+        ISellerPersistence persistence = SellerFactory.instance().makeSellerPersistence();
 
         ArrayList<User> sellers;
         if (categoryFilter == null || categoryFilter.isEmpty()) {
@@ -47,10 +38,10 @@ public class BuyerController {
 
     @GetMapping("/buyer/view-seller/{sellerID}")
     public String sellerDetails(Model model, @PathVariable int sellerID) {
-        ISellerPersistence persistence = new SellerPersistence();
+        ISellerPersistence persistence = SellerFactory.instance().makeSellerPersistence();
         User seller = persistence.getSellerByID(String.valueOf(sellerID));
 
-        IInventoryItemPersistence inventoryPersistence = new InventoryItemPersistence();
+        IInventoryItemPersistence inventoryPersistence = InventoryFactory.instance().makeInventoryItemPersistence();
         ArrayList<IInventoryItem> inventory = inventoryPersistence.getAll(String.valueOf(sellerID));
 
         model.addAttribute("seller", seller);
@@ -101,7 +92,7 @@ public class BuyerController {
             cart = (ICart) session.getAttribute("cart");
         }
 
-        IInventoryItemPersistence inventoryPersistence = new InventoryItemPersistence();
+        IInventoryItemPersistence inventoryPersistence = InventoryFactory.instance().makeInventoryItemPersistence();
         IInventoryItem inventory = inventoryPersistence.getItemByID(itemID);
         inventory.setItemQuantity(Integer.parseInt(qty));
 

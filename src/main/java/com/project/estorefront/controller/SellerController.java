@@ -30,7 +30,7 @@ public class SellerController {
 
     @GetMapping("/seller/items")
     public String sellerItems(Model model, HttpSession session) {
-        IInventoryItemPersistence inventoryItemPersistence = new InventoryItemPersistence();
+        IInventoryItemPersistence inventoryItemPersistence = InventoryFactory.instance().makeInventoryItemPersistence();
 
         String userID = (String) session.getAttribute("userID");
 
@@ -56,7 +56,9 @@ public class SellerController {
         // TODO: Once seller dashboard is created, update 1 param to userID
         IInventoryItem item = new InventoryItem(mockUserID, ItemCategory.valueOf(itemCategory), itemName,
                 itemDescription, itemPrice, itemQuantity);
-        IInventoryItemPersistence.InventoryItemPersistenceOperationStatus status = item.save(new InventoryItemPersistence());
+        IInventoryItemPersistence inventoryItemPersistence = InventoryFactory.instance().makeInventoryItemPersistence();
+
+        IInventoryItemPersistence.InventoryItemPersistenceOperationStatus status = item.save(inventoryItemPersistence);
 
         if (status == IInventoryItemPersistence.InventoryItemPersistenceOperationStatus.SUCCESS) {
             return "redirect:/seller/items";
@@ -104,7 +106,7 @@ public class SellerController {
     @GetMapping("/seller/items/edit/{itemID}")
     public String editSellerItem(@PathVariable String itemID, Model model) {
         //TODO change comparison from string to enum in .html
-        IInventoryItemPersistence inventoryItemPersistence = new InventoryItemPersistence();
+        IInventoryItemPersistence inventoryItemPersistence = InventoryFactory.instance().makeInventoryItemPersistence();
         IInventoryItem item = inventoryItemPersistence.getItemByID(itemID);
         model.addAttribute("item", item);
         return "seller-items-update";
