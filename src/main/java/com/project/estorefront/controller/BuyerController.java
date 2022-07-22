@@ -73,6 +73,7 @@ public class BuyerController {
         model.addAttribute("orderID",orderID);
         return "add-review";
     }
+
     @GetMapping("/buyer/order/submit-review/{userID}/{orderID}")
     public String submitReview(@PathVariable("userID") String userID,@PathVariable("orderID") String orderID, @RequestParam("review") String description, Model model) {
         IBuyerOrderManagement buyerOrder = new OrderDetails();
@@ -81,7 +82,6 @@ public class BuyerController {
         return "submit-success";
     }
 
-    //public ModelAndView addToCart()
     @RequestMapping(value= "/buyer/cart/add/{itemID}", method = RequestMethod.POST)
     public String addToCart(@PathVariable String itemID, @RequestParam("quantity") String qty, HttpSession session)
     {
@@ -119,10 +119,19 @@ public class BuyerController {
             cart = (ICart)session.getAttribute("cart");
         }
 
+        double cartTotal = 0;
+
+        for(IInventoryItem item : cart.getCartItems())
+        {
+            cartTotal += item.getItemPrice()* item.getItemQuantity();
+        }
+
         model.addAttribute("inventory", cart.getCartItems());
+        model.addAttribute("cartTotal", cartTotal);
 
         return "view-cart";
     }
+    
     @RequestMapping(value= "/buyer/cart/delete/{itemID}", method = RequestMethod.GET)
     public String deleteItemFromCart(@PathVariable String itemID, Model model, HttpSession session)
     {
