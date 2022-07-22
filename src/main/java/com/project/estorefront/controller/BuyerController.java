@@ -82,8 +82,7 @@ public class BuyerController {
         return "submit-success";
     }
 
-    @RequestMapping(value= "/buyer/cart/add/{itemID}", method = RequestMethod.POST)
-    public String addToCart(@PathVariable String itemID, @RequestParam("quantity") String qty, HttpSession session)
+    private ICart getCart(HttpSession session)
     {
         ICart cart = null;
         if(session.getAttribute("cart") == null)
@@ -95,6 +94,13 @@ public class BuyerController {
             cart = (ICart)session.getAttribute("cart");
         }
 
+        return cart;
+    }
+    
+    @RequestMapping(value= "/buyer/cart/add/{itemID}", method = RequestMethod.POST)
+    public String addToCart(@PathVariable String itemID, @RequestParam("quantity") String qty, HttpSession session)
+    {
+        ICart cart = getCart(session);
         IInventoryItemPersistence inventoryPersistence = new InventoryItemPersistence();
         IInventoryItem inventory = inventoryPersistence.getItemByID(itemID);
         inventory.setItemQuantity(Integer.parseInt(qty));
@@ -105,20 +111,10 @@ public class BuyerController {
         return "redirect:/buyer";
     }
 
-    //public ModelAndView addToCart()
     @RequestMapping(value= "/buyer/cart/view", method = RequestMethod.GET)
     public String viewCart(Model model, HttpSession session)
     {
-        ICart cart = null;
-        if(session.getAttribute("cart") == null)
-        {
-            cart = Cart.instance();
-        }
-        else
-        {
-            cart = (ICart)session.getAttribute("cart");
-        }
-
+        ICart cart = getCart(session);
         double cartTotal = 0;
 
         for(IInventoryItem item : cart.getCartItems())
@@ -131,20 +127,25 @@ public class BuyerController {
 
         return "view-cart";
     }
-    
+
     @RequestMapping(value= "/buyer/cart/delete/{itemID}", method = RequestMethod.GET)
     public String deleteItemFromCart(@PathVariable String itemID, Model model, HttpSession session)
     {
-        ICart cart = null;
-        if(session.getAttribute("cart") == null)
-        {
-            cart = Cart.instance();
-        }
-        else
-        {
-            cart = (ICart)session.getAttribute("cart");
-        }
+        ICart cart = getCart(session);
+        IInventoryItemPersistence inventoryPersistence = new InventoryItemPersistence();
+        IInventoryItem inventory = inventoryPersistence.getItemByID(itemID);
 
+        cart.removeItem(inventory);
+        session.setAttribute("cart", cart);
+        model.addAttribute("inventory", cart.getCartItems());
+
+        return "view-cart";
+    }
+
+    @RequestMapping(value= "/buyer/cart/edit/{itemID}", method = RequestMethod.GET)
+    public String viewEditItemQtyPage(@PathVariable String itemID, Model model, HttpSession session)
+    {
+        ICart cart = getCart(session);
         IInventoryItemPersistence inventoryPersistence = new InventoryItemPersistence();
         IInventoryItem inventory = inventoryPersistence.getItemByID(itemID);
 
