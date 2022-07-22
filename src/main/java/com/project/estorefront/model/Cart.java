@@ -88,6 +88,21 @@ public class Cart implements ICart{
     }
 
     @Override
+    public IInventoryItem getItemByID(String id)
+    {
+        IInventoryItem item = null;
+        for(IInventoryItem cartItem : items)
+        {
+            if(cartItem.getItemID().matches(id))
+            {
+                item = cartItem;
+                break;
+            }
+        }
+        return item;
+    }
+
+    @Override
     public void pay() 
     {
     }
