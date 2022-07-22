@@ -1,10 +1,7 @@
 package com.project.estorefront.controller;
 
 import com.project.estorefront.model.*;
-import com.project.estorefront.repository.IInventoryItemPersistence;
-import com.project.estorefront.repository.ISellerPersistence;
-import com.project.estorefront.repository.InventoryItemPersistence;
-import com.project.estorefront.repository.SellerPersistence;
+import com.project.estorefront.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -93,8 +90,17 @@ public class BuyerController {
         {
             cart = (ICart)session.getAttribute("cart");
         }
-
         return cart;
+    }
+
+    private double getCartTotal(ICart cart)
+    {
+        double cartTotal = 0;
+        for(IInventoryItem item : cart.getCartItems())
+        {
+            cartTotal += item.getItemPrice()* item.getItemQuantity();
+        }
+        return cartTotal;
     }
     
     @RequestMapping(value= "/buyer/cart/add/{itemID}", method = RequestMethod.POST)
@@ -115,15 +121,8 @@ public class BuyerController {
     public String viewCart(Model model, HttpSession session)
     {
         ICart cart = getCart(session);
-        double cartTotal = 0;
-
-        for(IInventoryItem item : cart.getCartItems())
-        {
-            cartTotal += item.getItemPrice()* item.getItemQuantity();
-        }
-
         model.addAttribute("inventory", cart.getCartItems());
-        model.addAttribute("cartTotal", cartTotal);
+        model.addAttribute("cartTotal", getCartTotal(cart));
 
         return "view-cart";
     }
@@ -146,13 +145,26 @@ public class BuyerController {
     public String viewEditItemQtyPage(@PathVariable String itemID, Model model, HttpSession session)
     {
         ICart cart = getCart(session);
-        IInventoryItemPersistence inventoryPersistence = new InventoryItemPersistence();
-        IInventoryItem inventory = inventoryPersistence.getItemByID(itemID);
 
-        cart.removeItem(inventory);
-        session.setAttribute("cart", cart);
-        model.addAttribute("inventory", cart.getCartItems());
+        IInventoryItem item = cart.getItemByID(itemID);
+        if(item == null)
+        {
+            model.addAttribute("inventory", cart.getCartItems());
+            model.addAttribute("cartTotal", getCartTotal(cart));
+            return "view-cart";
+        }
 
-        return "view-cart";
+        model.addAttribute("item", item);
+        return "cart-item-update";
+    }
+
+    @PostMapping("/buyer/cart/update/{itemID}")
+    public String updateCartItemQty(@PathVariable String itemID, @RequestParam("quantity") String quantity, HttpSession session) {
+        ICart cart = getCart(session);
+        IInventoryItem item = cart.getItemByID(itemID);
+        item.setItemQuantity(Integer.parseInt(quantity));
+        cart.updateItem(item);
+
+        return "redirect:/buyer/cart/view";
     }
 }
