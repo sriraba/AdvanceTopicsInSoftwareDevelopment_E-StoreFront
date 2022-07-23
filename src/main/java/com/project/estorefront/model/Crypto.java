@@ -1,6 +1,6 @@
 package com.project.estorefront.model;
 
-public class Crypto implements  ICrypto{
+public class Crypto implements ICrypto {
     @Override
     public String encrypt(String value) {
         return null;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpSession;
 
+import com.project.estorefront.model.validators.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +15,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.project.estorefront.model.User;
 import com.project.estorefront.model.UserFactory;
-import com.project.estorefront.model.validators.EmailValidator;
-import com.project.estorefront.model.validators.NameValidator;
-import com.project.estorefront.model.validators.PasswordValidator;
-import com.project.estorefront.model.validators.PhoneNumberValidator;
 import com.project.estorefront.repository.Authentication;
 import com.project.estorefront.repository.IAuthentication;
 
@@ -38,8 +35,9 @@ public class AuthenticationController {
     @PostMapping("/validate-login")
     public ModelAndView validateLogin(@RequestParam("email") String email, @RequestParam("password") String password,
             @RequestParam("role") String role, HttpSession session, RedirectAttributes redirAttrs) {
-        EmailValidator emailValidator = new EmailValidator();
-        PasswordValidator passwordValidator = new PasswordValidator();
+
+        IValidator emailValidator = ValidatorFactory.instance().makeEmailValidator();
+        IValidator passwordValidator = ValidatorFactory.instance().makePasswordValidator();
 
         if (emailValidator.validate(email) && passwordValidator.validate(password)) {
 
@@ -74,10 +72,11 @@ public class AuthenticationController {
             @RequestParam("confirmPassword") String confirmPassword,
             @RequestParam("contact") String contact, @RequestParam("city") String city, @RequestParam String address,
             @RequestParam("role") String role, HttpSession session, RedirectAttributes redirAttrs) {
-        NameValidator nameValidator = new NameValidator();
-        EmailValidator emailValidator = new EmailValidator();
-        PasswordValidator passwordValidator = new PasswordValidator();
-        PhoneNumberValidator phoneNumberValidator = new PhoneNumberValidator();
+
+        IValidator nameValidator = ValidatorFactory.instance().makeNameValidator();
+        IValidator emailValidator = ValidatorFactory.instance().makeEmailValidator();
+        IValidator passwordValidator = ValidatorFactory.instance().makePasswordValidator();
+        IValidator phoneNumberValidator = ValidatorFactory.instance().makePhoneNumberValidator();
 
         ArrayList<String> errors = new ArrayList<>();
 
@@ -99,7 +98,7 @@ public class AuthenticationController {
         if (passwordValidator.validate(password) == false) {
             errors.add("Invalid password");
         }
-        if (passwordValidator.comparePassword(password, confirmPassword) == false) {
+        if (((PasswordValidator) passwordValidator).comparePassword(password, confirmPassword) == false) {
             errors.add("Password not matched");
         }
 
