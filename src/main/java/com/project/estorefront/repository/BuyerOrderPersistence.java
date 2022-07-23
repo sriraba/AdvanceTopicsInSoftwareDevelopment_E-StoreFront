@@ -1,7 +1,9 @@
 package com.project.estorefront.repository;
 
+import com.project.estorefront.model.DatabaseFactory;
 import com.project.estorefront.model.OrderDetails;
 
+import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,11 +11,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrderPersistence{
+public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrderPersistence {
     @Override
     public ArrayList<OrderDetails> loadOrders(String buyerID) {
         PreparedStatement preparedStatement = null;
-        Connection connection = Database.getConnection();
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
+
         ArrayList<OrderDetails> sellerOrderDetails = new ArrayList<>();
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM buyer_orders WHERE buyer_orders.user_id = ?");
@@ -33,16 +37,19 @@ public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrd
                 sellerOrderDetails.add(orderDetail);
             }
             return sellerOrderDetails;
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return sellerOrderDetails;
+        } finally {
+            database.closeConnection();
         }
     }
 
     @Override
     public void submitReview(String userID, String orderID, String description) {
         PreparedStatement preparedStatement = null;
-        Connection connection = Database.getConnection();
+        Database database = (Database) DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
         try{
 
             String persistReview = "insert into reviews (review_id, description, user_id, order_id ) " +

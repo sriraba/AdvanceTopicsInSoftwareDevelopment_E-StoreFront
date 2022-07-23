@@ -1,6 +1,7 @@
 package com.project.estorefront.validators;
 
 import com.project.estorefront.model.IInventoryItem;
+import com.project.estorefront.model.InventoryFactory;
 import com.project.estorefront.model.InventoryItem;
 import com.project.estorefront.model.validators.IInventoryItemValidator;
 import com.project.estorefront.model.validators.InventoryItemValidator;
@@ -15,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 
     @Test
     public void validateInvalidInventoryItem() {
-        IInventoryItem item = new InventoryItem();
+        IInventoryItem item = InventoryFactory.instance().makeInventoryItem();
         IInventoryItemValidator validator = new InventoryItemValidator();
         assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.ALL_INVALID);
     }

@@ -1,19 +1,21 @@
 package com.project.estorefront.repository;
 
-import com.project.estorefront.model.*;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.project.estorefront.model.*;
+
 public class SellerPersistence implements ISellerPersistence {
 
     @Override
     public ArrayList<User> getAllSellers() {
         ArrayList<User> sellerList = new ArrayList<>();
-        Connection connection = Database.getConnection();
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
+
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE seller = 1");
@@ -37,8 +39,8 @@ public class SellerPersistence implements ISellerPersistence {
                 seller.setPhone(contactNumber);
                 seller.setCity(city);
                 seller.setIsSeller(true);
-                ((Seller) seller).setBusinessName(businessName);
-                ((Seller) seller).setBusinessDescription(businessDescription);
+                ((ISeller) seller).setBusinessName(businessName);
+                ((ISeller) seller).setBusinessDescription(businessDescription);
 
                 seller.setUserID(userID);
                 sellerList.add(seller);
@@ -47,13 +49,17 @@ public class SellerPersistence implements ISellerPersistence {
         } catch (SQLException e) {
             e.printStackTrace();
             return sellerList;
+        } finally {
+            database.closeConnection();
         }
     }
 
     @Override
     public ArrayList<User> getAllSellersByCity(String city) {
         ArrayList<User> sellerList = new ArrayList<>();
-        Connection connection = Database.getConnection();
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
+
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE seller = 1 AND city = ?");
@@ -78,8 +84,8 @@ public class SellerPersistence implements ISellerPersistence {
                 seller.setPhone(contactNumber);
                 seller.setCity(sellerCity);
                 seller.setIsSeller(true);
-                ((Seller) seller).setBusinessName(businessName);
-                ((Seller) seller).setBusinessDescription(businessDescription);
+                ((ISeller) seller).setBusinessName(businessName);
+                ((ISeller) seller).setBusinessDescription(businessDescription);
 
                 seller.setUserID(userID);
                 sellerList.add(seller);
@@ -88,16 +94,21 @@ public class SellerPersistence implements ISellerPersistence {
         } catch (SQLException e) {
             e.printStackTrace();
             return sellerList;
+        } finally {
+            database.closeConnection();
         }
     }
 
     @Override
     public ArrayList<User> getAllSellersByCategory(ItemCategory itemCategory, String city) {
         ArrayList<User> sellerList = new ArrayList<>();
-        Connection connection = Database.getConnection();
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
+
         PreparedStatement preparedStatement;
         try {
-            preparedStatement = connection.prepareStatement("SELECT DISTINCT user.user_id, email, contact_num, seller, city, business_name, address, business_description, seller_inventory.category_id FROM user RIGHT JOIN seller_inventory on user.user_id = seller_inventory.user_id where user.seller = 1 AND category_id = ? AND city = ?;");
+            preparedStatement = connection.prepareStatement(
+                    "SELECT DISTINCT user.user_id, email, contact_num, seller, city, business_name, address, business_description, seller_inventory.category_id FROM user RIGHT JOIN seller_inventory on user.user_id = seller_inventory.user_id where user.seller = 1 AND category_id = ? AND city = ?;");
             preparedStatement.setString(1, itemCategory.toString());
             preparedStatement.setString(2, city);
             ResultSet rs = preparedStatement.executeQuery();
@@ -117,8 +128,8 @@ public class SellerPersistence implements ISellerPersistence {
                 seller.setPhone(contactNumber);
                 seller.setCity(rsCity);
                 seller.setIsSeller(true);
-                ((Seller) seller).setBusinessName(businessName);
-                ((Seller) seller).setBusinessDescription(businessDescription);
+                ((ISeller) seller).setBusinessName(businessName);
+                ((ISeller) seller).setBusinessDescription(businessDescription);
 
                 seller.setUserID(userID);
                 sellerList.add(seller);
@@ -127,12 +138,16 @@ public class SellerPersistence implements ISellerPersistence {
         } catch (SQLException e) {
             e.printStackTrace();
             return sellerList;
+        } finally {
+            database.closeConnection();
         }
     }
 
     @Override
     public User getSellerByID(String sellerID) {
-        Connection connection = Database.getConnection();
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
+
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE user_id = ?");
@@ -157,8 +172,8 @@ public class SellerPersistence implements ISellerPersistence {
                 seller.setPhone(contactNumber);
                 seller.setCity(city);
                 seller.setIsSeller(true);
-                ((Seller) seller).setBusinessName(businessName);
-                ((Seller) seller).setBusinessDescription(businessDescription);
+                ((ISeller) seller).setBusinessName(businessName);
+                ((ISeller) seller).setBusinessDescription(businessDescription);
 
                 seller.setUserID(userID);
                 return seller;
@@ -167,6 +182,8 @@ public class SellerPersistence implements ISellerPersistence {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        } finally {
+            database.closeConnection();
         }
     }
 }

@@ -23,6 +23,7 @@ public class SellerPersistenceMock implements ISellerPersistence {
         seller.setBusinessName("ASD");
         seller.setBusinessDescription("ASD");
         sellers.add(seller);
+
     }
 
     public void addMockSellerWithCity(String cityName) {

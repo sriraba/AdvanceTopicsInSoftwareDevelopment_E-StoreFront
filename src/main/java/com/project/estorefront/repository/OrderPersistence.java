@@ -1,5 +1,6 @@
 package com.project.estorefront.repository;
 
+import com.project.estorefront.model.DatabaseFactory;
 import com.project.estorefront.model.ItemDetails;
 import com.project.estorefront.model.OrderDetails;
 
@@ -9,15 +10,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class OrderPersistence implements IOrderPersistence{
+public class OrderPersistence implements IOrderPersistence {
     @Override
     public OrderDetails loadOrderAndItems(String orderID) {
-        PreparedStatement preparedStatement = null;
-        Connection connection = Database.getConnection();
+        PreparedStatement preparedStatement;
+
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
         OrderDetails orderDetail = new OrderDetails();
         ArrayList<ItemDetails> itemDetails = new ArrayList<>();
         try {
-            preparedStatement = connection.prepareStatement("SELECT * FROM buyer_orders JOIN order_items ON buyer_orders.order_id = order_items.order_id AND buyer_orders.order_id = ?");
+            preparedStatement = connection.prepareStatement(
+                    "SELECT * FROM buyer_orders JOIN order_items ON buyer_orders.order_id = order_items.order_id AND buyer_orders.order_id = ?");
             preparedStatement.setString(1, orderID);
             ResultSet rs = preparedStatement.executeQuery();
             ItemDetails itemDetail = new ItemDetails();
@@ -38,9 +42,11 @@ public class OrderPersistence implements IOrderPersistence{
             }
             orderDetail.setItemDetails(itemDetails);
             return orderDetail;
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return orderDetail;
+        } finally {
+            database.closeConnection();
         }
     }
 }

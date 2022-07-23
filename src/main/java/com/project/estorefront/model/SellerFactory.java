@@ -20,25 +20,21 @@ public class SellerFactory implements ISellerFactory {
     }
 
     @Override
-
     public ISellerPersistence makeSellerPersistence() {
         return new SellerPersistence();
     }
 
     @Override
-
     public ISellerOrderManagement makeSellerOrderManagement() {
         return new OrderDetails();
     }
 
     @Override
-
     public ISellerOrderPersistence makeSellerOrderPersistence() {
         return new SellerOrderPersistence();
     }
 
     @Override
-
     public User makeSeller() {
         return new Seller();
     }

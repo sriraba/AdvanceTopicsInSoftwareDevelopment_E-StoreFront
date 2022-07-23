@@ -7,11 +7,17 @@ import java.util.ArrayList;
 
 public interface IInventoryItemPersistence {
 
-    boolean save(IInventoryItem item) throws SQLException;
+    enum InventoryItemPersistenceOperationStatus {
+        SUCCESS,
+        FAILURE,
+        SQL_EXCEPTION,
+    }
 
-    boolean delete(IInventoryItem item);
+    InventoryItemPersistenceOperationStatus save(IInventoryItem item) throws SQLException;
 
-    boolean update(IInventoryItem item);
+    InventoryItemPersistenceOperationStatus delete(IInventoryItem item);
+
+    InventoryItemPersistenceOperationStatus update(IInventoryItem item);
 
     ArrayList<IInventoryItem> getAll(String userID);
 
