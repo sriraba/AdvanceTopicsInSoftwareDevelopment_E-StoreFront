@@ -2,6 +2,7 @@ package com.project.estorefront.repository;
 
 import com.project.estorefront.model.Coupon;
 import com.project.estorefront.model.DatabaseFactory;
+import com.project.estorefront.model.ICoupon;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.List;
 public class CouponsPersistence implements ICouponsPersistence {
 
     @Override
-    public void saveCoupon(Coupon coupon) {
+    public void saveCoupon(ICoupon coupon) {
         IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
         try {
@@ -33,7 +34,7 @@ public class CouponsPersistence implements ICouponsPersistence {
     }
 
     @Override
-    public void updateCoupon(Coupon coupon) {
+    public void updateCoupon(ICoupon coupon) {
         IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
         try {
@@ -56,12 +57,12 @@ public class CouponsPersistence implements ICouponsPersistence {
     }
 
     @Override
-    public List<Coupon> getCoupons() {
+    public List<ICoupon> getCoupons() {
         IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
 
         Statement stmt;
-        ArrayList<Coupon> coupons = new ArrayList<>();
+        ArrayList<ICoupon> coupons = new ArrayList<>();
         try {
 
             stmt = connection.createStatement();

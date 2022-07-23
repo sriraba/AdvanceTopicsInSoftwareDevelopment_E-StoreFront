@@ -1,9 +1,6 @@
 package com.project.estorefront.repository;
 
-import com.project.estorefront.model.DatabaseFactory;
-import com.project.estorefront.model.IInventoryItem;
-import com.project.estorefront.model.InventoryItem;
-import com.project.estorefront.model.ItemCategory;
+import com.project.estorefront.model.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -120,7 +117,7 @@ public class InventoryItemPersistence implements IInventoryItemPersistence {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                IInventoryItem item = new InventoryItem();
+                IInventoryItem item = InventoryFactory.instance().makeInventoryItem();
                 item.setItemID(rs.getString("item_id"));
                 item.setUserID(rs.getString("user_id"));
                 item.setItemCategory(ItemCategory.valueOf(rs.getString("category_id")));
@@ -146,7 +143,7 @@ public class InventoryItemPersistence implements IInventoryItemPersistence {
         IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
 
-        IInventoryItem item = new InventoryItem();
+        IInventoryItem item = InventoryFactory.instance().makeInventoryItem();
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM seller_inventory WHERE item_id = ?");
             preparedStatement.setString(1, itemID);

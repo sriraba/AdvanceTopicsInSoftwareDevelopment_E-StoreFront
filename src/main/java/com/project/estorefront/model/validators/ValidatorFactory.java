@@ -20,7 +20,7 @@ public class ValidatorFactory implements IValidatorFactory {
     }
 
     @Override
-    public IValidator makePasswordValidator() {
+    public IPasswordValidator makePasswordValidator() {
         return new PasswordValidator();
     }
 

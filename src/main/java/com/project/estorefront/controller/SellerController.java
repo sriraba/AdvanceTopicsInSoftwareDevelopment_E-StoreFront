@@ -134,7 +134,7 @@ public class SellerController {
     @GetMapping("/seller/items/delete/{itemID}")
     public String deleteSellerItem(@PathVariable String itemID) throws SQLException {
         IInventoryItemPersistence inventoryItemPersistence = new InventoryItemPersistence();
-        IInventoryItem item = new InventoryItem();
+        IInventoryItem item = InventoryFactory.instance().makeInventoryItem();
         item.setItemID(itemID);
         item.delete(inventoryItemPersistence);
         return "redirect:/seller/items";

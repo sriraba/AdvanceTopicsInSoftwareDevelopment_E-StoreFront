@@ -10,5 +10,5 @@ public interface ICouponsPersistence {
     void updateCoupon(ICoupon coupon);
     List<ICoupon> getCoupons();
     ICoupon getCouponById(int id);
-    public void deleteCoupon(int id);
+    void deleteCoupon(int id);
 }

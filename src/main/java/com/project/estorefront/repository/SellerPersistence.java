@@ -6,11 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.project.estorefront.model.DatabaseFactory;
-import com.project.estorefront.model.ItemCategory;
-import com.project.estorefront.model.Seller;
-import com.project.estorefront.model.User;
-import com.project.estorefront.model.UserFactory;
+import com.project.estorefront.model.*;
 
 public class SellerPersistence implements ISellerPersistence {
 
@@ -43,8 +39,8 @@ public class SellerPersistence implements ISellerPersistence {
                 seller.setPhone(contactNumber);
                 seller.setCity(city);
                 seller.setIsSeller(true);
-                ((Seller) seller).setBusinessName(businessName);
-                ((Seller) seller).setBusinessDescription(businessDescription);
+                ((ISeller) seller).setBusinessName(businessName);
+                ((ISeller) seller).setBusinessDescription(businessDescription);
 
                 seller.setUserID(userID);
                 sellerList.add(seller);
@@ -88,8 +84,8 @@ public class SellerPersistence implements ISellerPersistence {
                 seller.setPhone(contactNumber);
                 seller.setCity(sellerCity);
                 seller.setIsSeller(true);
-                ((Seller) seller).setBusinessName(businessName);
-                ((Seller) seller).setBusinessDescription(businessDescription);
+                ((ISeller) seller).setBusinessName(businessName);
+                ((ISeller) seller).setBusinessDescription(businessDescription);
 
                 seller.setUserID(userID);
                 sellerList.add(seller);
@@ -132,8 +128,8 @@ public class SellerPersistence implements ISellerPersistence {
                 seller.setPhone(contactNumber);
                 seller.setCity(rsCity);
                 seller.setIsSeller(true);
-                ((Seller) seller).setBusinessName(businessName);
-                ((Seller) seller).setBusinessDescription(businessDescription);
+                ((ISeller) seller).setBusinessName(businessName);
+                ((ISeller) seller).setBusinessDescription(businessDescription);
 
                 seller.setUserID(userID);
                 sellerList.add(seller);
@@ -176,8 +172,8 @@ public class SellerPersistence implements ISellerPersistence {
                 seller.setPhone(contactNumber);
                 seller.setCity(city);
                 seller.setIsSeller(true);
-                ((Seller) seller).setBusinessName(businessName);
-                ((Seller) seller).setBusinessDescription(businessDescription);
+                ((ISeller) seller).setBusinessName(businessName);
+                ((ISeller) seller).setBusinessDescription(businessDescription);
 
                 seller.setUserID(userID);
                 return seller;

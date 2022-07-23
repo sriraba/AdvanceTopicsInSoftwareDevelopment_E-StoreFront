@@ -11,9 +11,6 @@ import com.project.estorefront.model.User;
 
 public class Authentication implements IAuthentication {
 
-    private Connection connection = null;
-    private ResultSet resultSet = null;
-
     @Override
     public String login(String email, String password) {
         IDatabase database = DatabaseFactory.instance().makeDatabase();
@@ -23,7 +20,7 @@ public class Authentication implements IAuthentication {
             PreparedStatement preparedStmt = connection.prepareStatement(userDetailsQuery);
             preparedStmt.setString(1, email);
             preparedStmt.setString(2, password);
-            resultSet = preparedStmt.executeQuery();
+            ResultSet resultSet = preparedStmt.executeQuery();
             while (resultSet.next()) {
                 return resultSet.getString("user_id");
             }

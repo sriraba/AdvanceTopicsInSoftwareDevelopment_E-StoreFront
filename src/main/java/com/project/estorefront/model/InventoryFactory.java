@@ -18,11 +18,6 @@ public class InventoryFactory implements IInventoryFactory {
     }
 
     @Override
-    public IInventoryItem makeInventoryItem(String userID, ItemCategory itemCategory, String itemName, String itemDescription, Double itemPrice, Integer itemQuantity) {
-        return new InventoryItem(userID, itemCategory, itemName, itemDescription, itemPrice, itemQuantity);
-    }
-
-    @Override
     public IInventoryItem makeInventoryItem() {
         return new InventoryItem();
     }

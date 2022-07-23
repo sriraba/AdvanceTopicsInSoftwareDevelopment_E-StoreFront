@@ -11,11 +11,10 @@ import com.project.estorefront.model.DeliveryPerson;
 import com.project.estorefront.model.IDeliveryPerson;
 
 public class DeliveryPersonPersistence implements IDeliveryPersonPersistence {
-    private Connection connection;
 
     @Override
     public ArrayList<IDeliveryPerson> getAll(String sellerID) {
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
         IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
 

@@ -6,9 +6,9 @@ public class CouponValidator implements ICouponValidator{
     public boolean isValidAmount(String amount) {
 
         try{
-            Double amt = Double.parseDouble(amount);
+            double amt = Double.parseDouble(amount);
 
-            if(amt <= 0 || amt > 100)
+            if (amt <= 0 || amt > 100)
             {
                 return false;
             }
@@ -28,7 +28,7 @@ public class CouponValidator implements ICouponValidator{
     public boolean isValidPercent(String percent) {
 
         try {
-            Double amt = Double.parseDouble(percent);
+            double amt = Double.parseDouble(percent);
 
             if (amt <= 0 || amt > 100)
             {
