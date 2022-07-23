@@ -3,6 +3,7 @@ package com.project.estorefront.controller;
 import com.project.estorefront.model.*;
 import com.project.estorefront.repository.IInventoryItemPersistence;
 import com.project.estorefront.repository.ISellerPersistence;
+import com.project.estorefront.repository.InventoryItemPersistence;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -82,17 +83,28 @@ public class BuyerController {
         return "submit-success";
     }
 
-    // public ModelAndView addToCart()
-    @RequestMapping(value = "/buyer/cart/add/{itemID}", method = RequestMethod.POST)
-    public String addToCart(@PathVariable String itemID, @RequestParam("quantity") String qty, HttpSession session) {
+    private ICart getCart(HttpSession session) {
         ICart cart = null;
         if (session.getAttribute("cart") == null) {
             cart = Cart.instance();
         } else {
             cart = (ICart) session.getAttribute("cart");
         }
+        return cart;
+    }
 
-        IInventoryItemPersistence inventoryPersistence = InventoryFactory.instance().makeInventoryItemPersistence();
+    private double getCartTotal(ICart cart) {
+        double cartTotal = 0;
+        for (IInventoryItem item : cart.getCartItems()) {
+            cartTotal += item.getItemPrice() * item.getItemQuantity();
+        }
+        return cartTotal;
+    }
+
+    @RequestMapping(value = "/buyer/cart/add/{itemID}", method = RequestMethod.POST)
+    public String addToCart(@PathVariable String itemID, @RequestParam("quantity") String qty, HttpSession session) {
+        ICart cart = getCart(session);
+        IInventoryItemPersistence inventoryPersistence = new InventoryItemPersistence();
         IInventoryItem inventory = inventoryPersistence.getItemByID(itemID);
         inventory.setItemQuantity(Integer.parseInt(qty));
 
@@ -102,18 +114,51 @@ public class BuyerController {
         return "redirect:/buyer";
     }
 
-    // public ModelAndView addToCart()
     @RequestMapping(value = "/buyer/cart/view", method = RequestMethod.GET)
     public String viewCart(Model model, HttpSession session) {
-        ICart cart = null;
-        if (session.getAttribute("cart") == null) {
-            cart = Cart.instance();
-        } else {
-            cart = (ICart) session.getAttribute("cart");
-        }
+        ICart cart = getCart(session);
+        model.addAttribute("inventory", cart.getCartItems());
+        model.addAttribute("cartTotal", getCartTotal(cart));
 
+        return "view-cart";
+    }
+
+    @RequestMapping(value = "/buyer/cart/delete/{itemID}", method = RequestMethod.GET)
+    public String deleteItemFromCart(@PathVariable String itemID, Model model, HttpSession session) {
+        ICart cart = getCart(session);
+        IInventoryItemPersistence inventoryPersistence = new InventoryItemPersistence();
+        IInventoryItem inventory = inventoryPersistence.getItemByID(itemID);
+
+        cart.removeItem(inventory);
+        session.setAttribute("cart", cart);
         model.addAttribute("inventory", cart.getCartItems());
 
         return "view-cart";
+    }
+
+    @RequestMapping(value = "/buyer/cart/edit/{itemID}", method = RequestMethod.GET)
+    public String viewEditItemQtyPage(@PathVariable String itemID, Model model, HttpSession session) {
+        ICart cart = getCart(session);
+
+        IInventoryItem item = cart.getItemByID(itemID);
+        if (item == null) {
+            model.addAttribute("inventory", cart.getCartItems());
+            model.addAttribute("cartTotal", getCartTotal(cart));
+            return "view-cart";
+        }
+
+        model.addAttribute("item", item);
+        return "cart-item-update";
+    }
+
+    @PostMapping("/buyer/cart/update/{itemID}")
+    public String updateCartItemQty(@PathVariable String itemID, @RequestParam("quantity") String quantity,
+            HttpSession session) {
+        ICart cart = getCart(session);
+        IInventoryItem item = cart.getItemByID(itemID);
+        item.setItemQuantity(Integer.parseInt(quantity));
+        cart.updateItem(item);
+
+        return "redirect:/buyer/cart/view";
     }
 }

@@ -7,17 +7,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class OrderDetails implements ISellerOrderManagement, IBuyerOrderManagement{
-
     private String orderID;
     private String sellerID;
     private String orderStatus;
     private String couponID;
-
     private Float totalAmount;
     private String deliveryCharges;
     private String deliveryAddress;
     private String pincode;
-
     private  String buyerID;
 
     public String getBuyerID() {
@@ -112,7 +109,7 @@ public class OrderDetails implements ISellerOrderManagement, IBuyerOrderManageme
 
     @Override
     public Map<String, ArrayList<OrderDetails>> getSellerOrders(String sellerID) {
-        ISellerOrderPersistence orderPersistence = new SellerOrderPersistence();
+        ISellerOrderPersistence orderPersistence =  SellerFactory.instance().makeSellerOrderPersistence();
         ArrayList<OrderDetails> allOrderDetails = orderPersistence.loadOrders(sellerID);
         ArrayList<OrderDetails> currentOrderDetails = new ArrayList<>();
         ArrayList<OrderDetails> previousOrderDetails = new ArrayList<>();
@@ -127,13 +124,12 @@ public class OrderDetails implements ISellerOrderManagement, IBuyerOrderManageme
         });
         sellerOrders.put("current", currentOrderDetails);
         sellerOrders.put("previous", previousOrderDetails);
-
         return sellerOrders;
     }
 
     @Override
     public Map<String, ArrayList<OrderDetails>> getBuyerOrders(String buyerID) {
-        IBuyerOrderPersistence orderPersistence = new BuyerOrderPersistence();
+        IBuyerOrderPersistence orderPersistence = BuyerFactory.instance().makeBuyerOrderPersistence();
         ArrayList<OrderDetails> allOrderDetails = orderPersistence.loadOrders(buyerID);
         ArrayList<OrderDetails> currentOrderDetails = new ArrayList<>();
         ArrayList<OrderDetails> previousOrderDetails = new ArrayList<>();
@@ -154,12 +150,12 @@ public class OrderDetails implements ISellerOrderManagement, IBuyerOrderManageme
 
     @Override
     public void submitReview(String userID, String orderID, String description) {
-        IBuyerOrderPersistence orderPersistence = new BuyerOrderPersistence();
+        IBuyerOrderPersistence orderPersistence = BuyerFactory.instance().makeBuyerOrderPersistence();
         orderPersistence.submitReview(userID,orderID,description);
     }
 
     public OrderDetails getOrderAndItemDetails(String orderID){
-        IOrderPersistence orderPersistence = new OrderPersistence();
+        IOrderPersistence orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence();
         return orderPersistence.loadOrderAndItems(orderID);
     }
 }

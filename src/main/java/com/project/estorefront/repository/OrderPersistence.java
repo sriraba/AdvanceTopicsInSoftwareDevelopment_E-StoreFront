@@ -18,13 +18,13 @@ public class OrderPersistence implements IOrderPersistence {
         IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
         OrderDetails orderDetail = new OrderDetails();
-
-        ArrayList<com.project.estorefront.model.ItemDetails> sellerItemDetails = new ArrayList<>();
+        ArrayList<ItemDetails> itemDetails = new ArrayList<>();
         try {
-            preparedStatement = connection.prepareStatement("SELECT * FROM buyer_orders JOIN order_items ON buyer_orders.order_id = order_items.order_id AND buyer_orders.order_id = ?");
+            preparedStatement = connection.prepareStatement(
+                    "SELECT * FROM buyer_orders JOIN order_items ON buyer_orders.order_id = order_items.order_id AND buyer_orders.order_id = ?");
             preparedStatement.setString(1, orderID);
             ResultSet rs = preparedStatement.executeQuery();
-            com.project.estorefront.model.ItemDetails itemDetail = new ItemDetails();
+            ItemDetails itemDetail = new ItemDetails();
             while (rs.next()) {
                 orderDetail.setOrderID(rs.getString("order_id"));
                 orderDetail.setOrderStatus(rs.getString("order_status"));
@@ -38,9 +38,9 @@ public class OrderPersistence implements IOrderPersistence {
                 itemDetail.setQuantity(rs.getInt("quantity"));
                 itemDetail.setItemPrice(rs.getFloat("item_price"));
                 orderDetail.setBuyerID(rs.getString("user_id"));
-                sellerItemDetails.add(itemDetail);
+                itemDetails.add(itemDetail);
             }
-            orderDetail.setItemDetails(sellerItemDetails);
+            orderDetail.setItemDetails(itemDetails);
             return orderDetail;
         } catch (SQLException e) {
             e.printStackTrace();

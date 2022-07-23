@@ -1,6 +1,7 @@
 package com.project.estorefront.controller;
 
 import com.project.estorefront.model.*;
+import com.project.estorefront.model.validators.CouponValidator;
 import com.project.estorefront.repository.CouponsPersistence;
 import com.project.estorefront.repository.IInventoryItemPersistence;
 import com.project.estorefront.repository.InventoryItemPersistence;
@@ -147,7 +148,14 @@ public class SellerController {
     }
 
     @GetMapping("/seller/add-coupon")
-    public String add() {
+    public String add(Model model) {
+        model.addAttribute("error","");
+        return "add-coupon";
+    }
+
+    @GetMapping("/seller/add-coupon/{error}")
+    public String add(Model model, @PathVariable("error") String error) {
+        model.addAttribute("error",error);
         return "add-coupon";
     }
 
@@ -156,9 +164,23 @@ public class SellerController {
         CouponsPersistence persistenceObj = new CouponsPersistence();
 
         int id = persistenceObj.getCoupons().size() + 1;
-
-        Coupon coupon = new Coupon(id, couponName, Double.parseDouble(amount), Double.parseDouble(percent));
-        persistenceObj.saveCoupon(coupon);
+	    String error = "";
+        CouponValidator validator = new CouponValidator();
+        if(!validator.isValidAmount(amount))
+        {
+            error = "Error: Invalid Amount";
+            return "redirect:/seller/add-coupon/" + error;
+        }
+        else if(!validator.isValidPercent(percent))
+        {
+            error = "Error: Invalid percent";
+            return "redirect:/seller/add-coupon/" + error;
+        }
+        else
+        {
+            Coupon coupon = new Coupon(id, couponName, Double.parseDouble(amount), Double.parseDouble(percent));
+            persistenceObj.saveCoupon(coupon);
+        }
 
         return "redirect:/seller/coupons";
     }
@@ -194,10 +216,17 @@ public class SellerController {
     public String update(@PathVariable("id") int id, @RequestParam("name") String couponName, @RequestParam("amount") String amount, @RequestParam("percent") String percent) {
         CouponsPersistence persistenceObj = new CouponsPersistence();
 
-        Coupon coupon = new Coupon(id, couponName, Double.parseDouble(amount), Double.parseDouble(percent));
-        persistenceObj.updateCoupon(coupon);
-
-        return "redirect:/seller/coupons";
+        CouponValidator validator = new CouponValidator();
+        if(validator.isValidPercent(percent) && validator.isValidAmount(amount))
+        {
+            Coupon coupon = new Coupon(id, couponName, Double.parseDouble(amount), Double.parseDouble(percent));
+            persistenceObj.updateCoupon(coupon);
+            return "redirect:/seller/coupons";
+        }
+        else
+        {
+            return "redirect:/seller/coupons/edit/" + id;
+        }
     }
 
 }

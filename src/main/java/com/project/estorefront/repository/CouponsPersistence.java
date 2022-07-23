@@ -64,7 +64,6 @@ public class CouponsPersistence implements ICouponsPersistence {
         ArrayList<Coupon> coupons = new ArrayList<>();
         try {
 
-
             stmt = connection.createStatement();
 
             String query = "select * from coupons;";
@@ -76,7 +75,7 @@ public class CouponsPersistence implements ICouponsPersistence {
                 double max_amt = Double.parseDouble(rs.getString("max_amt"));
                 double percent = Double.parseDouble(rs.getString("percent"));
 
-                Coupon coupon = new Coupon(coupon_id, name, max_amt, percent);
+                ICoupon coupon = new Coupon(coupon_id, name, max_amt, percent);
                 coupons.add(coupon);
             }
 
@@ -85,7 +84,6 @@ public class CouponsPersistence implements ICouponsPersistence {
         } finally {
             database.closeConnection();
         }
-
 
         return coupons;
     }
@@ -98,7 +96,6 @@ public class CouponsPersistence implements ICouponsPersistence {
         Coupon coupon = null;
         Statement stmt;
         try {
-
 
             stmt = connection.createStatement();
 
@@ -119,7 +116,6 @@ public class CouponsPersistence implements ICouponsPersistence {
         } finally {
             database.closeConnection();
         }
-
 
         return coupon;
     }

@@ -18,13 +18,12 @@ public class Cart implements ICart{
         {
             instance = new Cart();
         }
-
         return instance;
     }
 
     @Override
-    public void addItem(IInventoryItem item) {
-
+    public void addItem(IInventoryItem item) 
+    {
         int itemIndex = items.indexOf(item);
 
         if(itemIndex > -1)
@@ -39,47 +38,72 @@ public class Cart implements ICart{
     }
 
     @Override
-    public void removeItem(IInventoryItem item) {
-
-        items.remove(item);
-
+    public void removeItem(IInventoryItem item) 
+    {
+        IInventoryItem itemToDelete = null;
+        for(IInventoryItem cartItem : items)
+        {
+            if(cartItem.getItemID().matches(item.getItemID()))
+            {
+                itemToDelete = cartItem;
+                break;
+            }
+        }
+        if(itemToDelete != null)
+        {
+            items.remove(itemToDelete);
+        }
     }
 
     @Override
-    public void updateItem(IInventoryItem item) {
-
+    public void updateItem(IInventoryItem item) 
+    {
         int itemIndex = items.indexOf(item);
         items.get(itemIndex).setItemQuantity(item.getItemQuantity());
 
     }
 
     @Override
-    public void clearCart() {
-
+    public void clearCart() 
+    {
         items.clear();
         instance = null;
-
     }
 
     @Override
     public int getTotalItems()
     {
         int totalItems = 0;
-
         for(IInventoryItem item : items)
         {
             totalItems += item.getItemQuantity();
         }
-
         return totalItems;
     }
 
     @Override
-    public ArrayList<IInventoryItem> getCartItems() {
+    public ArrayList<IInventoryItem> getCartItems() 
+    {
         return items;
     }
 
     @Override
-    public void pay() {
+    public IInventoryItem getItemByID(String id)
+    {
+        IInventoryItem item = null;
+        for(IInventoryItem cartItem : items)
+        {
+            if(cartItem.getItemID().matches(id))
+            {
+                item = cartItem;
+                break;
+            }
+        }
+        return item;
+    }
+
+    @Override
+    public void pay() 
+    {
     }
 }
