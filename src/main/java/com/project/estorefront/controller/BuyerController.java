@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 @Controller
@@ -71,6 +70,7 @@ public class BuyerController {
         model.addAttribute("orderID",orderID);
         return "add-review";
     }
+
     @GetMapping("/buyer/order/submit-review/{userID}/{orderID}")
     public String submitReview(@PathVariable("userID") String userID,@PathVariable("orderID") String orderID, @RequestParam("review") String description, Model model) {
         IBuyerOrderManagement buyerOrder = new OrderDetails();
@@ -79,52 +79,7 @@ public class BuyerController {
         return "submit-success";
     }
 
-    @GetMapping("/buyer/account")
-    public String buyerAccount(Model model, HttpSession session) {
-        IBuyerPersistence buyerPersistence = new BuyerPersistence();
-        String userID = (String) session.getAttribute("userID");
-        User buyer = new Buyer();
-        buyer = ((Buyer)buyer).getBuyerByID(buyerPersistence, "1");
-        model.addAttribute("buyer", buyer);
-        return "buyer-account";
-    }
-
-    @GetMapping("/buyer/account/edit/{userID}")
-    public String editSellerAccount(@PathVariable String userID, Model model) {
-        IBuyerPersistence buyerPersistence = new BuyerPersistence();
-        User buyer = new Buyer();
-        buyer = ((Buyer)buyer).getBuyerByID(buyerPersistence, userID);
-        model.addAttribute("buyer", buyer);
-        return "buyer-account-update";
-    }
-
-    @PostMapping("/buyer/account/update/{userID}")
-    public String updateBuyerAccount(@RequestParam("firstName") String firstName,
-                                      @RequestParam("lastName") String lastName,
-                                     @RequestParam("phone") String phone, @RequestParam("address") String address, @PathVariable String userID, HttpSession session) {
-        User buyer = new Buyer();
-        buyer.setFirstName(firstName);
-        buyer.setLastName(lastName);
-        buyer.setPhone(phone);
-        buyer.setAddress(address);
-        buyer.setUserID(userID);
-        IBuyerPersistence buyerPersistence = new BuyerPersistence();
-        ((Buyer) buyer).updateBuyerAccount(buyerPersistence);
-        return "redirect:/buyer/account";
-    }
-
-    @GetMapping("/buyer/account/deactivate")
-    public String deactivateBuyerAccount() throws SQLException {
-        User buyer = new Buyer();
-        buyer.setUserID("1");
-        IBuyerPersistence buyerPersistence = new BuyerPersistence();
-        ((Buyer) buyer).deactivateBuyerAccount(buyerPersistence);
-        return "redirect:/login";
-    }
-
-    //public ModelAndView addToCart()
-    @RequestMapping(value= "/buyer/cart/add/{itemID}", method = RequestMethod.POST)
-    public String addToCart(@PathVariable String itemID, @RequestParam("quantity") String qty, HttpSession session)
+    private ICart getCart(HttpSession session)
     {
         ICart cart = null;
         if(session.getAttribute("cart") == null)
@@ -135,7 +90,23 @@ public class BuyerController {
         {
             cart = (ICart)session.getAttribute("cart");
         }
+        return cart;
+    }
 
+    private double getCartTotal(ICart cart)
+    {
+        double cartTotal = 0;
+        for(IInventoryItem item : cart.getCartItems())
+        {
+            cartTotal += item.getItemPrice()* item.getItemQuantity();
+        }
+        return cartTotal;
+    }
+    
+    @RequestMapping(value= "/buyer/cart/add/{itemID}", method = RequestMethod.POST)
+    public String addToCart(@PathVariable String itemID, @RequestParam("quantity") String qty, HttpSession session)
+    {
+        ICart cart = getCart(session);
         IInventoryItemPersistence inventoryPersistence = new InventoryItemPersistence();
         IInventoryItem inventory = inventoryPersistence.getItemByID(itemID);
         inventory.setItemQuantity(Integer.parseInt(qty));
@@ -146,22 +117,54 @@ public class BuyerController {
         return "redirect:/buyer";
     }
 
-    //public ModelAndView addToCart()
     @RequestMapping(value= "/buyer/cart/view", method = RequestMethod.GET)
     public String viewCart(Model model, HttpSession session)
     {
-        ICart cart = null;
-        if(session.getAttribute("cart") == null)
-        {
-            cart = Cart.instance();
-        }
-        else
-        {
-            cart = (ICart)session.getAttribute("cart");
-        }
+        ICart cart = getCart(session);
+        model.addAttribute("inventory", cart.getCartItems());
+        model.addAttribute("cartTotal", getCartTotal(cart));
 
+        return "view-cart";
+    }
+
+    @RequestMapping(value= "/buyer/cart/delete/{itemID}", method = RequestMethod.GET)
+    public String deleteItemFromCart(@PathVariable String itemID, Model model, HttpSession session)
+    {
+        ICart cart = getCart(session);
+        IInventoryItemPersistence inventoryPersistence = new InventoryItemPersistence();
+        IInventoryItem inventory = inventoryPersistence.getItemByID(itemID);
+
+        cart.removeItem(inventory);
+        session.setAttribute("cart", cart);
         model.addAttribute("inventory", cart.getCartItems());
 
         return "view-cart";
+    }
+
+    @RequestMapping(value= "/buyer/cart/edit/{itemID}", method = RequestMethod.GET)
+    public String viewEditItemQtyPage(@PathVariable String itemID, Model model, HttpSession session)
+    {
+        ICart cart = getCart(session);
+
+        IInventoryItem item = cart.getItemByID(itemID);
+        if(item == null)
+        {
+            model.addAttribute("inventory", cart.getCartItems());
+            model.addAttribute("cartTotal", getCartTotal(cart));
+            return "view-cart";
+        }
+
+        model.addAttribute("item", item);
+        return "cart-item-update";
+    }
+
+    @PostMapping("/buyer/cart/update/{itemID}")
+    public String updateCartItemQty(@PathVariable String itemID, @RequestParam("quantity") String quantity, HttpSession session) {
+        ICart cart = getCart(session);
+        IInventoryItem item = cart.getItemByID(itemID);
+        item.setItemQuantity(Integer.parseInt(quantity));
+        cart.updateItem(item);
+
+        return "redirect:/buyer/cart/view";
     }
 }

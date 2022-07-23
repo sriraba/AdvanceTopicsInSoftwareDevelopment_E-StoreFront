@@ -81,4 +81,15 @@ class SellerPersistenceTest {
         ArrayList<User> seller = sellerPersistenceMock.getAllSellersByCategory(ItemCategory.GROCERY, "Halifax");
         assertNull(seller);
     }
+
+    @Test
+    void testUpdateSellerAccountWhenUserExists(){
+
+    }
+    @Test
+    public void testPersistenceSellerUpdateAccount() {
+        ISellerPersistence sellerPersistence = new SellerPersistenceMock();
+        User seller = new Seller()
+                ArrayList<User> seller = sellerPersistenceMock.getSell
+    }
 }

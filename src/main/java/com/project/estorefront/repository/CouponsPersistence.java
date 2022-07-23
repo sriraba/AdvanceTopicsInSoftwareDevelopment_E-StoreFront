@@ -1,6 +1,7 @@
 package com.project.estorefront.repository;
 
 import com.project.estorefront.model.Coupon;
+import com.project.estorefront.model.ICoupon;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class CouponsPersistence implements ICouponsPersistence{
         connection = Database.getConnection();
     }
     @Override
-    public void saveCoupon(Coupon coupon) {
+    public void saveCoupon(ICoupon coupon) {
 
         try {
 
@@ -36,7 +37,7 @@ public class CouponsPersistence implements ICouponsPersistence{
     }
 
     @Override
-    public void updateCoupon(Coupon coupon) {
+    public void updateCoupon(ICoupon coupon) {
 
         try {
 
@@ -57,8 +58,8 @@ public class CouponsPersistence implements ICouponsPersistence{
     }
 
     @Override
-    public List<Coupon> getCoupons() {
-        ArrayList<Coupon> coupons = new ArrayList<>();
+    public List<ICoupon> getCoupons() {
+        ArrayList<ICoupon> coupons = new ArrayList<>();
 
         Statement stmt = null;
         try {
@@ -74,7 +75,7 @@ public class CouponsPersistence implements ICouponsPersistence{
                 double max_amt = Double.parseDouble(rs.getString("max_amt"));
                 double percent = Double.parseDouble(rs.getString("percent"));
 
-                Coupon coupon = new Coupon(coupon_id, name, max_amt, percent);
+                ICoupon coupon = new Coupon(coupon_id, name, max_amt, percent);
                 coupons.add(coupon);
             }
 
@@ -87,8 +88,8 @@ public class CouponsPersistence implements ICouponsPersistence{
     }
 
     @Override
-    public Coupon getCouponById(int id) {
-        Coupon coupon = null;
+    public ICoupon getCouponById(int id) {
+        ICoupon coupon = null;
 
         Statement stmt = null;
         try {

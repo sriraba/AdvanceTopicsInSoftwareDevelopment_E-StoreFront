@@ -1,6 +1,6 @@
 package com.project.estorefront.model;
 
-public class Coupon {
+public class Coupon implements ICoupon{
 
     private final int couponID;
     private final String name;
