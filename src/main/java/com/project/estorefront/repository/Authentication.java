@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
+import com.project.estorefront.model.CryptoFactory;
 import com.project.estorefront.model.DatabaseFactory;
 import com.project.estorefront.model.User;
 
@@ -16,10 +17,11 @@ public class Authentication implements IAuthentication {
         IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
         try {
+            String hashedPassword = CryptoFactory.instance().makeCrypto().encryptPassword(password);
             String userDetailsQuery = "select * from user where email =? and password =?";
             PreparedStatement preparedStmt = connection.prepareStatement(userDetailsQuery);
             preparedStmt.setString(1, email);
-            preparedStmt.setString(2, password);
+            preparedStmt.setString(2, hashedPassword);
             ResultSet resultSet = preparedStmt.executeQuery();
             while (resultSet.next()) {
                 return resultSet.getString("user_id");
@@ -44,12 +46,13 @@ public class Authentication implements IAuthentication {
             PreparedStatement preparedStmt = connection.prepareStatement(persistUserDetails);
 
             String userID = UUID.randomUUID().toString();
+            String hashedPassword = CryptoFactory.instance().makeCrypto().encryptPassword(user.getPassword());
 
             preparedStmt.setString(1, userID);
             preparedStmt.setString(2, user.getFirstName());
             preparedStmt.setString(3, user.getLastName());
             preparedStmt.setString(4, user.getEmail());
-            preparedStmt.setString(5, user.getPassword());
+            preparedStmt.setString(5, hashedPassword);
             preparedStmt.setString(6, user.getPhone());
             preparedStmt.setBoolean(7, user.getIsSeller());
             preparedStmt.setString(8, user.getCity());

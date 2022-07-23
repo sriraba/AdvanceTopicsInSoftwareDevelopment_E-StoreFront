@@ -1,13 +1,16 @@
 package com.project.estorefront.model;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 public class Crypto implements ICrypto {
+
     @Override
-    public String encrypt(String value) {
-        return null;
+    public String encryptPassword(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
     @Override
-    public String decrypt(String value) {
-        return null;
+    public boolean checkPassword(String password, String hashedPassword) {
+        return BCrypt.checkpw(password, hashedPassword);
     }
 }

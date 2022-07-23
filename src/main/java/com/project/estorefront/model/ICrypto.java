@@ -2,9 +2,9 @@ package com.project.estorefront.model;
 
 public interface ICrypto {
 
-    String encrypt(String value);
+    String encryptPassword(String password);
 
-    String decrypt(String value);
+    boolean checkPassword(String password, String hashedPassword);
 
 
 }
