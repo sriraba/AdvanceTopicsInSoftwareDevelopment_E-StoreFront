@@ -1,8 +1,9 @@
 package com.project.estorefront.model;
 
-import com.project.estorefront.repository.BuyerPersistence;
-import com.project.estorefront.repository.IBuyerPersistence;
-import com.project.estorefront.repository.SellerPersistence;
+import com.project.estorefront.repository.BuyerOrderPersistence;
+import com.project.estorefront.repository.IBuyerOrderPersistence;
+import com.project.estorefront.repository.ISellerOrderPersistence;
+import com.project.estorefront.repository.SellerOrderPersistence;
 
 public class BuyerFactory implements IBuyerFactory {
 
@@ -19,12 +20,13 @@ public class BuyerFactory implements IBuyerFactory {
     }
 
     @Override
-    public IBuyerPersistence makeBuyerPersistence() {
-        return new BuyerPersistence();
-    }
-
-    @Override
     public User makeBuyer() {
         return new Buyer();
     }
+
+    @Override
+    public IBuyerOrderPersistence makeBuyerOrderPersistence() {
+        return new BuyerOrderPersistence();
+    }
+
 }
