@@ -97,7 +97,7 @@ public class SellerController {
     @PostMapping("/seller/items/create")
     public String createSellerItem(@RequestParam("itemName") String itemName,
             @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
-            @RequestParam("quantity") int itemQuantity, @RequestParam("price") double itemPrice, HttpSession session,
+            @RequestParam(value = "quantity", defaultValue = "0") int itemQuantity, @RequestParam(value = "price", defaultValue = "0") double itemPrice , HttpSession session,
             RedirectAttributes redirAttrs)
             throws SQLException {
         String userID = (String) session.getAttribute("userID");
@@ -180,18 +180,30 @@ public class SellerController {
             @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
             @RequestParam("quantity") int itemQuantity, @RequestParam("price") double itemPrice,
             @PathVariable String itemID, HttpSession session, RedirectAttributes redirAttrs) {
+
+
         IInventoryItemPersistence inventoryItemPersistence = new InventoryItemPersistence();
         IInventoryItem item = new InventoryItem(mockUserID, ItemCategory.valueOf(itemCategory), itemName,
                 itemDescription, itemPrice, itemQuantity);
         item.setItemID(itemID);
-        IInventoryItemPersistence.InventoryItemPersistenceOperationStatus status = item
-                .update(inventoryItemPersistence);
 
-        if (status == IInventoryItemPersistence.InventoryItemPersistenceOperationStatus.SUCCESS) {
-            return "redirect:/seller/items";
+        IInventoryItemValidator validator = InventoryFactory.instance().makeValidator();
+        InventoryItemValidationStatus validationStatus = validator.validate(item);
+
+        if (validationStatus.equals(InventoryItemValidationStatus.VALID)) {
+            IInventoryItemPersistence.InventoryItemPersistenceOperationStatus status = item
+                    .update(inventoryItemPersistence);
+
+            if (status == IInventoryItemPersistence.InventoryItemPersistenceOperationStatus.SUCCESS) {
+                redirAttrs.addFlashAttribute("success", "Item updated successfully.");
+                return "redirect:/seller/items";
+            } else {
+                redirAttrs.addFlashAttribute("error", "Something went wrong. Please try again.");
+                return "redirect:/seller/items/edit/" + itemID;
+            }
         } else {
-            redirAttrs.addFlashAttribute("error", "Something went wrong. Please try again.");
-            return "redirect:/seller/items/update/" + itemID;
+            redirAttrs.addFlashAttribute("error", validationStatus.label);
+            return "redirect:/seller/items/edit/" + itemID;
         }
     }
 
