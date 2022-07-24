@@ -41,6 +41,16 @@ public class Seller extends User implements ISeller {
     public static ArrayList<User> getAllSellersByCategory(ISellerPersistence persistence, ItemCategory category, String city) {
         return persistence.getAllSellersByCategory(category, city);
     }
+
+    @Override
+    public void updateProfile() {
+
+    }
+
+    public User getSellerByID(ISellerPersistence persistence, String sellerID) {
+        return persistence.getSellerByID(sellerID);
+    }
+
     @Override
     public boolean updateSellerAccount(ISellerPersistence persistence) {
         return persistence.updateSellerAccount(this);
@@ -50,27 +60,5 @@ public class Seller extends User implements ISeller {
     public boolean deactivateSellerAccount(ISellerPersistence persistence) {
         return persistence.deactivateSellerAccount(this);
     }
-    @Override
-    public void updateProfile() {
 
-    }
-    public User getSellerByID(ISellerPersistence persistence ,String sellerID){
-        return persistence.getSellerByID(sellerID);
-    }
-    @Override
-    public boolean updateSellerAccount(ISellerPersistence persistence) {
-        return persistence.updateSellerAccount(this);
-    }
-
-    @Override
-    public boolean deactivateSellerAccount(ISellerPersistence persistence) {
-        return persistence.deactivateSellerAccount(this);
-    }
-    @Override
-    public void updateProfile() {
-
-    }
-    public User getSellerByID(ISellerPersistence persistence ,String sellerID){
-        return persistence.getSellerByID(sellerID);
-    }
 }

@@ -26,23 +26,26 @@ public class SellerController {
     public String seller() {
         return "seller-page";
     }
+
     @GetMapping("/seller/account")
     public String sellerAccount(Model model, HttpSession session) {
         ISellerPersistence sellerPersistence = new SellerPersistence();
         String userID = (String) session.getAttribute("userID");
         User seller = new Seller();
-        seller = ((Seller)seller).getSellerByID(sellerPersistence, "1");
+        seller = ((Seller) seller).getSellerByID(sellerPersistence, "1");
         model.addAttribute("seller", seller);
         return "seller-account";
     }
+
     @GetMapping("/seller/account/edit/{userID}")
     public String editSellerAccount(@PathVariable String userID, Model model) {
         ISellerPersistence sellerPersistence = new SellerPersistence();
         User seller = new Seller();
-        seller = ((Seller)seller).getSellerByID(sellerPersistence, userID);
+        seller = ((Seller) seller).getSellerByID(sellerPersistence, userID);
         model.addAttribute("seller", seller);
         return "seller-account-update";
     }
+
     @PostMapping("/seller/account/update/{userID}")
     public String updateSellerAccount(@RequestParam("firstName") String firstName,
                                       @RequestParam("lastName") String lastName, @RequestParam("businessName") String businessName, @RequestParam("businessDescription") String businessDescription,
@@ -50,8 +53,8 @@ public class SellerController {
         User seller = new Seller();
         seller.setFirstName(firstName);
         seller.setLastName(lastName);
-        ((Seller)seller).setBusinessName(businessName);
-        ((Seller)seller).setBusinessDescription(businessDescription);
+        ((Seller) seller).setBusinessName(businessName);
+        ((Seller) seller).setBusinessDescription(businessDescription);
         seller.setEmail(email);
         seller.setPhone(phone);
         seller.setUserID(userID);
@@ -59,12 +62,13 @@ public class SellerController {
         ((Seller) seller).updateSellerAccount(sellerPersistence);
         return "redirect:/seller/account";
     }
+
     @GetMapping("/seller/account/deactivate")
     public String deactivateSellerAccount() throws SQLException {
-        User seller = new Seller();
+        Seller seller = new Seller();
         seller.setUserID("1");
         ISellerPersistence sellerPersistence = new SellerPersistence();
-        ((Seller) seller).deactivateSellerAccount(sellerPersistence);
+        seller.deactivateSellerAccount(sellerPersistence);
         return "redirect:/login";
     }
 
@@ -139,7 +143,7 @@ public class SellerController {
 
     @GetMapping("/seller/orders/assigned")
     public String deliveryPersonAssigned(Model model) {
-        model.addAttribute("page","seller");
+        model.addAttribute("page", "seller");
         return "submit-success";
     }
 
@@ -188,13 +192,13 @@ public class SellerController {
 
     @GetMapping("/seller/add-coupon")
     public String add(Model model) {
-        model.addAttribute("error","");
+        model.addAttribute("error", "");
         return "add-coupon";
     }
 
     @GetMapping("/seller/add-coupon/{error}")
     public String add(Model model, @PathVariable("error") String error) {
-        model.addAttribute("error",error);
+        model.addAttribute("error", error);
         return "add-coupon";
     }
 
@@ -203,20 +207,15 @@ public class SellerController {
         CouponsPersistence persistenceObj = new CouponsPersistence();
 
         int id = persistenceObj.getCoupons().size() + 1;
-	    String error = "";
+        String error = "";
         CouponValidator validator = new CouponValidator();
-        if(!validator.isValidAmount(amount))
-        {
+        if (!validator.isValidAmount(amount)) {
             error = "Error: Invalid Amount";
             return "redirect:/seller/add-coupon/" + error;
-        }
-        else if(!validator.isValidPercent(percent))
-        {
+        } else if (!validator.isValidPercent(percent)) {
             error = "Error: Invalid percent";
             return "redirect:/seller/add-coupon/" + error;
-        }
-        else
-        {
+        } else {
             Coupon coupon = new Coupon(id, couponName, Double.parseDouble(amount), Double.parseDouble(percent));
             persistenceObj.saveCoupon(coupon);
         }
@@ -256,14 +255,11 @@ public class SellerController {
         CouponsPersistence persistenceObj = new CouponsPersistence();
 
         CouponValidator validator = new CouponValidator();
-        if(validator.isValidPercent(percent) && validator.isValidAmount(amount))
-        {
+        if (validator.isValidPercent(percent) && validator.isValidAmount(amount)) {
             Coupon coupon = new Coupon(id, couponName, Double.parseDouble(amount), Double.parseDouble(percent));
             persistenceObj.updateCoupon(coupon);
             return "redirect:/seller/coupons";
-        }
-        else
-        {
+        } else {
             return "redirect:/seller/coupons/edit/" + id;
         }
     }
