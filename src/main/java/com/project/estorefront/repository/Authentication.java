@@ -40,9 +40,9 @@ public class Authentication implements IAuthentication {
         Connection connection = database.getConnection();
 
         try {
-            String persistUserDetails = "insert into user (user_id, first_name, last_name, email, password, contact_num, seller, city, business_name, address ) "
+            String persistUserDetails = "insert into user (user_id, first_name, last_name, email, password, contact_num, seller, city, business_name, address, isUserEnabled) "
                     +
-                    "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStmt = connection.prepareStatement(persistUserDetails);
 
             String userID = UUID.randomUUID().toString();
@@ -58,6 +58,7 @@ public class Authentication implements IAuthentication {
             preparedStmt.setString(8, user.getCity());
             preparedStmt.setString(9, "");
             preparedStmt.setString(10, user.getAddress());
+            preparedStmt.setBoolean(11, user.getIsUserEnabled());
             preparedStmt.execute();
             return userID;
         } catch (SQLException e) {

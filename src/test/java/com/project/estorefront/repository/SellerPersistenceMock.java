@@ -1,10 +1,7 @@
 package com.project.estorefront.repository;
 
-import com.project.estorefront.model.ItemCategory;
-import com.project.estorefront.model.Seller;
-import com.project.estorefront.model.User;
+import com.project.estorefront.model.*;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class SellerPersistenceMock implements ISellerPersistence {
@@ -45,7 +42,7 @@ public class SellerPersistenceMock implements ISellerPersistence {
     }
 
     @Override
-    public ArrayList<User> getAllSellers() throws SQLException {
+    public ArrayList<User> getAllSellers() {
         for (User seller : sellers) {
             System.out.println(seller.getEmail());
         }
@@ -82,5 +79,34 @@ public class SellerPersistenceMock implements ISellerPersistence {
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean deactivateSellerAccount(User seller) {
+        //User seller = new Seller();
+        for (User u: sellers){
+            if(u.getIsSeller() == seller.getIsSeller()){
+                seller.setIsSeller(false);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean updateSellerAccount(User seller) {
+        Seller currentSeller;
+        for (User u: sellers ) {
+            if (u.getUserID().equals(seller.getUserID())){
+                currentSeller = (Seller) u;
+                currentSeller.setFirstName(seller.getFirstName());
+                currentSeller.setLastName(seller.getLastName());
+                currentSeller.setBusinessName(((Seller)seller).getBusinessName());
+                currentSeller.setPhone(seller.getPhone());
+                currentSeller.setEmail(seller.getEmail());
+                return true;
+            }
+        }
+        return false;
     }
 }
