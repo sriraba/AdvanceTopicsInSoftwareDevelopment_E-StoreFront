@@ -1,6 +1,6 @@
 package com.project.estorefront.model.validators;
 
-public class PasswordValidator implements IValidator {
+public class PasswordValidator implements IPasswordValidator {
 
     @Override
     public boolean validate(String value) {

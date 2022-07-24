@@ -37,11 +37,11 @@ public interface IInventoryItem {
 
     void setItemQuantity(Integer itemQuantity);
 
-    boolean save(IInventoryItemPersistence persistence) throws SQLException;
+    IInventoryItemPersistence.InventoryItemPersistenceOperationStatus save(IInventoryItemPersistence persistence) throws SQLException;
 
-    boolean delete(IInventoryItemPersistence persistence);
+    IInventoryItemPersistence.InventoryItemPersistenceOperationStatus delete(IInventoryItemPersistence persistence);
 
-    boolean update(IInventoryItemPersistence persistence);
+    IInventoryItemPersistence.InventoryItemPersistenceOperationStatus update(IInventoryItemPersistence persistence);
 
     IInventoryItemValidator.InventoryItemValidationStatus validate(IInventoryItemValidator validator);
 

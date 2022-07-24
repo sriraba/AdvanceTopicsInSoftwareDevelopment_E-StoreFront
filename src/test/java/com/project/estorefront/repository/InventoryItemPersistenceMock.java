@@ -15,18 +15,24 @@ public class InventoryItemPersistenceMock implements IInventoryItemPersistence {
     }
 
     @Override
-    public boolean save(IInventoryItem item) throws SQLException {
-        return inventoryItems.add(item);
+    public IInventoryItemPersistence.InventoryItemPersistenceOperationStatus save(IInventoryItem item) throws SQLException {
+        inventoryItems.add(item);
+        return IInventoryItemPersistence.InventoryItemPersistenceOperationStatus.SUCCESS;
     }
 
     @Override
-    public boolean delete(IInventoryItem item) {
-        return inventoryItems.remove(item);
+    public IInventoryItemPersistence.InventoryItemPersistenceOperationStatus delete(IInventoryItem item) {
+        if (inventoryItems.contains(item)) {
+            inventoryItems.remove(item);
+            return IInventoryItemPersistence.InventoryItemPersistenceOperationStatus.SUCCESS;
+        } else {
+            return IInventoryItemPersistence.InventoryItemPersistenceOperationStatus.FAILURE;
+        }
     }
 
     @Override
-    public boolean update(IInventoryItem item) {
-        InventoryItem current;
+    public IInventoryItemPersistence.InventoryItemPersistenceOperationStatus update(IInventoryItem item) {
+        IInventoryItem current;
         for (IInventoryItem i: inventoryItems) {
             if (i.getItemID().equals(item.getItemID())) {
                 current = (InventoryItem) i;
@@ -35,10 +41,11 @@ public class InventoryItemPersistenceMock implements IInventoryItemPersistence {
                 current.setItemCategory(item.getItemCategory());
                 current.setItemQuantity(item.getItemQuantity());
                 current.setItemPrice(item.getItemPrice());
-                return true;
+
+                return IInventoryItemPersistence.InventoryItemPersistenceOperationStatus.SUCCESS;
             }
         }
-        return false;
+        return IInventoryItemPersistence.InventoryItemPersistenceOperationStatus.FAILURE;
     }
 
     @Override
