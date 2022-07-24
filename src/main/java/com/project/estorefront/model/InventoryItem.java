@@ -1,6 +1,7 @@
 package com.project.estorefront.model;
 
 import com.project.estorefront.model.validators.IInventoryItemValidator;
+import com.project.estorefront.model.validators.InventoryItemValidationStatus;
 import com.project.estorefront.repository.IInventoryItemPersistence;
 
 import java.sql.SQLException;
@@ -120,7 +121,7 @@ public class InventoryItem implements IInventoryItem {
     }
 
     @Override
-    public IInventoryItemValidator.InventoryItemValidationStatus validate(IInventoryItemValidator validator) {
+    public InventoryItemValidationStatus validate(IInventoryItemValidator validator) {
         return validator.validate(this);
     }
 }

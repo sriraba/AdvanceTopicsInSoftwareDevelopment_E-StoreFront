@@ -4,6 +4,7 @@ import com.project.estorefront.model.IInventoryItem;
 import com.project.estorefront.model.InventoryFactory;
 import com.project.estorefront.model.InventoryItem;
 import com.project.estorefront.model.validators.IInventoryItemValidator;
+import com.project.estorefront.model.validators.InventoryItemValidationStatus;
 import com.project.estorefront.model.validators.InventoryItemValidator;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +19,7 @@ import static org.junit.Assert.assertEquals;
     public void validateInvalidInventoryItem() {
         IInventoryItem item = InventoryFactory.instance().makeInventoryItem();
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.ALL_INVALID);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.ALL_INVALID);
     }
 
     @Test
@@ -32,7 +33,7 @@ import static org.junit.Assert.assertEquals;
         item.setUserID("Test");
 
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_ID);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_ID);
     }
 
     @Test
@@ -46,7 +47,7 @@ import static org.junit.Assert.assertEquals;
         item.setUserID("Test");
 
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_PRICE);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_PRICE);
     }
 
     @Test
@@ -60,7 +61,7 @@ import static org.junit.Assert.assertEquals;
         item.setUserID("Test");
 
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_PRICE);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_PRICE);
     }
 
     @Test
@@ -74,7 +75,7 @@ import static org.junit.Assert.assertEquals;
         item.setUserID("Test");
 
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_QUANTITY);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_QUANTITY);
     }
 
     @Test
@@ -88,7 +89,7 @@ import static org.junit.Assert.assertEquals;
         item.setUserID("Test");
 
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_NAME);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_NAME);
     }
 
     @Test
@@ -102,7 +103,7 @@ import static org.junit.Assert.assertEquals;
         item.setUserID("Test");
 
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_NAME);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_NAME);
     }
 
     @Test
@@ -116,7 +117,7 @@ import static org.junit.Assert.assertEquals;
         item.setUserID("Test");
 
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_DESCRIPTION);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_DESCRIPTION);
     }
 
     @Test
@@ -130,7 +131,7 @@ import static org.junit.Assert.assertEquals;
         item.setUserID("Test");
 
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_DESCRIPTION);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_DESCRIPTION);
     }
 
     @Test
@@ -144,7 +145,7 @@ import static org.junit.Assert.assertEquals;
         item.setUserID("");
 
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_DESCRIPTION);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_DESCRIPTION);
     }
 
     @Test
@@ -158,7 +159,7 @@ import static org.junit.Assert.assertEquals;
         item.setUserID("Test");
 
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.VALID);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.VALID);
     }
 
 }
