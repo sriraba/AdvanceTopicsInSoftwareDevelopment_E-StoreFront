@@ -92,10 +92,14 @@ public class BuyerController {
         return "seller-details";
     }
 
-    @GetMapping("/buyer/orders/view/{userID}")
-    public ModelAndView buyerOrdersView(@PathVariable String userID) {
+    @GetMapping("/buyer/orders/view")
+    public ModelAndView buyerOrdersView(HttpSession session) {
+        String userID = (String) session.getAttribute("userID");
+        if(userID == null || userID.isEmpty()){
+            return new ModelAndView("redirect:/login");
+        }
         IBuyerOrderManagement buyerOrder = new OrderDetails();
-        return new ModelAndView("buyer-orders", "orders", buyerOrder.getBuyerOrders(userID));
+        return new ModelAndView("buyer-orders","orders", buyerOrder.getBuyerOrders(userID));
     }
 
     @GetMapping("/buyer/order/details/{orderID}")

@@ -128,10 +128,14 @@ public class SellerController {
         }
     }
 
-    @GetMapping("/seller/orders/view/{userID}")
-    public ModelAndView sellerOrdersView(@PathVariable String userID) {
+    @GetMapping("/seller/orders/view")
+    public ModelAndView sellerOrdersView(HttpSession session) {
+        String userID = (String) session.getAttribute("userID");
+        if(userID == null || userID.isEmpty()){
+            return new ModelAndView("redirect:/login");
+        }
         ISellerOrderManagement sellerOrder = new OrderDetails();
-        return new ModelAndView("seller-orders", "orders", sellerOrder.getSellerOrders(userID));
+        return new ModelAndView("seller-orders","orders", sellerOrder.getSellerOrders(userID));
 
     }
 
