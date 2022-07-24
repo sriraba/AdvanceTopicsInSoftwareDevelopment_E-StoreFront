@@ -17,14 +17,16 @@ public class Authentication implements IAuthentication {
         IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
         try {
-            String hashedPassword = CryptoFactory.instance().makeCrypto().encryptPassword(password);
-            String userDetailsQuery = "select * from user where email =? and password =?";
+            String userDetailsQuery = "select * from user where email =?";
             PreparedStatement preparedStmt = connection.prepareStatement(userDetailsQuery);
             preparedStmt.setString(1, email);
-            preparedStmt.setString(2, hashedPassword);
             ResultSet resultSet = preparedStmt.executeQuery();
             while (resultSet.next()) {
-                return resultSet.getString("user_id");
+                String hashedPassword = resultSet.getString("password");
+                if (CryptoFactory.instance().makeCrypto().checkPassword(password, hashedPassword)) {
+                    return resultSet.getString("user_id");
+                }
+                return null;
             }
             return null;
         } catch (SQLException e) {
