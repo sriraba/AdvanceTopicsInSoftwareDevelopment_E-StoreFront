@@ -34,7 +34,7 @@ public class Seller extends User implements ISeller {
     }
 
 
-    public static ArrayList<User> getAllSellers(ISellerPersistence persistence, String city) {
+    public static ArrayList<User> getAllSellersByCity(ISellerPersistence persistence, String city) {
         return persistence.getAllSellersByCity(city);
     }
 

@@ -5,5 +5,5 @@ import com.project.estorefront.model.IDeliveryPerson;
 import java.util.ArrayList;
 
 public interface IDeliveryPersonPersistence {
-    public ArrayList<IDeliveryPerson> getAll(String sellerID);
+    ArrayList<IDeliveryPerson> getAll(String sellerID);
 }

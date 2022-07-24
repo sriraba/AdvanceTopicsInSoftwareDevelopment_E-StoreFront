@@ -1,6 +1,5 @@
 package com.project.estorefront.model;
 
-import com.project.estorefront.repository.DeliveryPersonPersistence;
 import com.project.estorefront.repository.IDeliveryPersonPersistence;
 
 import java.util.ArrayList;

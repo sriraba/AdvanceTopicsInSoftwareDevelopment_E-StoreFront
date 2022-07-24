@@ -5,6 +5,7 @@ import com.project.estorefront.model.OrderDetails;
 import java.util.ArrayList;
 
 public interface IBuyerOrderPersistence {
-    public ArrayList<OrderDetails> loadOrders(String userID);
-    public void submitReview(String userID, String orderID, String description);
+    ArrayList<OrderDetails> loadOrders(String userID);
+
+    void submitReview(String userID, String orderID, String description);
 }

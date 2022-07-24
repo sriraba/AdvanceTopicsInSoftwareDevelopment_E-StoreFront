@@ -18,5 +18,5 @@ public interface ICart {
 
     ArrayList<IInventoryItem> getCartItems();
 
-    public IInventoryItem getItemByID(String id);
+    IInventoryItem getItemByID(String id);
 }
