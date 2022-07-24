@@ -35,6 +35,49 @@ public class BuyerController {
 
         return "buyers";
     }
+    @GetMapping("/buyer/account")
+    public String buyerAccount(Model model, HttpSession session) {
+        IBuyerPersistence buyerPersistence = new BuyerPersistence();
+        String userID = (String) session.getAttribute("userID");
+        User buyer = new Buyer();
+        buyer = ((Buyer)buyer).getBuyerByID(buyerPersistence, "1");
+        model.addAttribute("buyer", buyer);
+        return "buyer-account";
+    }
+
+    @GetMapping("/buyer/account/edit/{userID}")
+    public String editSellerAccount(@PathVariable String userID, Model model) {
+        IBuyerPersistence buyerPersistence = new BuyerPersistence();
+        User buyer = new Buyer();
+        buyer = ((Buyer)buyer).getBuyerByID(buyerPersistence, userID);
+        model.addAttribute("buyer", buyer);
+        return "buyer-account-update";
+    }
+
+    @PostMapping("/buyer/account/update/{userID}")
+    public String updateBuyerAccount(@RequestParam("firstName") String firstName,
+                                     @RequestParam("lastName") String lastName,
+                                     @RequestParam("phone") String phone, @RequestParam("address") String address, @PathVariable String userID, HttpSession session) {
+        User buyer = new Buyer();
+        buyer.setFirstName(firstName);
+        buyer.setLastName(lastName);
+        buyer.setPhone(phone);
+        buyer.setAddress(address);
+        buyer.setUserID(userID);
+        IBuyerPersistence buyerPersistence = new BuyerPersistence();
+        ((Buyer) buyer).updateBuyerAccount(buyerPersistence);
+        return "redirect:/buyer/account";
+    }
+
+    @GetMapping("/buyer/account/deactivate")
+    public String deactivateBuyerAccount() {
+        User buyer = new Buyer();
+        buyer.setUserID("1");
+        IBuyerPersistence buyerPersistence = new BuyerPersistence();
+        ((Buyer) buyer).deactivateBuyerAccount(buyerPersistence);
+        return "redirect:/login";
+    }
+
 
     @GetMapping("/buyer/view-seller/{sellerID}")
     public String sellerDetails(Model model, @PathVariable int sellerID) {

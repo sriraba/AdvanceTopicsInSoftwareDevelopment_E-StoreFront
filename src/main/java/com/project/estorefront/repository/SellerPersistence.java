@@ -2,10 +2,7 @@ package com.project.estorefront.repository;
 
 import com.project.estorefront.model.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class SellerPersistence implements ISellerPersistence {
@@ -169,4 +166,40 @@ public class SellerPersistence implements ISellerPersistence {
             return null;
         }
     }
+
+    @Override
+    public boolean deactivateSellerAccount(User seller) {
+        PreparedStatement preparedStatement = null;
+        Connection connection = Database.getConnection();
+        try {
+            preparedStatement = connection.prepareStatement("UPDATE user SET seller =? WHERE user_id = ?");
+            preparedStatement.setBoolean(1, seller.getIsSeller());
+            preparedStatement.setString(2, seller.getUserID());
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @Override
+    public boolean updateSellerAccount(User seller) {
+            PreparedStatement preparedStatement = null;
+            Connection connection = Database.getConnection();
+            try {
+                preparedStatement = connection.prepareStatement("UPDATE user SET first_name = ?, last_name = ?, contact_num = ?, business_name =?, business_description=? WHERE user_id = ?");
+                //preparedStatement.setString(1, seller.getUserID());
+                preparedStatement.setString(1, seller.getFirstName());
+                preparedStatement.setString(2, seller.getLastName());
+                preparedStatement.setString(3, seller.getPhone());
+                preparedStatement.setString(4, ((Seller)seller).getBusinessName());
+                preparedStatement.setString(5, ((Seller) seller).getBusinessDescription());
+                preparedStatement.setString(6, seller.getUserID());
+                preparedStatement.executeUpdate();
+                return true;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+    }
 }
+
+
