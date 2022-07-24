@@ -70,7 +70,7 @@ public class BuyerController {
     }
 
     @GetMapping("/buyer/account/deactivate")
-    public String deactivateBuyerAccount() throws SQLException {
+    public String deactivateBuyerAccount() {
         User buyer = new Buyer();
         buyer.setUserID("1");
         IBuyerPersistence buyerPersistence = new BuyerPersistence();
