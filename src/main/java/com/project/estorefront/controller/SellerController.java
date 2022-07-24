@@ -2,6 +2,8 @@ package com.project.estorefront.controller;
 
 import com.project.estorefront.model.*;
 import com.project.estorefront.model.validators.CouponValidator;
+import com.project.estorefront.model.validators.IInventoryItemValidator;
+import com.project.estorefront.model.validators.InventoryItemValidationStatus;
 import com.project.estorefront.repository.CouponsPersistence;
 import com.project.estorefront.repository.IInventoryItemPersistence;
 import com.project.estorefront.repository.InventoryItemPersistence;
@@ -57,14 +59,23 @@ public class SellerController {
         // TODO: Once seller dashboard is created, update 1 param to userID
         IInventoryItem item = new InventoryItem(mockUserID, ItemCategory.valueOf(itemCategory), itemName,
                 itemDescription, itemPrice, itemQuantity);
-        IInventoryItemPersistence inventoryItemPersistence = InventoryFactory.instance().makeInventoryItemPersistence();
 
-        IInventoryItemPersistence.InventoryItemPersistenceOperationStatus status = item.save(inventoryItemPersistence);
+        IInventoryItemValidator validator = InventoryFactory.instance().makeValidator();
+        InventoryItemValidationStatus validationStatus = validator.validate(item);
 
-        if (status == IInventoryItemPersistence.InventoryItemPersistenceOperationStatus.SUCCESS) {
-            return "redirect:/seller/items";
+        if (validationStatus.equals(InventoryItemValidationStatus.VALID)) {
+            IInventoryItemPersistence inventoryItemPersistence = InventoryFactory.instance().makeInventoryItemPersistence();
+            IInventoryItemPersistence.InventoryItemPersistenceOperationStatus status = item.save(inventoryItemPersistence);
+
+            if (status == IInventoryItemPersistence.InventoryItemPersistenceOperationStatus.SUCCESS) {
+                redirAttrs.addFlashAttribute("success", "Item added successfully.");
+                return "redirect:/seller/items";
+            } else {
+                redirAttrs.addFlashAttribute("error", "Something went wrong. Please try again.");
+                return "redirect:/seller/items/add";
+            }
         } else {
-            redirAttrs.addFlashAttribute("error", "Something went wrong. Please try again.");
+            redirAttrs.addFlashAttribute("error", validationStatus.label);
             return "redirect:/seller/items/add";
         }
     }
