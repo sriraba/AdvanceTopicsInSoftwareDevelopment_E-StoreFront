@@ -1,5 +1,6 @@
 package com.project.estorefront.repository;
 
+import com.project.estorefront.model.DatabaseFactory;
 import com.project.estorefront.model.Seller;
 import com.project.estorefront.model.User;
 import com.project.estorefront.model.UserFactory;
@@ -13,7 +14,8 @@ public class BuyerPersistence implements IBuyerPersistence {
 
     @Override
     public User getBuyerByID(String buyerID) {
-        Connection connection = Database.getConnection();
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE user_id = ?");
@@ -47,7 +49,8 @@ public class BuyerPersistence implements IBuyerPersistence {
     @Override
     public boolean updateBuyerAccount(User buyer) {
         PreparedStatement preparedStatement = null;
-        Connection connection = Database.getConnection();
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
         try {
             preparedStatement = connection.prepareStatement("UPDATE user SET first_name = ?, last_name = ?, contact_num = ?, address  =? WHERE user_id = ?");
             preparedStatement.setString(1, buyer.getFirstName());
@@ -66,16 +69,17 @@ public class BuyerPersistence implements IBuyerPersistence {
 
     @Override
     public boolean deactivateBuyerAccount(User buyer) {
-            PreparedStatement preparedStatement = null;
-            Connection connection = Database.getConnection();
-            try {
-                preparedStatement = connection.prepareStatement("UPDATE user SET isUserEnabled =? WHERE user_id = ?");
-                preparedStatement.setBoolean(1, buyer.getIsUserEnabled());
-                preparedStatement.setString(2, buyer.getUserID());
-                preparedStatement.executeUpdate();
-                return true;
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+        PreparedStatement preparedStatement = null;
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
+        try {
+            preparedStatement = connection.prepareStatement("UPDATE user SET isUserEnabled =? WHERE user_id = ?");
+            preparedStatement.setBoolean(1, buyer.getIsUserEnabled());
+            preparedStatement.setString(2, buyer.getUserID());
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

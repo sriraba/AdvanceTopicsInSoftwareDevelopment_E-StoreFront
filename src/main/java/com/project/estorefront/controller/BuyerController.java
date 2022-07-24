@@ -1,9 +1,7 @@
 package com.project.estorefront.controller;
 
 import com.project.estorefront.model.*;
-import com.project.estorefront.repository.IInventoryItemPersistence;
-import com.project.estorefront.repository.ISellerPersistence;
-import com.project.estorefront.repository.InventoryItemPersistence;
+import com.project.estorefront.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

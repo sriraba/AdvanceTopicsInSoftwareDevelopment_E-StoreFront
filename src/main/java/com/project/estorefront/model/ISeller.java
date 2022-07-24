@@ -1,5 +1,7 @@
 package com.project.estorefront.model;
 
+import com.project.estorefront.repository.ISellerPersistence;
+
 public interface ISeller {
 
     String getBusinessName();

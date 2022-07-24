@@ -18,7 +18,7 @@ public class BuyerFactory implements IBuyerFactory {
 
     @Override
     public IBuyerPersistence makeBuyerPersistence() {
-        return null;
+        return new BuyerPersistence();
     }
 
     @Override
