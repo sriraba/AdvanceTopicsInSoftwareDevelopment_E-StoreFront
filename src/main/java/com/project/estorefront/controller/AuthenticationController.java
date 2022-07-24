@@ -1,10 +1,12 @@
 package com.project.estorefront.controller;
 
-import java.util.ArrayList;
-
-import javax.servlet.http.HttpSession;
-
-import com.project.estorefront.model.validators.*;
+import com.project.estorefront.model.AuthenticationFactory;
+import com.project.estorefront.model.User;
+import com.project.estorefront.model.UserFactory;
+import com.project.estorefront.model.validators.IPasswordValidator;
+import com.project.estorefront.model.validators.IValidator;
+import com.project.estorefront.model.validators.ValidatorFactory;
+import com.project.estorefront.repository.IAuthentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.project.estorefront.model.User;
-import com.project.estorefront.model.UserFactory;
-import com.project.estorefront.repository.Authentication;
-import com.project.estorefront.repository.IAuthentication;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 
 @Controller
 public class AuthenticationController {
@@ -41,8 +41,9 @@ public class AuthenticationController {
 
         if (emailValidator.validate(email) && passwordValidator.validate(password)) {
 
-            IAuthentication authentication = new Authentication();
-            String userID = authentication.login(email, password);
+            IAuthentication authentication = AuthenticationFactory.instance().makeAuthentication();
+
+            String userID = User.login(authentication, email, password);
 
             if (userID == null || userID.isEmpty()) {
                 redirAttrs.addFlashAttribute("error", "Invalid email or password");
@@ -104,8 +105,8 @@ public class AuthenticationController {
 
         if (errors.size() == 0) {
 
-            IAuthentication authentication = new Authentication();
-            User user = null;
+            IAuthentication authentication = AuthenticationFactory.instance().makeAuthentication();
+            User user;
 
             if (role.contains("buyer")) {
                 user = UserFactory.instance().getUser("buyer");
@@ -128,8 +129,9 @@ public class AuthenticationController {
             user.setAddress(address);
             user.setIsSeller(false);
 
-            String userID = authentication.register(user);
-            session.setAttribute("userID", userID.toString());
+            String userID = user.register(authentication);
+
+            session.setAttribute("userID", userID);
             session.setAttribute("role", role);
 
             if (userID.isEmpty()) {

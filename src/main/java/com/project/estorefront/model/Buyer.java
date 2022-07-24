@@ -3,7 +3,7 @@ package com.project.estorefront.model;
 import com.project.estorefront.repository.IBuyerPersistence;
 import com.project.estorefront.repository.ISellerPersistence;
 
-public class Buyer extends User implements IBuyer{
+public class Buyer extends User implements IBuyer {
 
 
     public Buyer() {
@@ -34,7 +34,7 @@ public class Buyer extends User implements IBuyer{
         return persistence.deactivateBuyerAccount(this);
     }
 
-    public User getBuyerByID(IBuyerPersistence persistence , String buyerID){
+    public User getBuyerByID(IBuyerPersistence persistence, String buyerID) {
         return persistence.getBuyerByID(buyerID);
     }
 }
