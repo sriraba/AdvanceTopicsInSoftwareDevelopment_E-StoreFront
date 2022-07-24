@@ -4,16 +4,16 @@ import com.project.estorefront.repository.IAuthentication;
 
 public abstract class User {
 
-    private String userID;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String address;
-    private String city;
-    private String phone;
-    private String password;
-    private boolean isSeller;
-    private boolean isUserEnabled;
+    protected String userID;
+    protected String firstName;
+    protected String lastName;
+    protected String email;
+    protected String address;
+    protected String city;
+    protected String phone;
+    protected String password;
+    protected boolean isSeller;
+    protected boolean isUserEnabled;
 
     public User(String firstName, String lastName, String email, String address, String phone, String password, String city, boolean isSeller, boolean isUserEnabled) {
         this.firstName = firstName;
