@@ -307,4 +307,14 @@ public class SellerController {
         }
     }
 
+    @RequestMapping(value = "/seller/analytics", method = RequestMethod.GET)
+    public String viewAnalytics(Model model) {
+        IAnalyticsPersistence obj = new AnalyticsPersistence();
+        model.addAttribute("totalSales", obj.getTotalSales());
+        model.addAttribute("totalOrders", obj.getTotalOrders());
+        model.addAttribute("totalReturningCustomers", obj.getTotalReturningBuyers());
+        model.addAttribute("totalNewBuyers", obj.getNewBuyers());
+        return "view-analytics";
+    }
+
 }

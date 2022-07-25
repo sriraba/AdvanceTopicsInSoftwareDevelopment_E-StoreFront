@@ -1,6 +1,8 @@
 package com.project.estorefront.controller;
 
 import com.project.estorefront.model.*;
+import com.project.estorefront.model.validators.CartValidator;
+import com.project.estorefront.model.validators.ICartValidator;
 import com.project.estorefront.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -139,7 +141,7 @@ public class BuyerController {
     private ICart getCart(HttpSession session) {
         ICart cart = null;
         if (session.getAttribute("cart") == null) {
-            cart = Cart.instance();
+            cart = CartFactory.instance().makeCart();
         } else {
             cart = (ICart) session.getAttribute("cart");
         }
@@ -213,5 +215,25 @@ public class BuyerController {
         cart.updateItem(item);
 
         return "redirect:/buyer/cart/view";
+    }
+
+    @RequestMapping(value= "/buyer/checkout", method = RequestMethod.POST)
+    public String checkout(@RequestParam("address") String address, @RequestParam("pincode") String pincode, HttpSession session)
+    {
+        ICart cart = getCart(session);
+        ICartValidator validator = CartFactory.instance().makeCartValidator();
+        String error = validator.validateCart(cart);
+        String userID = (String) session.getAttribute("userID");
+        if(!error.matches(""))
+        {
+            return "redirect:/buyer/cart/view/" + error;
+        }
+        IPlaceOrderPersistence obj = CartFactory.instance().makeCartPersistence();
+        if(obj.placeOrder(cart, userID, address, pincode))
+        {
+            session.setAttribute("cart", "");
+            return "thank-you";
+        }
+        return "redirect:/buyer/cart/view/" + "Error: Unable to place order right now, please try again later!";
     }
 }
