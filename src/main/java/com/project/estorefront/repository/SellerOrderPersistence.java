@@ -48,20 +48,23 @@ public class SellerOrderPersistence extends OrderPersistence implements ISellerO
     }
 
     @Override
-    public void updateDeliveryPerson(String orderID, String charge) {
+    public PersistenceStatus updateDeliveryCharges(String orderID, String charge) {
         PreparedStatement preparedStatement = null;
         IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
-
-        ArrayList<IDeliveryPerson> deliveryPersonDetails = new ArrayList<>();
         try {
             preparedStatement = connection.prepareStatement(
-                    "UPDATE buyer_orders WHERE buyer_orders.order_id = ? AND buyer_orders.delivery_charges = ?");
-            preparedStatement.setString(1, orderID);
-            preparedStatement.setString(2, charge);
-            preparedStatement.executeUpdate();
+                    "UPDATE buyer_orders SET buyer_orders.delivery_charges = ? WHERE buyer_orders.order_id = ? ");
+            preparedStatement.setString(1, charge);
+            preparedStatement.setString(2, orderID);
+            int status = preparedStatement.executeUpdate();
+            if (status>0) {
+                return PersistenceStatus.SUCCESS;
+            } else {
+                return PersistenceStatus.FAILURE;
+            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return PersistenceStatus.SQL_EXCEPTION;
         } finally {
             database.closeConnection();
         }
