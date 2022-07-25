@@ -18,11 +18,7 @@ import java.util.ArrayList;
 @Controller
 public class SellerController {
 
-    private String mockUserID;
-
-    public SellerController() {
-        mockUserID = "1";
-    }
+    private static final String notLoggedInRedirect = "redirect:/login";
 
     @GetMapping("/seller")
     public String seller() {
@@ -31,9 +27,14 @@ public class SellerController {
 
     @GetMapping("/seller/account")
     public String sellerAccount(Model model, HttpSession session) {
+        String userID = getUserID(session);
+        if (userID == null || userID.isEmpty()) {
+            return notLoggedInRedirect;
+        }
+
         ISellerPersistence sellerPersistence = new SellerPersistence();
-        String userID = (String) session.getAttribute("userID");
-        User seller = new Seller();
+
+        User seller = SellerFactory.instance().makeSeller();
         seller = ((Seller) seller).getSellerByID(sellerPersistence, "1");
         model.addAttribute("seller", seller);
         return "seller-account";
@@ -68,29 +69,41 @@ public class SellerController {
     }
 
     @GetMapping("/seller/account/deactivate")
-    public String deactivateSellerAccount() throws SQLException {
-        Seller seller = new Seller();
-        seller.setUserID("1");
-        ISellerPersistence sellerPersistence = new SellerPersistence();
-        seller.deactivateSellerAccount(sellerPersistence);
+    public String deactivateSellerAccount(HttpSession session) throws SQLException {
+        String userID = getUserID(session);
+        if (userID == null || userID.isEmpty()) {
+            return notLoggedInRedirect;
+        }
+
+        User seller = SellerFactory.instance().makeSeller(userID);
+        ISellerPersistence sellerPersistence = SellerFactory.instance().makeSellerPersistence();
+
+        ((Seller) seller).deactivateSellerAccount(sellerPersistence);
         return "redirect:/login";
     }
 
     @GetMapping("/seller/items")
     public String sellerItems(Model model, HttpSession session) {
+        String userID = getUserID(session);
+        if (userID == null || userID.isEmpty()) {
+            return notLoggedInRedirect;
+        }
+
         IInventoryItemPersistence inventoryItemPersistence = InventoryFactory.instance().makeInventoryItemPersistence();
 
-        String userID = (String) session.getAttribute("userID");
-
-        // TODO: Once seller dashboard is created, update 1 param to userID
-        ArrayList<IInventoryItem> all = inventoryItemPersistence.getAll(mockUserID);
+        ArrayList<IInventoryItem> all = inventoryItemPersistence.getAll(userID);
         model.addAttribute("items", all);
 
         return "seller-items";
     }
 
     @GetMapping("/seller/items/add")
-    public String sellerItemsAdd() {
+    public String sellerItemsAdd(HttpSession session) {
+        String userID = getUserID(session);
+        if (userID == null || userID.isEmpty()) {
+            return notLoggedInRedirect;
+        }
+
         return "seller-items-add";
     }
 
@@ -100,10 +113,12 @@ public class SellerController {
                                    @RequestParam(value = "quantity", defaultValue = "0") int itemQuantity, @RequestParam(value = "price", defaultValue = "0") double itemPrice, HttpSession session,
                                    RedirectAttributes redirAttrs)
             throws SQLException {
-        String userID = (String) session.getAttribute("userID");
+        String userID = getUserID(session);
+        if (userID == null || userID.isEmpty()) {
+            return notLoggedInRedirect;
+        }
 
-        // TODO: Once seller dashboard is created, update 1 param to userID
-        IInventoryItem item = new InventoryItem(mockUserID, ItemCategory.valueOf(itemCategory), itemName,
+        IInventoryItem item = new InventoryItem(userID, ItemCategory.valueOf(itemCategory), itemName,
                 itemDescription, itemPrice, itemQuantity);
 
         IInventoryItemValidator validator = InventoryFactory.instance().makeValidator();
@@ -130,10 +145,11 @@ public class SellerController {
 
     @GetMapping("/seller/orders/view")
     public ModelAndView sellerOrdersView(HttpSession session) {
-        String userID = (String) session.getAttribute("userID");
+        String userID = getUserID(session);
         if (userID == null || userID.isEmpty()) {
-            return new ModelAndView("redirect:/login");
+            return new ModelAndView(notLoggedInRedirect);
         }
+
         ISellerOrderManagement sellerOrder = new OrderDetails();
         ISellerOrderPersistence orderPersistence = SellerFactory.instance().makeSellerOrderPersistence();
         return new ModelAndView("seller-orders", "orders", sellerOrder.getSellerOrders(userID, orderPersistence));
@@ -175,8 +191,12 @@ public class SellerController {
     }
 
     @GetMapping("/seller/items/edit/{itemID}")
-    public String editSellerItem(@PathVariable String itemID, Model model) {
-        // TODO change comparison from string to enum in .html
+    public String editSellerItem(@PathVariable String itemID, Model model, HttpSession session) {
+        String userID = getUserID(session);
+        if (userID == null || userID.isEmpty()) {
+            return notLoggedInRedirect;
+        }
+
         IInventoryItemPersistence inventoryItemPersistence = InventoryFactory.instance().makeInventoryItemPersistence();
         IInventoryItem item = inventoryItemPersistence.getItemByID(itemID);
         model.addAttribute("item", item);
@@ -188,11 +208,14 @@ public class SellerController {
                                    @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
                                    @RequestParam("quantity") int itemQuantity, @RequestParam("price") double itemPrice,
                                    @PathVariable String itemID, HttpSession session, RedirectAttributes redirAttrs) {
-
+        String userID = getUserID(session);
+        if (userID == null || userID.isEmpty()) {
+            return notLoggedInRedirect;
+        }
 
         IInventoryItemPersistence inventoryItemPersistence = InventoryFactory.instance().makeInventoryItemPersistence();
 
-        IInventoryItem item = InventoryFactory.instance().makeInventoryItem(itemID, mockUserID, ItemCategory.GROCERY, itemQuantity, itemPrice, itemName, itemDescription);
+        IInventoryItem item = InventoryFactory.instance().makeInventoryItem(itemID, userID, ItemCategory.valueOf(itemCategory), itemQuantity, itemPrice, itemName, itemDescription);
 
         IInventoryItemValidator validator = InventoryFactory.instance().makeValidator();
         InventoryItemValidationStatus validationStatus = validator.validate(item);
@@ -215,7 +238,13 @@ public class SellerController {
     }
 
     @GetMapping("/seller/items/delete/{itemID}")
-    public String deleteSellerItem(@PathVariable String itemID) throws SQLException {
+    public String deleteSellerItem(@PathVariable String itemID, HttpSession session) throws SQLException {
+        String userID = getUserID(session);
+        if (userID == null || userID.isEmpty()) {
+            return notLoggedInRedirect;
+        }
+
+
         IInventoryItemPersistence inventoryItemPersistence = InventoryFactory.instance().makeInventoryItemPersistence();
         IInventoryItem item = InventoryFactory.instance().makeInventoryItemWithItemID(itemID);
 
@@ -304,6 +333,10 @@ public class SellerController {
         } else {
             return "redirect:/seller/coupons/edit/" + id;
         }
+    }
+
+    private String getUserID(HttpSession session) {
+        return (String) session.getAttribute("userID");
     }
 
 }

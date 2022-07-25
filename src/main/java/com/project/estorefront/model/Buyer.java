@@ -10,8 +10,12 @@ public class Buyer extends User implements IBuyer {
         super();
     }
 
-    public Buyer(String firstName, String lastName, String email, String address, String contact, String password, String city) {
+    public Buyer(String buyerID) {
+        super();
+        this.userID = buyerID;
+    }
 
+    public Buyer(String firstName, String lastName, String email, String address, String contact, String password, String city) {
     }
 
     @Override

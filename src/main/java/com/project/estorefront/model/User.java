@@ -95,8 +95,6 @@ public abstract class User {
         this.password = password;
     }
 
-    // public abstract void updateSellerProfile();
-
     public abstract void updateProfile();
 
     // public abstract void updateSellerProfile();
@@ -135,6 +133,14 @@ public abstract class User {
 
     public static boolean resetPassword(IAuthentication authentication, String email, String password) {
         return authentication.resetPassword(email, password);
+    }
+
+    public static boolean checkIfUserExists(IAuthentication authentication, String email) {
+        return authentication.checkIfUserExists(email);
+    }
+
+    public static boolean checkIfUserIsSeller(IAuthentication authentication, String email) {
+        return authentication.checkIfUserIsSeller(email);
     }
 
 }

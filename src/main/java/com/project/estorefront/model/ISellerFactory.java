@@ -13,4 +13,6 @@ public interface ISellerFactory {
 
     User makeSeller();
 
+    User makeSeller(String sellerID);
+
 }

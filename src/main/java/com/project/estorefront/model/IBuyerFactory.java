@@ -6,7 +6,10 @@ import com.project.estorefront.repository.ISellerPersistence;
 
 public interface IBuyerFactory {
     IBuyerPersistence makeBuyerPersistence();
+
     User makeBuyer();
+
+    User makeBuyer(String buyerID);
 
     IBuyerOrderPersistence makeBuyerOrderPersistence();
 }

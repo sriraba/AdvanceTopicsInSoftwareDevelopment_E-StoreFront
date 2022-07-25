@@ -27,6 +27,11 @@ public class BuyerFactory implements IBuyerFactory {
     }
 
     @Override
+    public User makeBuyer(String buyerID) {
+        return new Buyer(buyerID);
+    }
+
+    @Override
     public IBuyerOrderPersistence makeBuyerOrderPersistence() {
         return new BuyerOrderPersistence();
     }

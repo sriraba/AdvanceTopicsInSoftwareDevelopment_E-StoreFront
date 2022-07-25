@@ -36,7 +36,7 @@ public class UserFactory implements IUserFactory {
         seller.setAddress(address);
         seller.setPhone(phone);
         seller.setCity(city);
-        ((Seller) seller).setIsSeller(isSeller);
+        seller.setIsSeller(isSeller);
         ((Seller) seller).setBusinessName(businessName);
         ((Seller) seller).setBusinessDescription(businessDescription);
 

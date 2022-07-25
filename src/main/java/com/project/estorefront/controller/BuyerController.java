@@ -13,8 +13,15 @@ import java.util.ArrayList;
 @Controller
 public class BuyerController {
 
+    private static final String notLoggedInRedirect = "redirect:/login";
+
     @GetMapping("/buyer")
-    public String buyerHome(@RequestParam(required = false, name = "category") String categoryFilter, Model model) {
+    public String buyerHome(@RequestParam(required = false, name = "category") String categoryFilter, Model model, HttpSession session) {
+        String userID = getUserID(session);
+        if (userID == null || userID.isEmpty()) {
+            return notLoggedInRedirect;
+        }
+
         ISellerPersistence persistence = SellerFactory.instance().makeSellerPersistence();
 
         ArrayList<User> sellers;
@@ -37,10 +44,14 @@ public class BuyerController {
 
     @GetMapping("/buyer/account")
     public String buyerAccount(Model model, HttpSession session) {
+        String userID = getUserID(session);
+        if (userID == null || userID.isEmpty()) {
+            return notLoggedInRedirect;
+        }
+
         IBuyerPersistence buyerPersistence = new BuyerPersistence();
-        String userID = (String) session.getAttribute("userID");
         User buyer = new Buyer();
-        buyer = ((Buyer) buyer).getBuyerByID(buyerPersistence, "1");
+        buyer = ((Buyer) buyer).getBuyerByID(buyerPersistence, userID);
         model.addAttribute("buyer", buyer);
         return "buyer-account";
     }
@@ -70,9 +81,13 @@ public class BuyerController {
     }
 
     @GetMapping("/buyer/account/deactivate")
-    public String deactivateBuyerAccount() {
-        User buyer = new Buyer();
-        buyer.setUserID("1");
+    public String deactivateBuyerAccount(HttpSession session) {
+        String userID = getUserID(session);
+        if (userID == null || userID.isEmpty()) {
+            return notLoggedInRedirect;
+        }
+
+        User buyer = BuyerFactory.instance().makeBuyer(userID);
         IBuyerPersistence buyerPersistence = new BuyerPersistence();
         ((Buyer) buyer).deactivateBuyerAccount(buyerPersistence);
         return "redirect:/login";
@@ -99,6 +114,7 @@ public class BuyerController {
         if (userID == null || userID.isEmpty()) {
             return new ModelAndView("redirect:/login");
         }
+
         IBuyerOrderManagement buyerOrder = new OrderDetails();
         IBuyerOrderPersistence orderPersistence = BuyerFactory.instance().makeBuyerOrderPersistence();
         return new ModelAndView("buyer-orders", "orders", buyerOrder.getBuyerOrders(userID, orderPersistence));
@@ -209,5 +225,9 @@ public class BuyerController {
         cart.updateItem(item);
 
         return "redirect:/buyer/cart/view";
+    }
+
+    private String getUserID(HttpSession session) {
+        return (String) session.getAttribute("userID");
     }
 }

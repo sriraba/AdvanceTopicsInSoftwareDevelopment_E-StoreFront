@@ -105,4 +105,21 @@ public class Authentication implements IAuthentication {
             database.closeConnection();
         }
     }
+
+    @Override
+    public boolean checkIfUserIsSeller(String email) {
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
+        try {
+            String checkIfUserIsSellerQuery = "select * from user where email = ? and seller = 1";
+            PreparedStatement preparedStmt = connection.prepareStatement(checkIfUserIsSellerQuery);
+            preparedStmt.setString(1, email);
+            ResultSet resultSet = preparedStmt.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            database.closeConnection();
+        }
+    }
 }

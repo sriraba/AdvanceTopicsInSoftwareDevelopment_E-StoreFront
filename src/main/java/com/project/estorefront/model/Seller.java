@@ -13,6 +13,11 @@ public class Seller extends User implements ISeller {
         super();
     }
 
+    public Seller(String sellerID) {
+        super();
+        this.userID = sellerID;
+    }
+
     public void setBusinessName(String businessName) {
         this.businessName = businessName;
     }

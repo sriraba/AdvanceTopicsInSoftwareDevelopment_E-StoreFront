@@ -10,4 +10,6 @@ public interface IAuthentication {
     boolean resetPassword(String email, String password);
 
     boolean checkIfUserExists(String email);
+
+    boolean checkIfUserIsSeller(String email);
 }
