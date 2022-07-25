@@ -37,21 +37,21 @@ public class BuyerOrderPersistenceTest {
     }
 
     @Test
-    void testBuyerOrdersForBuyerID() {
+    public void testBuyerOrdersForBuyerID() {
         IBuyerOrderPersistence persistence = new BuyerOrderPersistenceMock();
         ArrayList<OrderDetails> orderDetails = persistence.loadOrders("1");;
         assertEquals(2, orderDetails.size());
     }
 
     @Test
-    void testBuyerOrdersForNullBuyerID() {
+    public void testBuyerOrdersForNullBuyerID() {
         IBuyerOrderPersistence persistence = new BuyerOrderPersistenceMock();
         ArrayList<OrderDetails> orderDetails = persistence.loadOrders("");;
         assertNull(orderDetails);
     }
 
     @Test
-    void testBuyerOrdersForBuyerIDNotPresent() {
+    public void testBuyerOrdersForBuyerIDNotPresent() {
         IBuyerOrderPersistence persistence = new BuyerOrderPersistenceMock();
         ArrayList<OrderDetails> orderDetails = persistence.loadOrders("9");;
         assertNull(orderDetails);
