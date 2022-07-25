@@ -49,9 +49,6 @@ public class BuyerOrderPersistenceMock extends OrderPersistence implements IBuye
     }
 
     public void addMockBuyerOrders(String buyerID){
-        ArrayList<OrderDetails> currentOrders = new ArrayList<>();
-        ArrayList<OrderDetails> previousOrders = new ArrayList<>();
-
         for (OrderDetails orderDetails : addMockBuyerCurrentOrders()) {
             if(buyerID.equalsIgnoreCase(orderDetails.getBuyerID())){
                 buyerOrders.add(orderDetails);

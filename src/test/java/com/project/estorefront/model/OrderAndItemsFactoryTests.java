@@ -1,7 +1,7 @@
 package com.project.estorefront.model;
 
 import com.project.estorefront.repository.IOrderPersistence;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;

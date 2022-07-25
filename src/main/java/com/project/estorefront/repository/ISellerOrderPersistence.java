@@ -6,5 +6,5 @@ import java.util.ArrayList;
 
 public interface ISellerOrderPersistence extends IOrderPersistence{
     ArrayList<OrderDetails> loadOrders(String userID);
-    void updateDeliveryPerson(String orderID, String name);
+    PersistenceStatus updateDeliveryCharges(String orderID, String name);
 }
