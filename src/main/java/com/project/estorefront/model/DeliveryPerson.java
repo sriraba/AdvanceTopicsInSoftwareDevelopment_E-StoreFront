@@ -26,9 +26,8 @@ public class DeliveryPerson implements IDeliveryPerson{
         this.personName = personName;
     }
 
-    public ArrayList<IDeliveryPerson> getDeliveryPersonDetails(String sellerID){
-        IDeliveryPersonPersistence deliveryPersonPersistence = DeliveryPersonFactory.instance().makeDeliveryPersonPersistence();
-        return deliveryPersonPersistence.getAll(sellerID);
+    public ArrayList<IDeliveryPerson> getDeliveryPersonDetails(String sellerID, IDeliveryPersonPersistence deliveryPersonPersistence){
+        return (sellerID == null || sellerID.isEmpty()) ? null : deliveryPersonPersistence.getAll(sellerID);
     }
 
 }

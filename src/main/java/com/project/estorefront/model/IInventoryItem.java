@@ -1,6 +1,7 @@
 package com.project.estorefront.model;
 
 import com.project.estorefront.model.validators.IInventoryItemValidator;
+import com.project.estorefront.model.validators.InventoryItemValidationStatus;
 import com.project.estorefront.repository.IInventoryItemPersistence;
 
 import java.sql.SQLException;
@@ -43,6 +44,6 @@ public interface IInventoryItem {
 
     IInventoryItemPersistence.InventoryItemPersistenceOperationStatus update(IInventoryItemPersistence persistence);
 
-    IInventoryItemValidator.InventoryItemValidationStatus validate(IInventoryItemValidator validator);
+    InventoryItemValidationStatus validate(IInventoryItemValidator validator);
 
 }
