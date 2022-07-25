@@ -163,8 +163,9 @@ public class SellerController {
     @GetMapping("/seller/orders/assign_delivery_person/{sellerID}")
     public ModelAndView assignDeliveryPerson(@PathVariable String sellerID) {
         IDeliveryPerson deliveryPersons = new DeliveryPerson();
+        IDeliveryPersonPersistence deliveryPersonPersistence = DeliveryPersonFactory.instance().makeDeliveryPersonPersistence();
         return new ModelAndView("assign-delivery-person", "delivery_persons",
-                deliveryPersons.getDeliveryPersonDetails(sellerID));
+                deliveryPersons.getDeliveryPersonDetails(sellerID,deliveryPersonPersistence));
     }
 
     @GetMapping("/seller/orders/assigned")

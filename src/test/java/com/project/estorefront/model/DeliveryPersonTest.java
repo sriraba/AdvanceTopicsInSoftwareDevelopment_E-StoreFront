@@ -1,5 +1,7 @@
 package com.project.estorefront.model;
 
+import com.project.estorefront.repository.DeliveryPersonPersistenceMock;
+import com.project.estorefront.repository.IDeliveryPersonPersistence;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,20 +20,23 @@ import static org.junit.jupiter.api.Assertions.*;
 class DeliveryPersonTest {
     @Test
     void testGetDeliveryPersonDetailsBySellerID() {
-        DeliveryPersonMock deliveryPersonMock = new DeliveryPersonMock();
-        ArrayList<IDeliveryPerson> deliveryPeople =deliveryPersonMock.getDeliveryPersonDetails("5");
+        IDeliveryPerson deliveryPerson = new DeliveryPerson();
+        IDeliveryPersonPersistence deliveryPersonPersistence = new DeliveryPersonPersistenceMock();
+        ArrayList<IDeliveryPerson> deliveryPeople =deliveryPerson.getDeliveryPersonDetails("5",deliveryPersonPersistence);
         assertEquals(deliveryPeople.size(),2);
     }
     @Test
     void testGetDeliveryPersonDetailsByEmptySellerID() {
-        DeliveryPersonMock deliveryPersonMock = new DeliveryPersonMock();
-        ArrayList<IDeliveryPerson> deliveryPeople =deliveryPersonMock.getDeliveryPersonDetails("");
+        IDeliveryPerson deliveryPerson = new DeliveryPerson();
+        IDeliveryPersonPersistence deliveryPersonPersistence = new DeliveryPersonPersistenceMock();
+        ArrayList<IDeliveryPerson> deliveryPeople =deliveryPerson.getDeliveryPersonDetails("",deliveryPersonPersistence);
         assertNull(deliveryPeople);
     }
     @Test
     void testGetDeliveryPersonDetailsByNotPresentSellerID() {
-        DeliveryPersonMock deliveryPersonMock = new DeliveryPersonMock();
-        ArrayList<IDeliveryPerson> deliveryPeople =deliveryPersonMock.getDeliveryPersonDetails("15");
+        IDeliveryPerson deliveryPerson = new DeliveryPerson();
+        IDeliveryPersonPersistence deliveryPersonPersistence = new DeliveryPersonPersistenceMock();
+        ArrayList<IDeliveryPerson> deliveryPeople =deliveryPerson.getDeliveryPersonDetails("15",deliveryPersonPersistence);
         assertNull(deliveryPeople);
     }
 

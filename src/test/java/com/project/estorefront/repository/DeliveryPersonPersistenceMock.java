@@ -1,9 +1,12 @@
-package com.project.estorefront.model;
+package com.project.estorefront.repository;
 
+import com.project.estorefront.model.DeliveryPerson;
+import com.project.estorefront.model.IDeliveryPerson;
 
 import java.util.ArrayList;
 
-public class DeliveryPersonMock implements IDeliveryPerson{
+public class DeliveryPersonPersistenceMock implements IDeliveryPersonPersistence{
+
     ArrayList<IDeliveryPerson> deliveryPeople = new ArrayList<>();
     private ArrayList<IDeliveryPerson> addMockDeliveryPerson() {
         ArrayList<IDeliveryPerson> deliveryPersons = new ArrayList<>();
@@ -37,29 +40,8 @@ public class DeliveryPersonMock implements IDeliveryPerson{
     }
 
     @Override
-    public String getSellerID() {
-        return null;
-    }
-
-    @Override
-    public void setSellerID(String sellerID) {
-
-    }
-
-    @Override
-    public String getPersonName() {
-        return null;
-    }
-
-    @Override
-    public void setPersonName(String personName) {
-
-    }
-
-    @Override
-    public ArrayList<IDeliveryPerson> getDeliveryPersonDetails(String sellerID) {
+    public ArrayList<IDeliveryPerson> getAll(String sellerID) {
         addMockDeliveryPersonForID(sellerID);
         return (deliveryPeople!= null && deliveryPeople.size()>0) ? deliveryPeople : null;
-
     }
 }
