@@ -1,5 +1,6 @@
 package com.project.estorefront.model;
 
+import com.project.estorefront.repository.IInventoryItemPersistence;
 import com.project.estorefront.repository.ISellerPersistence;
 
 public interface ISeller {
@@ -14,5 +15,7 @@ public interface ISeller {
     boolean updateSellerAccount(ISellerPersistence persistence);
     boolean deactivateSellerAccount(ISellerPersistence persistence);
     User getSellerByID(ISellerPersistence persistence ,String sellerID);
+    IInventoryItemPersistence.InventoryItemPersistenceOperationStatus update(IInventoryItemPersistence persistence);
+
 
 }

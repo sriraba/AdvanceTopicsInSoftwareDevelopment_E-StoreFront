@@ -1,8 +1,6 @@
 package com.project.estorefront.repository;
 
-import com.project.estorefront.model.ItemCategory;
-import com.project.estorefront.model.Seller;
-import com.project.estorefront.model.User;
+import com.project.estorefront.model.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -83,13 +81,61 @@ class SellerPersistenceTest {
     }
 
     @Test
-    void testUpdateSellerAccountWhenUserExists(){
+    void testUpdateSellerAccountWhenUserDoesNotExists(){
+        SellerPersistenceMock persistence =  new SellerPersistenceMock();
+        persistence.addMockSeller();
+
+        User seller = new Seller();
+        seller.setFirstName("Faiza");
+        seller.setLastName("Umatiya");
+        seller.setPhone("982193");
+        ((Seller)seller).setBusinessName("Meritas Holidays");
+        ((Seller) seller).setBusinessDescription("Enjoy your vacation with the exclusive offers");
+        seller.setUserID("2");
+
+        assertFalse(persistence.updateSellerAccount(seller));
 
     }
     @Test
-    public void testPersistenceSellerUpdateAccount() {
-//        ISellerPersistence sellerPersistence = new SellerPersistenceMock();
-//        User seller = new Seller();
-//                ArrayList<User> seller = sellerPersistenceMock.getSell
+    void testUpdateSellerAccountWhenUserExists(){
+        SellerPersistenceMock persistence = new SellerPersistenceMock();
+        persistence.addMockSeller();
+        User seller = new Seller();
+        seller.setFirstName("Faiza");
+        seller.setLastName("Umatiya");
+        seller.setPhone("98729348");
+        ((Seller)seller).setBusinessName("Meritas Holidays");
+        ((Seller) seller).setBusinessDescription("Enjoy your vacation with the exclusive offers");
+        seller.setUserID("1");
+
+        assertTrue(persistence.updateSellerAccount(seller));
+    }
+    @Test
+    public void testDeactivateSellerAccountWhenUserDoesNotExist() {
+        SellerPersistenceMock persistence = new SellerPersistenceMock();
+        persistence.addMockSeller();
+        User seller = new Seller();
+        seller.setFirstName("Faiza");
+        seller.setLastName("Umatiya");
+        seller.setPhone("8374294");
+        ((Seller)seller).setBusinessName("Meritas Holidays");
+        ((Seller) seller).setBusinessDescription("Enjoy your vacation with the exclusive offers");
+        seller.setUserID("2");
+        assertFalse(persistence.deactivateSellerAccount(seller));
+    }
+
+    @Test
+    public void testDeactivateSellerAccountWhenUserExists() {
+        SellerPersistenceMock persistence = new SellerPersistenceMock();
+        persistence.addMockSeller();
+        User seller = new Seller();
+        seller.setFirstName("Faiza");
+        seller.setLastName("Umatiya");
+        seller.setPhone("8374294");
+        ((Seller)seller).setBusinessName("Meritas Holidays");
+        ((Seller) seller).setBusinessDescription("Enjoy your vacation with the exclusive offers");
+        seller.setUserID("1");
+        assertTrue(persistence.deactivateSellerAccount(seller));
     }
 }
+

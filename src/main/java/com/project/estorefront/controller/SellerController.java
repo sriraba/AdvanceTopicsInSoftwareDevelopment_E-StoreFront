@@ -49,13 +49,12 @@ public class SellerController {
     @PostMapping("/seller/account/update/{userID}")
     public String updateSellerAccount(@RequestParam("firstName") String firstName,
                                       @RequestParam("lastName") String lastName, @RequestParam("businessName") String businessName, @RequestParam("businessDescription") String businessDescription,
-                                      @RequestParam("email") String email, @RequestParam("phone") String phone, @PathVariable String userID, HttpSession session) {
+                                      @RequestParam("phone") String phone, @PathVariable String userID, HttpSession session) {
         User seller = new Seller();
         seller.setFirstName(firstName);
         seller.setLastName(lastName);
         ((Seller) seller).setBusinessName(businessName);
         ((Seller) seller).setBusinessDescription(businessDescription);
-        seller.setEmail(email);
         seller.setPhone(phone);
         seller.setUserID(userID);
         ISellerPersistence sellerPersistence = new SellerPersistence();

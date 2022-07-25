@@ -1,5 +1,6 @@
 package com.project.estorefront.model;
 
+import com.project.estorefront.repository.IInventoryItemPersistence;
 import com.project.estorefront.repository.ISellerPersistence;
 
 import java.util.ArrayList;
@@ -49,6 +50,11 @@ public class Seller extends User implements ISeller {
 
     public User getSellerByID(ISellerPersistence persistence, String sellerID) {
         return persistence.getSellerByID(sellerID);
+    }
+
+    @Override
+    public IInventoryItemPersistence.InventoryItemPersistenceOperationStatus update(IInventoryItemPersistence persistence) {
+        return null;
     }
 
     @Override
