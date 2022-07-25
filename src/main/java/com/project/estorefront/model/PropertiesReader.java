@@ -1,13 +1,15 @@
 package com.project.estorefront.model;
 
-public class PropertiesReader {
+public class PropertiesReader implements IPropertiesReader {
 
     private static PropertiesReader instance;
 
     private static String springDataSourceURL;
     private static String springDatasourceUsername;
     private static String springDatasourcePassword;
-    private static String secretKey;
+
+    private static String emailSenderEmail;
+    private static String emailSenderPassword;
 
     private PropertiesReader() {
     }
@@ -18,14 +20,16 @@ public class PropertiesReader {
             springDatasourceUsername = System.getenv("SPRING_DATASOURCE_USERNAME");
             springDatasourcePassword = System.getenv("SPRING_DATASOURCE_PASSWORD");
             springDataSourceURL = System.getenv("SPRING_DATASOURCE_URL");
-            secretKey = System.getenv("SECRET_KEY");
+
+            emailSenderEmail = System.getenv("EMAIL_SENDER_EMAIL");
+            emailSenderPassword = System.getenv("EMAIL_SENDER_PASSWORD");
 
             instance = new PropertiesReader();
         }
         return instance;
     }
 
-    public String getSpringDataSourceURL() {
+    public String getSpringDatasourceURL() {
         return springDataSourceURL;
     }
 
@@ -37,9 +41,12 @@ public class PropertiesReader {
         return springDatasourcePassword;
     }
 
-    public String getSecretKey() {
-        return secretKey;
+    public String getEmailSenderEmail() {
+        return emailSenderEmail;
     }
 
+    public String getEmailSenderPassword() {
+        return emailSenderPassword;
+    }
 
 }
