@@ -7,7 +7,16 @@ import java.util.ArrayList;
 public class BuyerOrderPersistenceMock extends OrderPersistence implements IBuyerOrderPersistence{
 
     private ArrayList<OrderDetails> buyerOrders = new ArrayList<>();
+    private ArrayList<OrderDetails> orderReviews = new ArrayList<>();
 
+    private void addMockOrderReviews(){
+        OrderDetails orderDetail = new OrderDetails();
+        orderDetail.setOrderID("OR12367");
+        orderDetail.setOrderStatus("Delivered");
+        orderDetail.setBuyerID("8");
+        orderDetail.setDescription("On time Delivery!!");
+        orderReviews.add(orderDetail);
+    }
     private ArrayList<OrderDetails> addMockBuyerCurrentOrders(){
         ArrayList<OrderDetails> currentOrderList = new ArrayList<>();
         OrderDetails orderDetail = new OrderDetails();
@@ -66,7 +75,14 @@ public class BuyerOrderPersistenceMock extends OrderPersistence implements IBuye
     }
 
     @Override
-    public void submitReview(String userID, String orderID, String description) {
-
+    public PersistenceStatus submitReview(String userID, String orderID, String description) {
+        addMockOrderReviews();
+        for (OrderDetails buyerOrder : buyerOrders) {
+            if(buyerOrder.getBuyerID().equalsIgnoreCase(userID) && buyerOrder.getOrderID().equalsIgnoreCase(orderID)){
+                buyerOrder.setDescription(description);
+                return PersistenceStatus.SUCCESS;
+            }
+        }
+        return PersistenceStatus.FAILURE;
     }
 }
