@@ -56,6 +56,11 @@ public class SellerOrderPersistenceMock extends OrderPersistence implements ISel
             sellerOrders=null;
         }
     }
+    public void addAllMockSellerOrders(){
+        sellerOrders.addAll(addMockSellerCurrentOrders());
+        sellerOrders.addAll(addMockSellerPreviousOrders());
+    }
+
     @Override
     public ArrayList<OrderDetails> loadOrders(String userID) {
         addMockSellerOrders(userID);
@@ -63,7 +68,14 @@ public class SellerOrderPersistenceMock extends OrderPersistence implements ISel
     }
 
     @Override
-    public void updateDeliveryPerson(String orderID, String name) {
-
+    public PersistenceStatus updateDeliveryCharges(String orderID, String charge) {
+        addAllMockSellerOrders();
+        for (OrderDetails sellerOrder : sellerOrders) {
+            if(sellerOrder.getOrderID().equalsIgnoreCase(orderID)){
+                sellerOrder.setDeliveryCharges(charge);
+                return PersistenceStatus.SUCCESS;
+            }
+        }
+        return PersistenceStatus.FAILURE;
     }
 }
