@@ -16,6 +16,8 @@ public interface ICart {
 
     int getTotalItems();
 
+    double getTotal();
+
     ArrayList<IInventoryItem> getCartItems();
 
     IInventoryItem getItemByID(String id);
