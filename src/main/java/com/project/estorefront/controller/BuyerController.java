@@ -125,7 +125,8 @@ public class BuyerController {
     public String submitReview(@PathVariable("userID") String userID, @PathVariable("orderID") String orderID,
             @RequestParam("review") String description, Model model) {
         IBuyerOrderManagement buyerOrder = new OrderDetails();
-        PersistenceStatus status = buyerOrder.submitReview(userID, orderID, description);
+        IBuyerOrderPersistence orderPersistence = BuyerFactory.instance().makeBuyerOrderPersistence();
+        PersistenceStatus status = buyerOrder.submitReview(userID, orderID, description,orderPersistence);
         model.addAttribute("page", "buyer");
         if(status == PersistenceStatus.SUCCESS){
             return "submit-success";

@@ -77,6 +77,7 @@ public class BuyerOrderPersistenceMock extends OrderPersistence implements IBuye
     @Override
     public PersistenceStatus submitReview(String userID, String orderID, String description) {
         addMockOrderReviews();
+        addMockBuyerOrders(userID);
         for (OrderDetails buyerOrder : buyerOrders) {
             if(buyerOrder.getBuyerID().equalsIgnoreCase(userID) && buyerOrder.getOrderID().equalsIgnoreCase(orderID)){
                 buyerOrder.setDescription(description);
