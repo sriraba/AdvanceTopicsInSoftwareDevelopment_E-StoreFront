@@ -17,9 +17,9 @@ public class UserFactory implements IUserFactory {
     public User getUser(String userType) {
 
         if (userType.equalsIgnoreCase("buyer")) {
-            return new Buyer();
+            return BuyerFactory.instance().makeBuyer();
         } else if (userType.equalsIgnoreCase("seller")) {
-            return new Seller();
+            return SellerFactory.instance().makeSeller();
         } else {
             return null;
         }

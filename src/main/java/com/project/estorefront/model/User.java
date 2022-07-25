@@ -1,5 +1,7 @@
 package com.project.estorefront.model;
 
+import com.project.estorefront.repository.IAuthentication;
+
 public abstract class User {
 
     private String userID;
@@ -11,8 +13,9 @@ public abstract class User {
     private String phone;
     private String password;
     private boolean isSeller;
+    private boolean isUserEnabled;
 
-    public User(String firstName, String lastName, String email, String address, String phone, String password, String city, boolean isSeller) {
+    public User(String firstName, String lastName, String email, String address, String phone, String password, String city, boolean isSeller, boolean isUserEnabled) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -21,6 +24,7 @@ public abstract class User {
         this.password = password;
         this.city = city;
         this.isSeller = isSeller;
+        this.isUserEnabled = isUserEnabled;
     }
 
     public User() {
@@ -90,7 +94,7 @@ public abstract class User {
         this.password = password;
     }
 
-   // public abstract void updateSellerProfile();
+    // public abstract void updateSellerProfile();
 
     public abstract void updateProfile();
 
@@ -107,4 +111,21 @@ public abstract class User {
     public void setIsSeller(boolean isSeller) {
         this.isSeller = isSeller;
     }
+
+    public boolean getIsUserEnabled() {
+        return isUserEnabled;
+    }
+
+    public void setIsUserEnabled(boolean isUserEnabled) {
+        this.isUserEnabled = isUserEnabled;
+    }
+
+    public static boolean sendResetEmail(IMailSender mailSender, String email, String otp) {
+        return mailSender.sendMail(email, otp);
+    }
+
+    public static boolean resetPassword(IAuthentication authentication, String email, String password) {
+        return authentication.resetPassword(email, password);
+    }
+
 }

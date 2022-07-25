@@ -11,6 +11,7 @@
 <h5 class="card-title" th:text="${seller.getBusinessName()}"/>
 <p class="card-text" th:text="${seller.getBusinessDescription()}"/>
 <tr th:each="item: ${inventory}">
+    <form th:action="@{'/buyer/cart/add/' + ${item.getItemID()}}" method="post">
     <div class="col-sm-6 mb-4 ml-4">
         <div class="card">
             <div class="card-body">
@@ -23,8 +24,9 @@
             </div>
         </div>
     </div>
-</tr>
-<input type="submit" value="Add to cart" class="btn btn-primary">
-</div>
+    <input type="submit" value="Add to cart" class="btn btn-primary">
+    </form>
+</tr><br>
+<button type="button" value="View Cart" class="btn btn-primary" th:onclick="|window.location.href='@{'/buyer/cart/view'}'|">View Cart</button>
 </body>
 </html>

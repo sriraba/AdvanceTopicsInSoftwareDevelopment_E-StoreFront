@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Details</title>
+</head>
+<body>
+<form th:action="@{/buyer/account/update/} + ${buyer.getUserID}" method="POST">
+    <table>
+        <h1>Edit Details</h1>
+        <tr>
+            <td>First Name:</td>
+            <td><input type=”text” name="firstName" th:value="${buyer.getFirstName()}"></td>
+        </tr>
+        <tr>
+            <td>Last Name:</td>
+            <td><input type=”text” name="lastName"  th:value="${buyer.getLastName()}"></td>
+        </tr>
+        <tr>
+            <td>Address:</td>
+            <td><input type=”text” name="address"  th:value="${buyer.getAddress()}"></td>
+        </tr>
+        <tr>
+            <td>Phone:</td>
+            <td><input type=”text” name="phone"  th:value="${buyer.getPhone()}"></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Update"></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

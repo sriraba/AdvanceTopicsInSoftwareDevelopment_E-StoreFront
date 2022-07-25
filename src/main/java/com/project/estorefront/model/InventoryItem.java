@@ -1,6 +1,7 @@
 package com.project.estorefront.model;
 
 import com.project.estorefront.model.validators.IInventoryItemValidator;
+import com.project.estorefront.model.validators.InventoryItemValidationStatus;
 import com.project.estorefront.repository.IInventoryItemPersistence;
 
 import java.sql.SQLException;
@@ -105,22 +106,22 @@ public class InventoryItem implements IInventoryItem {
     }
 
     @Override
-    public boolean save(IInventoryItemPersistence persistence) throws SQLException {
+    public IInventoryItemPersistence.InventoryItemPersistenceOperationStatus save(IInventoryItemPersistence persistence) throws SQLException {
         return persistence.save(this);
     }
 
     @Override
-    public boolean delete(IInventoryItemPersistence persistence) {
+    public IInventoryItemPersistence.InventoryItemPersistenceOperationStatus delete(IInventoryItemPersistence persistence) {
         return persistence.delete(this);
     }
 
     @Override
-    public boolean update(IInventoryItemPersistence persistence) {
+    public IInventoryItemPersistence.InventoryItemPersistenceOperationStatus update(IInventoryItemPersistence persistence) {
         return persistence.update(this);
     }
 
     @Override
-    public IInventoryItemValidator.InventoryItemValidationStatus validate(IInventoryItemValidator validator) {
+    public InventoryItemValidationStatus validate(IInventoryItemValidator validator) {
         return validator.validate(this);
     }
 }

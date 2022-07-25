@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light" xmlns:th="http://www.w3.org/1999/xhtml">
   <a class="navbar-brand" href="#">eStorefront</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -9,10 +9,17 @@
         <a class="nav-link" href="#">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Previous Orders</a>
+        <a class="nav-link" th:href="@{/buyer/orders/view}">Orders</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Profile</a>
+        <a class="nav-link" th:href="@{/buyer/account/}">Profile</a>
+      </li>
+    </ul>
+  </div>
+  <div>
+    <ul class="navbar-nav" align="right">
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/logout}">Logout</a>
       </li>
     </ul>
   </div>
