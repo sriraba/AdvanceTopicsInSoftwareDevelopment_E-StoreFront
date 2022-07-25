@@ -5,13 +5,12 @@ import com.project.estorefront.repository.ISellerPersistence;
 
 public class Buyer extends User implements IBuyer{
 
-
     public Buyer() {
         super();
     }
 
     public Buyer(String firstName, String lastName, String email, String address, String contact, String password, String city) {
-
+        super(firstName, lastName, email, address, "", password, city, false, false);
     }
 
     @Override
