@@ -52,6 +52,7 @@ public class SellerPersistenceMock implements ISellerPersistence {
         return sellers;
     }
 
+
     @Override
     public ArrayList<User> getAllSellersByCity(String city) {
         ArrayList<User> s = new ArrayList<>();

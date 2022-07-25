@@ -64,6 +64,13 @@ class SellerPersistenceTest {
         User seller = sellerPersistenceMock.getSellerByID("2");
         assertNull(seller);
     }
+    @Test
+    void testGetSellerByIDWithValidID() {
+        SellerPersistenceMock sellerPersistenceMock = new SellerPersistenceMock();
+        sellerPersistenceMock.addMockSeller();
+        User seller = sellerPersistenceMock.getSellerByID("1");
+        assertNotNull(seller);
+    }
 
     @Test
     void testGetSellerByCategory() {

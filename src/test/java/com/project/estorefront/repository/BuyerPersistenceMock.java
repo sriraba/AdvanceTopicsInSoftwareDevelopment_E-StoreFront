@@ -12,15 +12,18 @@ public class BuyerPersistenceMock implements IBuyerPersistence{
         Buyer buyer = new Buyer();
         buyer.setUserID("1");
         buyer.setEmail("hrishipatel99@gmail.com");
-        //buyer.setUserID("1");
-        // buyer.setBusinessName("ASD");
-        //.setBusinessDescription("ASD");
         buyers.add(buyer);
     }
     @Override
     public User getBuyerByID(String buyerID) {
+        for (User buyer : buyers) {
+            if (buyer.getUserID().equalsIgnoreCase(buyerID)) {
+                return buyer;
+            }
+        }
         return null;
     }
+
 
     @Override
     public boolean deactivateBuyerAccount(User buyer) {

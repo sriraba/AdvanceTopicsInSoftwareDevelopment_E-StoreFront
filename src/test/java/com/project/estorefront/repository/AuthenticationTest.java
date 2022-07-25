@@ -14,7 +14,6 @@ public class AuthenticationTest {
 	void testValidUserLogin() {
 		String validEmail = "sriramya@gmail.com";
 		IAuthentication userLoginValidator = new Authentication();
-
 		// assertTrue(emailValidator.validate(validEmail));
 	}
 
