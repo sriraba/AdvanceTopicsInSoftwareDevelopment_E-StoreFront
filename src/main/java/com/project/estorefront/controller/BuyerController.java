@@ -125,9 +125,14 @@ public class BuyerController {
     public String submitReview(@PathVariable("userID") String userID, @PathVariable("orderID") String orderID,
             @RequestParam("review") String description, Model model) {
         IBuyerOrderManagement buyerOrder = new OrderDetails();
-        buyerOrder.submitReview(userID, orderID, description);
+        PersistenceStatus status = buyerOrder.submitReview(userID, orderID, description);
         model.addAttribute("page", "buyer");
-        return "submit-success";
+        if(status == PersistenceStatus.SUCCESS){
+            return "submit-success";
+        }
+        else{
+            return "redirect:/buyer/orders/view";
+        }
     }
 
     private ICart getCart(HttpSession session) {

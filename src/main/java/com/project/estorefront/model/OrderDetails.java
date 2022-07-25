@@ -17,6 +17,16 @@ public class OrderDetails implements ISellerOrderManagement, IBuyerOrderManageme
     private String pincode;
     private  String buyerID;
 
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getBuyerID() {
         return buyerID;
     }
@@ -159,9 +169,9 @@ public class OrderDetails implements ISellerOrderManagement, IBuyerOrderManageme
     }
 
     @Override
-    public void submitReview(String userID, String orderID, String description) {
+    public PersistenceStatus submitReview(String userID, String orderID, String description) {
         IBuyerOrderPersistence orderPersistence = BuyerFactory.instance().makeBuyerOrderPersistence();
-        orderPersistence.submitReview(userID,orderID,description);
+        return orderPersistence.submitReview(userID,orderID,description);
     }
 
     public OrderDetails getOrderAndItemDetails(String orderID, IOrderPersistence orderPersistence){
