@@ -8,5 +8,5 @@ import java.util.Map;
 
 public interface IBuyerOrderManagement extends IOrderManagement{
     Map<String, ArrayList<OrderDetails>> getBuyerOrders(String userID, IBuyerOrderPersistence orderPersistence);
-    PersistenceStatus submitReview(String userID, String orderID, String description);
+    PersistenceStatus submitReview(String userID, String orderID, String description,IBuyerOrderPersistence orderPersistence);
 }

@@ -169,8 +169,7 @@ public class OrderDetails implements ISellerOrderManagement, IBuyerOrderManageme
     }
 
     @Override
-    public PersistenceStatus submitReview(String userID, String orderID, String description) {
-        IBuyerOrderPersistence orderPersistence = BuyerFactory.instance().makeBuyerOrderPersistence();
+    public PersistenceStatus submitReview(String userID, String orderID, String description, IBuyerOrderPersistence orderPersistence) {
         return orderPersistence.submitReview(userID,orderID,description);
     }
 
