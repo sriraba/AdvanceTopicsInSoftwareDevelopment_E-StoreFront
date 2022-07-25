@@ -1,5 +1,9 @@
 package com.project.estorefront.model;
 
+import com.project.estorefront.repository.IBuyerOrderPersistence;
+import com.project.estorefront.repository.IOrderPersistence;
+import com.project.estorefront.repository.ISellerOrderPersistence;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -142,7 +146,7 @@ public class OrderDetailsMock implements ISellerOrderManagement, IBuyerOrderMana
     }
 
     @Override
-    public Map<String, ArrayList<OrderDetails>> getBuyerOrders(String userID) {
+    public Map<String, ArrayList<OrderDetails>> getBuyerOrders(String userID, IBuyerOrderPersistence orderPersistence) {
         addMockBuyerOrders(userID);
         return buyerOrders!=null && buyerOrders.size()>0 ? buyerOrders : null;
     }
@@ -153,7 +157,7 @@ public class OrderDetailsMock implements ISellerOrderManagement, IBuyerOrderMana
     }
 
     @Override
-    public OrderDetails getOrderAndItemDetails(String orderID) {
+    public OrderDetails getOrderAndItemDetails(String orderID, IOrderPersistence orderPersistence) {
         addMockOrderDetails();
         if(orderID.isEmpty() || orderID == null || orderDetail==null){
             return null;
@@ -162,7 +166,7 @@ public class OrderDetailsMock implements ISellerOrderManagement, IBuyerOrderMana
     }
 
     @Override
-    public Map<String, ArrayList<OrderDetails>> getSellerOrders(String userID) {
+    public Map<String, ArrayList<OrderDetails>> getSellerOrders(String userID, ISellerOrderPersistence orderPersistence) {
         addMockSellerOrders(userID);
         return sellerOrders!=null && sellerOrders.size()>0 ? sellerOrders : null;
     }

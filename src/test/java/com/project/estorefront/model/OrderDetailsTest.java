@@ -1,5 +1,6 @@
 package com.project.estorefront.model;
 
+import com.project.estorefront.repository.*;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,43 +21,49 @@ class OrderDetailsTest {
 
     @Test
     void testGetSellerOrdersForSellerID() {
-        OrderDetailsMock orderDetailsMock = new OrderDetailsMock();
-        Map<String, ArrayList<OrderDetails>> orderDetails = orderDetailsMock.getSellerOrders("5");
+        ISellerOrderManagement orderManagement = new OrderDetails();
+        ISellerOrderPersistence orderPersistence = new SellerOrderPersistenceMock();
+        Map<String, ArrayList<OrderDetails>> orderDetails = orderManagement.getSellerOrders("5",orderPersistence);
         assertEquals(2, orderDetails.size());
     }
 
     @Test
     void testGetSellerOrdersForNullSellerID() {
-        OrderDetailsMock orderDetailsMock = new OrderDetailsMock();
-        Map<String, ArrayList<OrderDetails>> orderDetails = orderDetailsMock.getSellerOrders("");
+        ISellerOrderManagement orderManagement = new OrderDetails();
+        ISellerOrderPersistence orderPersistence = new SellerOrderPersistenceMock();
+        Map<String, ArrayList<OrderDetails>> orderDetails = orderManagement.getSellerOrders("",orderPersistence);
         assertNull(orderDetails);
     }
 
     @Test
     void testGetSellerOrdersForSellerIDNotPresent() {
-        OrderDetailsMock orderDetailsMock = new OrderDetailsMock();
-        Map<String, ArrayList<OrderDetails>> orderDetails = orderDetailsMock.getSellerOrders("8");
+        ISellerOrderManagement orderManagement = new OrderDetails();
+        ISellerOrderPersistence orderPersistence = new SellerOrderPersistenceMock();
+        Map<String, ArrayList<OrderDetails>> orderDetails = orderManagement.getSellerOrders("8", orderPersistence);
         assertNull(orderDetails);
     }
 
     @Test
     void testBuyerOrdersForBuyerID() {
-        OrderDetailsMock orderDetailsMock = new OrderDetailsMock();
-        Map<String, ArrayList<OrderDetails>> orderDetails = orderDetailsMock.getBuyerOrders("1");
+        IBuyerOrderManagement orderManagement = new OrderDetails();
+        IBuyerOrderPersistence buyerOrderPersistence = new BuyerOrderPersistenceMock();
+        Map<String, ArrayList<OrderDetails>> orderDetails = orderManagement.getBuyerOrders("1",buyerOrderPersistence);
         assertEquals(2, orderDetails.size());
     }
 
     @Test
     void testBuyerOrdersForNullBuyerID() {
-        OrderDetailsMock orderDetailsMock = new OrderDetailsMock();
-        Map<String, ArrayList<OrderDetails>> orderDetails = orderDetailsMock.getBuyerOrders("");
+        IBuyerOrderManagement orderManagement = new OrderDetails();
+        IBuyerOrderPersistence buyerOrderPersistence = new BuyerOrderPersistenceMock();
+        Map<String, ArrayList<OrderDetails>> orderDetails = orderManagement.getBuyerOrders("", buyerOrderPersistence);
         assertNull(orderDetails);
     }
 
     @Test
     void testBuyerOrdersForBuyerIDNotPresent() {
-        OrderDetailsMock orderDetailsMock = new OrderDetailsMock();
-        Map<String, ArrayList<OrderDetails>> orderDetails = orderDetailsMock.getBuyerOrders("9");
+        IBuyerOrderManagement orderManagement = new OrderDetails();
+        IBuyerOrderPersistence buyerOrderPersistence = new BuyerOrderPersistenceMock();
+        Map<String, ArrayList<OrderDetails>> orderDetails = orderManagement.getBuyerOrders("9",buyerOrderPersistence);
         assertNull(orderDetails);
     }
 
@@ -66,22 +73,25 @@ class OrderDetailsTest {
 
     @Test
     void testGetOrderAndItemDetailsForOrderID() {
-        OrderDetailsMock orderDetailsMock = new OrderDetailsMock();
-        OrderDetails orderDetail = orderDetailsMock.getOrderAndItemDetails("OR12365");
+        IOrderManagement orderManagement = new OrderDetails();
+        IOrderPersistence orderPersistence = new OrderPersistenceMock();
+        OrderDetails orderDetail = orderManagement.getOrderAndItemDetails("OR12365",orderPersistence);
         assertEquals(orderDetail.getOrderID(), "OR12365");
     }
 
     @Test
     void testGetOrderAndItemDetailsForNotPresentOrderID() {
-        OrderDetailsMock orderDetailsMock = new OrderDetailsMock();
-        OrderDetails orderDetail = orderDetailsMock.getOrderAndItemDetails("OR1238");
+        IOrderManagement orderManagement = new OrderDetails();
+        IOrderPersistence orderPersistence = new OrderPersistenceMock();
+        OrderDetails orderDetail = orderManagement.getOrderAndItemDetails("OR1238",orderPersistence);
         assertNull(orderDetail);
     }
 
     @Test
     void testGetOrderAndItemDetailsForEmptyOrderID() {
-        OrderDetailsMock orderDetailsMock = new OrderDetailsMock();
-        OrderDetails orderDetail = orderDetailsMock.getOrderAndItemDetails("");
+        IOrderManagement orderManagement = new OrderDetails();
+        IOrderPersistence orderPersistence = new OrderPersistenceMock();
+        OrderDetails orderDetail = orderManagement.getOrderAndItemDetails("",orderPersistence);
         assertNull(orderDetail);
     }
 }
