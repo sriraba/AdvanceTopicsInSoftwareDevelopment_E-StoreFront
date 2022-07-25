@@ -17,14 +17,16 @@ public class Authentication implements IAuthentication {
         IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
         try {
-            String hashedPassword = CryptoFactory.instance().makeCrypto().encryptPassword(password);
-            String userDetailsQuery = "select * from user where email =? and password =?";
+            String userDetailsQuery = "select * from user where email =?";
             PreparedStatement preparedStmt = connection.prepareStatement(userDetailsQuery);
             preparedStmt.setString(1, email);
-            preparedStmt.setString(2, hashedPassword);
             ResultSet resultSet = preparedStmt.executeQuery();
             while (resultSet.next()) {
-                return resultSet.getString("user_id");
+                String hashedPassword = resultSet.getString("password");
+                if (CryptoFactory.instance().makeCrypto().checkPassword(password, hashedPassword)) {
+                    return resultSet.getString("user_id");
+                }
+                return null;
             }
             return null;
         } catch (SQLException e) {
@@ -61,6 +63,42 @@ public class Authentication implements IAuthentication {
             preparedStmt.setBoolean(11, user.getIsUserEnabled());
             preparedStmt.execute();
             return userID;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            database.closeConnection();
+        }
+    }
+
+    @Override
+    public boolean resetPassword(String email, String password) {
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
+        try {
+            String resetPasswordQuery = "update user set password = ? where email = ?";
+            PreparedStatement preparedStmt = connection.prepareStatement(resetPasswordQuery);
+            String hashedPassword = CryptoFactory.instance().makeCrypto().encryptPassword(password);
+            preparedStmt.setString(1, hashedPassword);
+            preparedStmt.setString(2, email);
+
+            return preparedStmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            database.closeConnection();
+        }
+    }
+
+    @Override
+    public boolean checkIfUserExists(String email) {
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
+        try {
+            String checkIfUserExistsQuery = "select * from user where email = ?";
+            PreparedStatement preparedStmt = connection.prepareStatement(checkIfUserExistsQuery);
+            preparedStmt.setString(1, email);
+            ResultSet resultSet = preparedStmt.executeQuery();
+            return resultSet.next();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {

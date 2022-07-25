@@ -3,7 +3,6 @@ package com.project.estorefront.repository;
 import com.project.estorefront.model.DatabaseFactory;
 import com.project.estorefront.model.OrderDetails;
 
-import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,7 +45,7 @@ public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrd
     }
 
     @Override
-    public void submitReview(String userID, String orderID, String description) {
+    public PersistenceStatus submitReview(String userID, String orderID, String description) {
         PreparedStatement preparedStatement = null;
         Database database = (Database) DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
@@ -61,10 +60,17 @@ public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrd
             preparedStatement.setString(2, description);
             preparedStatement.setString(3, userID);
             preparedStatement.setString(4, orderID);
-            preparedStatement.execute();
+            boolean status = preparedStatement.execute();
+            if (status) {
+                return PersistenceStatus.SUCCESS;
+            } else {
+                return PersistenceStatus.FAILURE;
+            }
         }catch (SQLException e){
             e.printStackTrace();
+            return PersistenceStatus.SQL_EXCEPTION;
+        }finally {
+            database.closeConnection();
         }
-
     }
 }
