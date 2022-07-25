@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Enter OTP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+<div style="display: flex; align-items: center; justify-content: center;">
+    <form th:action="@{/reset-password/verify-otp}" method="post">
+        <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
+        <div class="form-group">
+            <label for="otp">Enter OTP</label>
+            <input type="otp" class="form-control" name="otp" id="otp">
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Reset Password" class="btn btn-primary">
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

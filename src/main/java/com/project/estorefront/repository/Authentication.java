@@ -69,4 +69,40 @@ public class Authentication implements IAuthentication {
             database.closeConnection();
         }
     }
+
+    @Override
+    public boolean resetPassword(String email, String password) {
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
+        try {
+            String resetPasswordQuery = "update user set password = ? where email = ?";
+            PreparedStatement preparedStmt = connection.prepareStatement(resetPasswordQuery);
+            String hashedPassword = CryptoFactory.instance().makeCrypto().encryptPassword(password);
+            preparedStmt.setString(1, hashedPassword);
+            preparedStmt.setString(2, email);
+
+            return preparedStmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            database.closeConnection();
+        }
+    }
+
+    @Override
+    public boolean checkIfUserExists(String email) {
+        IDatabase database = DatabaseFactory.instance().makeDatabase();
+        Connection connection = database.getConnection();
+        try {
+            String checkIfUserExistsQuery = "select * from user where email = ?";
+            PreparedStatement preparedStmt = connection.prepareStatement(checkIfUserExistsQuery);
+            preparedStmt.setString(1, email);
+            ResultSet resultSet = preparedStmt.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            database.closeConnection();
+        }
+    }
 }

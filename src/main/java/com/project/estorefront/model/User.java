@@ -1,5 +1,7 @@
 package com.project.estorefront.model;
 
+import com.project.estorefront.repository.IAuthentication;
+
 public abstract class User {
 
     private String userID;
@@ -92,7 +94,7 @@ public abstract class User {
         this.password = password;
     }
 
-   // public abstract void updateSellerProfile();
+    // public abstract void updateSellerProfile();
 
     public abstract void updateProfile();
 
@@ -110,12 +112,20 @@ public abstract class User {
         this.isSeller = isSeller;
     }
 
-    public boolean getIsUserEnabled(){
+    public boolean getIsUserEnabled() {
         return isUserEnabled;
     }
 
-    public void setIsUserEnabled(boolean isUserEnabled)
-    {
+    public void setIsUserEnabled(boolean isUserEnabled) {
         this.isUserEnabled = isUserEnabled;
     }
+
+    public static boolean sendResetEmail(IMailSender mailSender, String email, String otp) {
+        return mailSender.sendMail(email, otp);
+    }
+
+    public static boolean resetPassword(IAuthentication authentication, String email, String password) {
+        return authentication.resetPassword(email, password);
+    }
+
 }
