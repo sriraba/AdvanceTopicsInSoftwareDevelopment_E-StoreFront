@@ -7,7 +7,8 @@ public class AuthenticationFactory implements IAuthenticationFactory {
 
     private static AuthenticationFactory instance;
 
-    private AuthenticationFactory() {}
+    private AuthenticationFactory() {
+    }
 
     public static IAuthenticationFactory instance() {
         if (instance == null) {

@@ -14,7 +14,6 @@ import static org.junit.Assert.assertTrue;
 @SpringBootTest
 @TestPropertySource(properties = {"SPRING_DATASOURCE_URL=jdbc:mysql://db-5308.cs.dal.ca:3306/CSCI5308_1_DEVINT?autoreconnect=true", "SPRING_DATASOURCE_USERNAME=CSCI5308_1_DEVINT_USER", "SPRING_DATASOURCE_PASSWORD=uB8c3mUaMW", "SECRET_KEY=r4gg1kJLyg"})
 public class InventoryItemTests {
-
     @Test
     public void testGenerateItemID() {
         InventoryItem item = new InventoryItem();

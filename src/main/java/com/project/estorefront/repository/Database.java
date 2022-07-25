@@ -15,7 +15,7 @@ public class Database implements IDatabase {
     private final String springDataSourcePassword;
 
     public Database() {
-        springDataSourceUrl = PropertiesReader.instance().getSpringDataSourceURL();
+        springDataSourceUrl = PropertiesReader.instance().getSpringDatasourceURL();
         springDataSourceUsername = PropertiesReader.instance().getSpringDatasourceUsername();
         springDataSourcePassword = PropertiesReader.instance().getSpringDatasourcePassword();
         init();

@@ -15,7 +15,8 @@ public abstract class User {
     protected boolean isSeller;
     protected boolean isUserEnabled;
 
-    public User(String firstName, String lastName, String email, String address, String phone, String password, String city, boolean isSeller, boolean isUserEnabled) {
+    public User(String firstName, String lastName, String email, String address, String phone, String password,
+            String city, boolean isSeller, boolean isUserEnabled) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -98,7 +99,7 @@ public abstract class User {
 
     public abstract void updateProfile();
 
-    //public abstract void updateSellerProfile();
+    // public abstract void updateSellerProfile();
 
     public void deleteProfile() {
 
@@ -127,5 +128,13 @@ public abstract class User {
     public String register(IAuthentication authentication) {
         return authentication.register(this);
     };
+
+    public static boolean sendResetEmail(IMailSender mailSender, String email, String otp) {
+        return mailSender.sendMail(email, otp);
+    }
+
+    public static boolean resetPassword(IAuthentication authentication, String email, String password) {
+        return authentication.resetPassword(email, password);
+    }
 
 }

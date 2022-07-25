@@ -92,17 +92,23 @@ public class BuyerController {
         return "seller-details";
     }
 
-    @GetMapping("/buyer/orders/view/{userID}")
-    public ModelAndView buyerOrdersView(@PathVariable String userID) {
+    @GetMapping("/buyer/orders/view")
+    public ModelAndView buyerOrdersView(HttpSession session) {
+        String userID = (String) session.getAttribute("userID");
+        if(userID == null || userID.isEmpty()){
+            return new ModelAndView("redirect:/login");
+        }
         IBuyerOrderManagement buyerOrder = new OrderDetails();
-        return new ModelAndView("buyer-orders", "orders", buyerOrder.getBuyerOrders(userID));
+        IBuyerOrderPersistence orderPersistence = BuyerFactory.instance().makeBuyerOrderPersistence();
+        return new ModelAndView("buyer-orders","orders", buyerOrder.getBuyerOrders(userID, orderPersistence));
     }
 
     @GetMapping("/buyer/order/details/{orderID}")
     public ModelAndView buyerItems(@PathVariable String orderID) {
         IBuyerOrderManagement buyerOrder = new OrderDetails();
+        IOrderPersistence orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence();
         ModelAndView modelAndView = new ModelAndView("view-selected-order", "order",
-                buyerOrder.getOrderAndItemDetails(orderID));
+                buyerOrder.getOrderAndItemDetails(orderID,orderPersistence));
         modelAndView.addObject("page", "buyer");
         return modelAndView;
     }

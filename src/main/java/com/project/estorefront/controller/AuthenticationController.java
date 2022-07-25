@@ -1,8 +1,6 @@
 package com.project.estorefront.controller;
 
-import com.project.estorefront.model.AuthenticationFactory;
-import com.project.estorefront.model.User;
-import com.project.estorefront.model.UserFactory;
+import com.project.estorefront.model.*;
 import com.project.estorefront.model.validators.IPasswordValidator;
 import com.project.estorefront.model.validators.IValidator;
 import com.project.estorefront.model.validators.ValidatorFactory;
@@ -34,7 +32,7 @@ public class AuthenticationController {
 
     @PostMapping("/validate-login")
     public ModelAndView validateLogin(@RequestParam("email") String email, @RequestParam("password") String password,
-                                      @RequestParam("role") String role, HttpSession session, RedirectAttributes redirAttrs) {
+            @RequestParam("role") String role, HttpSession session, RedirectAttributes redirAttrs) {
 
         IValidator emailValidator = ValidatorFactory.instance().makeEmailValidator();
         IPasswordValidator passwordValidator = ValidatorFactory.instance().makePasswordValidator();
@@ -42,8 +40,7 @@ public class AuthenticationController {
         if (emailValidator.validate(email) && passwordValidator.validate(password)) {
 
             IAuthentication authentication = AuthenticationFactory.instance().makeAuthentication();
-
-            String userID = User.login(authentication, email, password);
+            String userID = authentication.login(email, password);
 
             if (userID == null || userID.isEmpty()) {
                 redirAttrs.addFlashAttribute("error", "Invalid email or password");
@@ -68,11 +65,11 @@ public class AuthenticationController {
 
     @PostMapping("/validate-register")
     public ModelAndView validateRegister(@RequestParam("firstName") String firstName,
-                                         @RequestParam("lastName") String lastName,
-                                         @RequestParam("email") String email, @RequestParam("password") String password,
-                                         @RequestParam("confirmPassword") String confirmPassword,
-                                         @RequestParam("contact") String contact, @RequestParam("city") String city, @RequestParam String address,
-                                         @RequestParam("role") String role, HttpSession session, RedirectAttributes redirAttrs) {
+            @RequestParam("lastName") String lastName,
+            @RequestParam("email") String email, @RequestParam("password") String password,
+            @RequestParam("confirmPassword") String confirmPassword,
+            @RequestParam("contact") String contact, @RequestParam("city") String city, @RequestParam String address,
+            @RequestParam("role") String role, HttpSession session, RedirectAttributes redirAttrs) {
 
         IValidator nameValidator = ValidatorFactory.instance().makeNameValidator();
         IValidator emailValidator = ValidatorFactory.instance().makeEmailValidator();
@@ -158,6 +155,74 @@ public class AuthenticationController {
         redirAttrs.addFlashAttribute("error", err);
 
         return new ModelAndView("redirect:/register");
+    }
+
+    @GetMapping
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/";
+    }
+
+    @GetMapping("/reset-password")
+    public String resetPassword() {
+        return "reset-password";
+    }
+
+    @PostMapping("/reset-password/send-otp")
+    public String sendOTP(@RequestParam("email") String email, Model model, RedirectAttributes redirAttrs,
+            HttpSession session) {
+        IAuthentication authentication = AuthenticationFactory.instance().makeAuthentication();
+
+        if (authentication.checkIfUserExists(email)) {
+            IMailSender mailSender = MailSenderFactory.instance().makeMailSender();
+
+            IOTPGenerator otpGenerator = MailSenderFactory.instance().makeOTPGenerator();
+            String otp = otpGenerator.generateOTP();
+
+            if (User.sendResetEmail(mailSender, email, otp)) {
+                session.setAttribute("resetPwdEmail", email);
+                session.setAttribute("resetPwdOTP", otp);
+                return "otp-page";
+            } else {
+                redirAttrs.addFlashAttribute("error", "Invalid email");
+                return "redirect:/reset-password";
+            }
+        } else {
+            redirAttrs.addFlashAttribute("error", "Email not registered");
+            return "redirect:/login";
+        }
+
+    }
+
+    @PostMapping("/reset-password/verify-otp")
+    public String verifyOTP(@RequestParam("otp") String otp, HttpSession session, RedirectAttributes redirAttrs) {
+        String otpFromSession = (String) session.getAttribute("resetPwdOTP");
+        if (otp.equals(otpFromSession)) {
+            return "new-password";
+        } else {
+            redirAttrs.addFlashAttribute("error", "Invalid OTP");
+            return "redirect:/reset-password";
+        }
+    }
+
+    @PostMapping("/reset-password/reset")
+    public String resetPassword(@RequestParam("password") String password, HttpSession session,
+            RedirectAttributes redirAttrs) {
+        String email = (String) session.getAttribute("resetPwdEmail");
+        IAuthentication authentication = AuthenticationFactory.instance().makeAuthentication();
+
+        IValidator passwordValidator = ValidatorFactory.instance().makePasswordValidator();
+        if (passwordValidator.validate(password) == false) {
+            redirAttrs.addFlashAttribute("error", "Invalid password");
+            return "redirect:/new-password";
+        }
+
+        if (User.resetPassword(authentication, email, password)) {
+            return "redirect:/login";
+        } else {
+            redirAttrs.addFlashAttribute("error", "Invalid OTP");
+            return "redirect:/reset-password";
+        }
     }
 
 }
