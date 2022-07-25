@@ -50,10 +50,10 @@ public class SellerController {
 
     @PostMapping("/seller/account/update/{userID}")
     public String updateSellerAccount(@RequestParam("firstName") String firstName,
-            @RequestParam("lastName") String lastName, @RequestParam("businessName") String businessName,
-            @RequestParam("businessDescription") String businessDescription,
-            @RequestParam("email") String email, @RequestParam("phone") String phone, @PathVariable String userID,
-            HttpSession session) {
+                                      @RequestParam("lastName") String lastName, @RequestParam("businessName") String businessName,
+                                      @RequestParam("businessDescription") String businessDescription,
+                                      @RequestParam("email") String email, @RequestParam("phone") String phone, @PathVariable String userID,
+                                      HttpSession session) {
         User seller = new Seller();
         seller.setFirstName(firstName);
         seller.setLastName(lastName);
@@ -96,9 +96,9 @@ public class SellerController {
 
     @PostMapping("/seller/items/create")
     public String createSellerItem(@RequestParam("itemName") String itemName,
-            @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
-            @RequestParam(value = "quantity", defaultValue = "0") int itemQuantity, @RequestParam(value = "price", defaultValue = "0") double itemPrice , HttpSession session,
-            RedirectAttributes redirAttrs)
+                                   @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
+                                   @RequestParam(value = "quantity", defaultValue = "0") int itemQuantity, @RequestParam(value = "price", defaultValue = "0") double itemPrice, HttpSession session,
+                                   RedirectAttributes redirAttrs)
             throws SQLException {
         String userID = (String) session.getAttribute("userID");
 
@@ -131,12 +131,12 @@ public class SellerController {
     @GetMapping("/seller/orders/view")
     public ModelAndView sellerOrdersView(HttpSession session) {
         String userID = (String) session.getAttribute("userID");
-        if(userID == null || userID.isEmpty()){
+        if (userID == null || userID.isEmpty()) {
             return new ModelAndView("redirect:/login");
         }
         ISellerOrderManagement sellerOrder = new OrderDetails();
-        ISellerOrderPersistence orderPersistence =  SellerFactory.instance().makeSellerOrderPersistence();
-        return new ModelAndView("seller-orders","orders", sellerOrder.getSellerOrders(userID, orderPersistence));
+        ISellerOrderPersistence orderPersistence = SellerFactory.instance().makeSellerOrderPersistence();
+        return new ModelAndView("seller-orders", "orders", sellerOrder.getSellerOrders(userID, orderPersistence));
 
     }
 
@@ -145,7 +145,7 @@ public class SellerController {
         ISellerOrderManagement sellerOrder = new OrderDetails();
         IOrderPersistence orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence();
         ModelAndView modelAndView = new ModelAndView("view-selected-order", "order",
-                sellerOrder.getOrderAndItemDetails(orderID,orderPersistence));
+                sellerOrder.getOrderAndItemDetails(orderID, orderPersistence));
         modelAndView.addObject("page", "current");
         return modelAndView;
     }
@@ -155,7 +155,7 @@ public class SellerController {
         ISellerOrderManagement sellerOrder = new OrderDetails();
         IOrderPersistence orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence();
         ModelAndView modelAndView = new ModelAndView("view-selected-order", "order",
-                sellerOrder.getOrderAndItemDetails(orderID,orderPersistence));
+                sellerOrder.getOrderAndItemDetails(orderID, orderPersistence));
         modelAndView.addObject("page", "previous");
         return modelAndView;
     }
@@ -165,7 +165,7 @@ public class SellerController {
         IDeliveryPerson deliveryPersons = new DeliveryPerson();
         IDeliveryPersonPersistence deliveryPersonPersistence = DeliveryPersonFactory.instance().makeDeliveryPersonPersistence();
         return new ModelAndView("assign-delivery-person", "delivery_persons",
-                deliveryPersons.getDeliveryPersonDetails(sellerID,deliveryPersonPersistence));
+                deliveryPersons.getDeliveryPersonDetails(sellerID, deliveryPersonPersistence));
     }
 
     @GetMapping("/seller/orders/assigned")
@@ -185,15 +185,14 @@ public class SellerController {
 
     @PostMapping("/seller/items/update/{itemID}")
     public String updateSellerItem(@RequestParam("itemName") String itemName,
-            @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
-            @RequestParam("quantity") int itemQuantity, @RequestParam("price") double itemPrice,
-            @PathVariable String itemID, HttpSession session, RedirectAttributes redirAttrs) {
+                                   @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
+                                   @RequestParam("quantity") int itemQuantity, @RequestParam("price") double itemPrice,
+                                   @PathVariable String itemID, HttpSession session, RedirectAttributes redirAttrs) {
 
 
-        IInventoryItemPersistence inventoryItemPersistence = new InventoryItemPersistence();
-        IInventoryItem item = new InventoryItem(mockUserID, ItemCategory.valueOf(itemCategory), itemName,
-                itemDescription, itemPrice, itemQuantity);
-        item.setItemID(itemID);
+        IInventoryItemPersistence inventoryItemPersistence = InventoryFactory.instance().makeInventoryItemPersistence();
+
+        IInventoryItem item = InventoryFactory.instance().makeInventoryItem(itemID, mockUserID, ItemCategory.GROCERY, itemQuantity, itemPrice, itemName, itemDescription);
 
         IInventoryItemValidator validator = InventoryFactory.instance().makeValidator();
         InventoryItemValidationStatus validationStatus = validator.validate(item);
@@ -217,9 +216,9 @@ public class SellerController {
 
     @GetMapping("/seller/items/delete/{itemID}")
     public String deleteSellerItem(@PathVariable String itemID) throws SQLException {
-        IInventoryItemPersistence inventoryItemPersistence = new InventoryItemPersistence();
-        IInventoryItem item = InventoryFactory.instance().makeInventoryItem();
-        item.setItemID(itemID);
+        IInventoryItemPersistence inventoryItemPersistence = InventoryFactory.instance().makeInventoryItemPersistence();
+        IInventoryItem item = InventoryFactory.instance().makeInventoryItemWithItemID(itemID);
+
         item.delete(inventoryItemPersistence);
         return "redirect:/seller/items";
     }
@@ -245,7 +244,7 @@ public class SellerController {
 
     @PostMapping("/seller/create-coupon")
     public String create(@RequestParam("name") String couponName, @RequestParam("amount") String amount,
-            @RequestParam("percent") String percent) {
+                         @RequestParam("percent") String percent) {
         CouponsPersistence persistenceObj = new CouponsPersistence();
 
         int id = persistenceObj.getCoupons().size() + 1;
@@ -294,7 +293,7 @@ public class SellerController {
 
     @RequestMapping(value = "/seller/coupons/update/{id}", method = RequestMethod.POST)
     public String update(@PathVariable("id") int id, @RequestParam("name") String couponName,
-            @RequestParam("amount") String amount, @RequestParam("percent") String percent) {
+                         @RequestParam("amount") String amount, @RequestParam("percent") String percent) {
         CouponsPersistence persistenceObj = new CouponsPersistence();
 
         CouponValidator validator = new CouponValidator();

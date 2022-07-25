@@ -17,9 +17,6 @@ public interface ISellerPersistence {
 
     User getSellerByID(String sellerID);
 
-
-    //boolean deactivateSellerAccount(User seller);
-
     boolean deactivateSellerAccount(User seller);
 
     boolean updateSellerAccount(User seller);

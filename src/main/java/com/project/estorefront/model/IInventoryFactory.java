@@ -7,6 +7,10 @@ public interface IInventoryFactory {
 
     IInventoryItem makeInventoryItem();
 
+    IInventoryItem makeInventoryItemWithItemID(String itemID);
+
+    IInventoryItem makeInventoryItem(String itemID, String userID, ItemCategory itemCategory, int quantity, double price, String itemName, String itemDescription);
+
     IInventoryItemPersistence makeInventoryItemPersistence();
 
     IInventoryItemValidator makeValidator();

@@ -13,7 +13,6 @@ public class Seller extends User implements ISeller {
         super();
     }
 
-    @Override
     public void setBusinessName(String businessName) {
         this.businessName = businessName;
     }
@@ -23,7 +22,6 @@ public class Seller extends User implements ISeller {
         return businessName;
     }
 
-    @Override
     public void setBusinessDescription(String businessDescription) {
         this.businessDescription = businessDescription;
     }

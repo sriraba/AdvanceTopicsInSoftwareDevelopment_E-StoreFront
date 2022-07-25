@@ -25,5 +25,22 @@ public class UserFactory implements IUserFactory {
         }
 
     }
+
+    @Override
+    public User makeUserWithAllFields(String userID, String firstName, String lastName, String email, String address, String phone, String city, boolean isSeller, String businessName, String businessDescription) {
+        User seller = new Seller();
+        seller.setUserID(userID);
+        seller.setFirstName(firstName);
+        seller.setLastName(lastName);
+        seller.setEmail(email);
+        seller.setAddress(address);
+        seller.setPhone(phone);
+        seller.setCity(city);
+        ((Seller) seller).setIsSeller(isSeller);
+        ((Seller) seller).setBusinessName(businessName);
+        ((Seller) seller).setBusinessDescription(businessDescription);
+
+        return seller;
+    }
 }
 

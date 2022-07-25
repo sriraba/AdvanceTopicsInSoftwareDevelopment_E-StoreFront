@@ -34,12 +34,13 @@ public class BuyerController {
 
         return "buyers";
     }
+
     @GetMapping("/buyer/account")
     public String buyerAccount(Model model, HttpSession session) {
         IBuyerPersistence buyerPersistence = new BuyerPersistence();
         String userID = (String) session.getAttribute("userID");
         User buyer = new Buyer();
-        buyer = ((Buyer)buyer).getBuyerByID(buyerPersistence, "1");
+        buyer = ((Buyer) buyer).getBuyerByID(buyerPersistence, "1");
         model.addAttribute("buyer", buyer);
         return "buyer-account";
     }
@@ -48,7 +49,7 @@ public class BuyerController {
     public String editSellerAccount(@PathVariable String userID, Model model) {
         IBuyerPersistence buyerPersistence = new BuyerPersistence();
         User buyer = new Buyer();
-        buyer = ((Buyer)buyer).getBuyerByID(buyerPersistence, userID);
+        buyer = ((Buyer) buyer).getBuyerByID(buyerPersistence, userID);
         model.addAttribute("buyer", buyer);
         return "buyer-account-update";
     }
@@ -95,12 +96,12 @@ public class BuyerController {
     @GetMapping("/buyer/orders/view")
     public ModelAndView buyerOrdersView(HttpSession session) {
         String userID = (String) session.getAttribute("userID");
-        if(userID == null || userID.isEmpty()){
+        if (userID == null || userID.isEmpty()) {
             return new ModelAndView("redirect:/login");
         }
         IBuyerOrderManagement buyerOrder = new OrderDetails();
         IBuyerOrderPersistence orderPersistence = BuyerFactory.instance().makeBuyerOrderPersistence();
-        return new ModelAndView("buyer-orders","orders", buyerOrder.getBuyerOrders(userID, orderPersistence));
+        return new ModelAndView("buyer-orders", "orders", buyerOrder.getBuyerOrders(userID, orderPersistence));
     }
 
     @GetMapping("/buyer/order/details/{orderID}")
@@ -108,14 +109,14 @@ public class BuyerController {
         IBuyerOrderManagement buyerOrder = new OrderDetails();
         IOrderPersistence orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence();
         ModelAndView modelAndView = new ModelAndView("view-selected-order", "order",
-                buyerOrder.getOrderAndItemDetails(orderID,orderPersistence));
+                buyerOrder.getOrderAndItemDetails(orderID, orderPersistence));
         modelAndView.addObject("page", "buyer");
         return modelAndView;
     }
 
     @GetMapping("/buyer/order/add-review/{userID}/{orderID}")
     public String addReview(@PathVariable("userID") String userID, @PathVariable("orderID") String orderID,
-            Model model) {
+                            Model model) {
         model.addAttribute("userID", userID);
         model.addAttribute("orderID", orderID);
         return "add-review";
@@ -123,7 +124,7 @@ public class BuyerController {
 
     @GetMapping("/buyer/order/submit-review/{userID}/{orderID}")
     public String submitReview(@PathVariable("userID") String userID, @PathVariable("orderID") String orderID,
-            @RequestParam("review") String description, Model model) {
+                               @RequestParam("review") String description, Model model) {
         IBuyerOrderManagement buyerOrder = new OrderDetails();
         buyerOrder.submitReview(userID, orderID, description);
         model.addAttribute("page", "buyer");
@@ -152,8 +153,9 @@ public class BuyerController {
     public String addToCart(@PathVariable String itemID, @RequestParam("quantity") String qty, HttpSession session) {
         ICart cart = getCart(session);
         IInventoryItemPersistence inventoryPersistence = new InventoryItemPersistence();
+
         IInventoryItem inventory = inventoryPersistence.getItemByID(itemID);
-        inventory.setItemQuantity(Integer.parseInt(qty));
+        ((InventoryItem) inventory).setItemQuantity(Integer.parseInt(qty));
 
         cart.addItem(inventory);
         session.setAttribute("cart", cart);
@@ -200,10 +202,10 @@ public class BuyerController {
 
     @PostMapping("/buyer/cart/update/{itemID}")
     public String updateCartItemQty(@PathVariable String itemID, @RequestParam("quantity") String quantity,
-            HttpSession session) {
+                                    HttpSession session) {
         ICart cart = getCart(session);
         IInventoryItem item = cart.getItemByID(itemID);
-        item.setItemQuantity(Integer.parseInt(quantity));
+        ((InventoryItem) item).setItemQuantity(Integer.parseInt(quantity));
         cart.updateItem(item);
 
         return "redirect:/buyer/cart/view";

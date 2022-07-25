@@ -34,18 +34,8 @@ public class SellerPersistence implements ISellerPersistence {
                 String address = rs.getString("address");
                 String businessDescription = rs.getString("business_description");
 
-                User seller = UserFactory.instance().getUser("seller");
-                seller.setFirstName(firstName);
-                seller.setLastName(lastName);
-                seller.setEmail(email);
-                seller.setAddress(address);
-                seller.setPhone(contactNumber);
-                seller.setCity(city);
-                seller.setIsSeller(true);
-                ((ISeller) seller).setBusinessName(businessName);
-                ((ISeller) seller).setBusinessDescription(businessDescription);
+                User seller = UserFactory.instance().makeUserWithAllFields(userID, firstName, lastName, email, address, contactNumber, city, true, businessName, businessDescription);
 
-                seller.setUserID(userID);
                 sellerList.add(seller);
             }
             return sellerList;
@@ -79,18 +69,8 @@ public class SellerPersistence implements ISellerPersistence {
                 String address = rs.getString("address");
                 String businessDescription = rs.getString("business_description");
 
-                User seller = UserFactory.instance().getUser("seller");
-                seller.setFirstName(firstName);
-                seller.setLastName(lastName);
-                seller.setEmail(email);
-                seller.setAddress(address);
-                seller.setPhone(contactNumber);
-                seller.setCity(sellerCity);
-                seller.setIsSeller(true);
-                ((ISeller) seller).setBusinessName(businessName);
-                ((ISeller) seller).setBusinessDescription(businessDescription);
+                User seller = UserFactory.instance().makeUserWithAllFields(userID, firstName, lastName, email, address, contactNumber, sellerCity, true, businessName, businessDescription);
 
-                seller.setUserID(userID);
                 sellerList.add(seller);
             }
             return sellerList;
@@ -123,18 +103,9 @@ public class SellerPersistence implements ISellerPersistence {
                 String rsCity = rs.getString("city");
                 String address = rs.getString("address");
                 String businessDescription = rs.getString("business_description");
-                ItemCategory category = ItemCategory.valueOf(rs.getString("category_id"));
 
-                User seller = UserFactory.instance().getUser("seller");
-                seller.setEmail(email);
-                seller.setAddress(address);
-                seller.setPhone(contactNumber);
-                seller.setCity(rsCity);
-                seller.setIsSeller(true);
-                ((ISeller) seller).setBusinessName(businessName);
-                ((ISeller) seller).setBusinessDescription(businessDescription);
+                User seller = UserFactory.instance().makeUserWithAllFields(userID, null, null, email, address, contactNumber, rsCity, true, businessName, businessDescription);
 
-                seller.setUserID(userID);
                 sellerList.add(seller);
             }
             return sellerList;
@@ -167,18 +138,8 @@ public class SellerPersistence implements ISellerPersistence {
                 String address = rs.getString("address");
                 String businessDescription = rs.getString("business_description");
 
-                User seller = UserFactory.instance().getUser("seller");
-                seller.setFirstName(firstName);
-                seller.setLastName(lastName);
-                seller.setEmail(email);
-                seller.setAddress(address);
-                seller.setPhone(contactNumber);
-                seller.setCity(city);
-                seller.setIsSeller(true);
-                ((ISeller) seller).setBusinessName(businessName);
-                ((ISeller) seller).setBusinessDescription(businessDescription);
+                User seller = UserFactory.instance().makeUserWithAllFields(userID, firstName, lastName, email, address, contactNumber, city, true, businessName, businessDescription);
 
-                seller.setUserID(userID);
                 return seller;
             }
             return null;

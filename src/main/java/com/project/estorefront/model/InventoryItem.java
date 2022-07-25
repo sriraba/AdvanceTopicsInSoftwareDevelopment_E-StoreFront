@@ -17,6 +17,10 @@ public class InventoryItem implements IInventoryItem {
     private Double itemPrice;
     private Integer itemQuantity;
 
+    public InventoryItem() {
+        this.itemID = UUID.randomUUID().toString();
+    }
+
     public InventoryItem(String userID, ItemCategory itemCategory, String itemName, String itemDescription, Double itemPrice, Integer itemQuantity) {
         this.itemID = UUID.randomUUID().toString();
         this.userID = userID;
@@ -27,7 +31,18 @@ public class InventoryItem implements IInventoryItem {
         this.itemQuantity = itemQuantity;
     }
 
-    public InventoryItem() {
+    public InventoryItem(String itemID, String userID, ItemCategory itemCategory, int itemQuantity, double price, String itemName, String itemDescription) {
+        this.itemID = itemID;
+        this.userID = userID;
+        this.itemCategory = itemCategory;
+        this.itemName = itemName;
+        this.itemDescription = itemDescription;
+        this.itemPrice = price;
+        this.itemQuantity = itemQuantity;
+    }
+
+    public InventoryItem(String itemID) {
+        this.itemID = itemID;
     }
 
     @Override
@@ -55,9 +70,17 @@ public class InventoryItem implements IInventoryItem {
         return itemName;
     }
 
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
     @Override
     public String getItemDescription() {
         return itemDescription;
+    }
+
+    public void setItemDescription(String itemDescription) {
+        this.itemDescription = itemDescription;
     }
 
     @Override
@@ -70,54 +93,35 @@ public class InventoryItem implements IInventoryItem {
         return itemQuantity;
     }
 
-    @Override
-    public void setItemID(String itemID) {
-        this.itemID = itemID;
+    public void setItemQuantity(Integer itemQuantity) {
+        this.itemQuantity = itemQuantity;
     }
 
-    @Override
     public void setUserID(String userID) {
         this.userID = userID;
     }
 
-    @Override
     public void setItemCategory(ItemCategory itemCategory) {
         this.itemCategory = itemCategory;
     }
 
-    @Override
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
-    @Override
-    public void setItemDescription(String itemDescription) {
-        this.itemDescription = itemDescription;
-    }
-
-    @Override
     public void setItemPrice(Double itemPrice) {
         this.itemPrice = itemPrice;
     }
 
     @Override
-    public void setItemQuantity(Integer itemQuantity) {
-        this.itemQuantity = itemQuantity;
-    }
-
-    @Override
     public IInventoryItemPersistence.InventoryItemPersistenceOperationStatus save(IInventoryItemPersistence persistence) throws SQLException {
-        return persistence.save(this);
+        return persistence.save(itemID, userID, itemCategory, itemQuantity, itemPrice, itemName, itemDescription);
     }
 
     @Override
     public IInventoryItemPersistence.InventoryItemPersistenceOperationStatus delete(IInventoryItemPersistence persistence) {
-        return persistence.delete(this);
+        return persistence.delete(itemID);
     }
 
     @Override
     public IInventoryItemPersistence.InventoryItemPersistenceOperationStatus update(IInventoryItemPersistence persistence) {
-        return persistence.update(this);
+        return persistence.update(userID, itemCategory, itemQuantity, itemPrice, itemName, itemDescription, itemID);
     }
 
     @Override
