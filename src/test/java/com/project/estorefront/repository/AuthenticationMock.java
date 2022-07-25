@@ -53,4 +53,14 @@ public class AuthenticationMock implements IAuthentication{
         userMap.put(userID, user);
         return userID;
     }
+
+    @Override
+    public boolean resetPassword(String email, String password) {
+        return false;
+    }
+
+    @Override
+    public boolean checkIfUserExists(String email) {
+        return false;
+    }
 }
