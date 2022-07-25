@@ -14,7 +14,7 @@ public class SellerOrderPersistence extends OrderPersistence implements ISellerO
     private Connection connection;
 
     @Override
-    public ArrayList<OrderDetails> loadOrders(String sellerID) {
+    public ArrayList<OrderDetails> loadOrders(String sellerID) throws SQLException {
         PreparedStatement preparedStatement = null;
         IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
@@ -48,7 +48,7 @@ public class SellerOrderPersistence extends OrderPersistence implements ISellerO
     }
 
     @Override
-    public void updateDeliveryPerson(String orderID, String charge) {
+    public void updateDeliveryPerson(String orderID, String charge) throws SQLException {
         PreparedStatement preparedStatement = null;
         IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();

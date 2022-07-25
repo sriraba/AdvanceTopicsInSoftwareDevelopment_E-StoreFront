@@ -9,31 +9,28 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@SpringBootTest
-@TestPropertySource(properties = {"SPRING_DATASOURCE_URL=jdbc:mysql://db-5308.cs.dal.ca:3306/CSCI5308_1_DEVINT?autoreconnect=true", "SPRING_DATASOURCE_USERNAME=CSCI5308_1_DEVINT_USER", "SPRING_DATASOURCE_PASSWORD=uB8c3mUaMW"})
-class DeliveryPersonTest {
+public class DeliveryPersonTest {
     @Test
-    void testGetDeliveryPersonDetailsBySellerID() {
+    void testGetDeliveryPersonDetailsBySellerID() throws SQLException {
         IDeliveryPerson deliveryPerson = new DeliveryPerson();
         IDeliveryPersonPersistence deliveryPersonPersistence = new DeliveryPersonPersistenceMock();
         ArrayList<IDeliveryPerson> deliveryPeople =deliveryPerson.getDeliveryPersonDetails("5",deliveryPersonPersistence);
         assertEquals(deliveryPeople.size(),2);
     }
     @Test
-    void testGetDeliveryPersonDetailsByEmptySellerID() {
+    void testGetDeliveryPersonDetailsByEmptySellerID() throws SQLException {
         IDeliveryPerson deliveryPerson = new DeliveryPerson();
         IDeliveryPersonPersistence deliveryPersonPersistence = new DeliveryPersonPersistenceMock();
         ArrayList<IDeliveryPerson> deliveryPeople =deliveryPerson.getDeliveryPersonDetails("",deliveryPersonPersistence);
         assertNull(deliveryPeople);
     }
     @Test
-    void testGetDeliveryPersonDetailsByNotPresentSellerID() {
+    void testGetDeliveryPersonDetailsByNotPresentSellerID() throws SQLException {
         IDeliveryPerson deliveryPerson = new DeliveryPerson();
         IDeliveryPersonPersistence deliveryPersonPersistence = new DeliveryPersonPersistenceMock();
         ArrayList<IDeliveryPerson> deliveryPeople =deliveryPerson.getDeliveryPersonDetails("15",deliveryPersonPersistence);

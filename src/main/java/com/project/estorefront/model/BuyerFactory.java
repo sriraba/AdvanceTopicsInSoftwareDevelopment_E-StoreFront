@@ -17,8 +17,8 @@ public class BuyerFactory implements IBuyerFactory {
     }
 
     @Override
-    public IBuyerPersistence makeBuyerPersistence() {
-        return new BuyerPersistence();
+    public IBuyerPersistence makeBuyerPersistence(IDatabase database) {
+        return new BuyerPersistence(database);
     }
 
     @Override
@@ -32,8 +32,8 @@ public class BuyerFactory implements IBuyerFactory {
     }
 
     @Override
-    public IBuyerOrderPersistence makeBuyerOrderPersistence() {
-        return new BuyerOrderPersistence();
+    public IBuyerOrderPersistence makeBuyerOrderPersistence(IDatabase database) {
+        return new BuyerOrderPersistence(database);
     }
 
 }

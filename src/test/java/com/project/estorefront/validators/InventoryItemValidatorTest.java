@@ -13,7 +13,6 @@ import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.Assert.assertEquals;
 
-@SpringBootTest
 public class InventoryItemValidatorTest {
 
     @Test

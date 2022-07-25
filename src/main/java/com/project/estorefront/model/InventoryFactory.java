@@ -2,6 +2,7 @@ package com.project.estorefront.model;
 
 import com.project.estorefront.model.validators.IInventoryItemValidator;
 import com.project.estorefront.model.validators.InventoryItemValidator;
+import com.project.estorefront.repository.IDatabase;
 import com.project.estorefront.repository.IInventoryItemPersistence;
 import com.project.estorefront.repository.InventoryItemPersistence;
 
@@ -35,8 +36,8 @@ public class InventoryFactory implements IInventoryFactory {
     }
 
     @Override
-    public IInventoryItemPersistence makeInventoryItemPersistence() {
-        return new InventoryItemPersistence();
+    public IInventoryItemPersistence makeInventoryItemPersistence(IDatabase database) {
+        return new InventoryItemPersistence(database);
     }
 
     @Override

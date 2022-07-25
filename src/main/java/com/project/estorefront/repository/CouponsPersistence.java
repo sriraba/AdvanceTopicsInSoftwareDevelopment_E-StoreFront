@@ -10,10 +10,16 @@ import java.util.List;
 
 public class CouponsPersistence implements ICouponsPersistence {
 
+    private IDatabase database;
+
+    public CouponsPersistence(IDatabase database) {
+        this.database = database;
+    }
+
     @Override
-    public void saveCoupon(ICoupon coupon) {
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    public void saveCoupon(ICoupon coupon) throws SQLException {
         Connection connection = database.getConnection();
+
         try {
             String query = "insert into coupons values (?,?,?,?,?)";
 
@@ -34,9 +40,9 @@ public class CouponsPersistence implements ICouponsPersistence {
     }
 
     @Override
-    public void updateCoupon(ICoupon coupon) {
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    public void updateCoupon(ICoupon coupon) throws SQLException {
         Connection connection = database.getConnection();
+
         try {
             String query = "update coupons set name=?, max_amt=?, percent=? where coupon_id=?";
 
@@ -57,8 +63,7 @@ public class CouponsPersistence implements ICouponsPersistence {
     }
 
     @Override
-    public List<ICoupon> getCoupons() {
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    public List<ICoupon> getCoupons() throws SQLException {
         Connection connection = database.getConnection();
 
         Statement stmt;
@@ -90,8 +95,7 @@ public class CouponsPersistence implements ICouponsPersistence {
     }
 
     @Override
-    public Coupon getCouponById(int id) {
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    public Coupon getCouponById(int id) throws SQLException {
         Connection connection = database.getConnection();
 
         Coupon coupon = null;
@@ -121,8 +125,7 @@ public class CouponsPersistence implements ICouponsPersistence {
         return coupon;
     }
 
-    public void deleteCoupon(int id) {
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    public void deleteCoupon(int id) throws SQLException {
         Connection connection = database.getConnection();
 
         Statement stmt = null;

@@ -18,6 +18,18 @@ import java.util.ArrayList;
 @Controller
 public class SellerController {
 
+    private IDatabase database;
+    private ISellerPersistence sellerPersistence;
+    private IInventoryItemPersistence inventoryItemPersistence;
+    private ICouponsPersistence couponsPersistence;
+
+    public SellerController() {
+        database = DatabaseFactory.instance().makeDatabase();
+        sellerPersistence = SellerFactory.instance().makeSellerPersistence(database);
+        inventoryItemPersistence = InventoryFactory.instance().makeInventoryItemPersistence(database);
+        couponsPersistence = CouponsFactory.instance().makeCouponsPersistence(database);
+    }
+
     private static final String notLoggedInRedirect = "redirect:/login";
 
     @GetMapping("/seller")
@@ -26,25 +38,34 @@ public class SellerController {
     }
 
     @GetMapping("/seller/account")
-    public String sellerAccount(Model model, HttpSession session) {
+    public String sellerAccount(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         String userID = getUserID(session);
         if (userID == null || userID.isEmpty()) {
             return notLoggedInRedirect;
         }
 
-        ISellerPersistence sellerPersistence = new SellerPersistence();
-
         User seller = SellerFactory.instance().makeSeller();
-        seller = ((Seller) seller).getSellerByID(sellerPersistence, "1");
+        try {
+            seller = ((Seller) seller).getSellerByID(sellerPersistence, "1");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error getting seller profile.");
+            return "redirect:/seller";
+        }
         model.addAttribute("seller", seller);
         return "seller-account";
     }
 
     @GetMapping("/seller/account/edit/{userID}")
-    public String editSellerAccount(@PathVariable String userID, Model model) {
-        ISellerPersistence sellerPersistence = new SellerPersistence();
+    public String editSellerAccount(@PathVariable String userID, Model model, RedirectAttributes redirectAttributes) {
         User seller = new Seller();
-        seller = ((Seller) seller).getSellerByID(sellerPersistence, userID);
+        try {
+            seller = ((Seller) seller).getSellerByID(sellerPersistence, userID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error getting seller profile.");
+            return "redirect:/seller";
+        }
         model.addAttribute("seller", seller);
         return "seller-account-update";
     }
@@ -54,7 +75,7 @@ public class SellerController {
                                       @RequestParam("lastName") String lastName, @RequestParam("businessName") String businessName,
                                       @RequestParam("businessDescription") String businessDescription,
                                       @RequestParam("email") String email, @RequestParam("phone") String phone, @PathVariable String userID,
-                                      HttpSession session) {
+                                      HttpSession session, RedirectAttributes redirectAttributes) {
         User seller = new Seller();
         seller.setFirstName(firstName);
         seller.setLastName(lastName);
@@ -63,8 +84,13 @@ public class SellerController {
         seller.setEmail(email);
         seller.setPhone(phone);
         seller.setUserID(userID);
-        ISellerPersistence sellerPersistence = new SellerPersistence();
-        ((Seller) seller).updateSellerAccount(sellerPersistence);
+        try {
+            ((Seller) seller).updateSellerAccount(sellerPersistence);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error updating seller profile.");
+            return "redirect:/seller";
+        }
         return "redirect:/seller/account";
     }
 
@@ -76,24 +102,27 @@ public class SellerController {
         }
 
         User seller = SellerFactory.instance().makeSeller(userID);
-        ISellerPersistence sellerPersistence = SellerFactory.instance().makeSellerPersistence();
 
         ((Seller) seller).deactivateSellerAccount(sellerPersistence);
         return "redirect:/login";
     }
 
     @GetMapping("/seller/items")
-    public String sellerItems(Model model, HttpSession session) {
+    public String sellerItems(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         String userID = getUserID(session);
         if (userID == null || userID.isEmpty()) {
             return notLoggedInRedirect;
         }
 
-        IInventoryItemPersistence inventoryItemPersistence = InventoryFactory.instance().makeInventoryItemPersistence();
-
-        ArrayList<IInventoryItem> all = inventoryItemPersistence.getAll(userID);
+        ArrayList<IInventoryItem> all = null;
+        try {
+            all = inventoryItemPersistence.getAll(userID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error getting inventory items");
+            return "redirect:/seller/items";
+        }
         model.addAttribute("items", all);
-
         return "seller-items";
     }
 
@@ -111,7 +140,7 @@ public class SellerController {
     public String createSellerItem(@RequestParam("itemName") String itemName,
                                    @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
                                    @RequestParam(value = "quantity", defaultValue = "0") int itemQuantity, @RequestParam(value = "price", defaultValue = "0") double itemPrice, HttpSession session,
-                                   RedirectAttributes redirAttrs)
+                                   RedirectAttributes redirectAttributes)
             throws SQLException {
         String userID = getUserID(session);
         if (userID == null || userID.isEmpty()) {
@@ -125,26 +154,24 @@ public class SellerController {
         InventoryItemValidationStatus validationStatus = validator.validate(item);
 
         if (validationStatus.equals(InventoryItemValidationStatus.VALID)) {
-            IInventoryItemPersistence inventoryItemPersistence = InventoryFactory.instance()
-                    .makeInventoryItemPersistence();
             IInventoryItemPersistence.InventoryItemPersistenceOperationStatus status = item
                     .save(inventoryItemPersistence);
 
             if (status == IInventoryItemPersistence.InventoryItemPersistenceOperationStatus.SUCCESS) {
-                redirAttrs.addFlashAttribute("success", "Item added successfully.");
+                redirectAttributes.addFlashAttribute("success", "Item added successfully.");
                 return "redirect:/seller/items";
             } else {
-                redirAttrs.addFlashAttribute("error", "Something went wrong. Please try again.");
+                redirectAttributes.addFlashAttribute("error", "Something went wrong. Please try again.");
                 return "redirect:/seller/items/add";
             }
         } else {
-            redirAttrs.addFlashAttribute("error", validationStatus.label);
+            redirectAttributes.addFlashAttribute("error", validationStatus.label);
             return "redirect:/seller/items/add";
         }
     }
 
     @GetMapping("/seller/orders/view")
-    public ModelAndView sellerOrdersView(HttpSession session) {
+    public ModelAndView sellerOrdersView(HttpSession session, RedirectAttributes redirectAttributes) {
         String userID = getUserID(session);
         if (userID == null || userID.isEmpty()) {
             return new ModelAndView(notLoggedInRedirect);
@@ -152,32 +179,52 @@ public class SellerController {
 
         ISellerOrderManagement sellerOrder = new OrderDetails();
         ISellerOrderPersistence orderPersistence = SellerFactory.instance().makeSellerOrderPersistence();
-        return new ModelAndView("seller-orders", "orders", sellerOrder.getSellerOrders(userID, orderPersistence));
 
+        try {
+            return new ModelAndView("seller-orders", "orders", sellerOrder.getSellerOrders(userID, orderPersistence));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error getting orders");
+            return new ModelAndView("redirect:/seller/orders/view");
+        }
     }
 
     @GetMapping("/seller/orders/current/{orderID}")
-    public ModelAndView sellerCurrentOrderView(@PathVariable String orderID) {
+    public ModelAndView sellerCurrentOrderView(@PathVariable String orderID, RedirectAttributes redirectAttributes) {
         ISellerOrderManagement sellerOrder = new OrderDetails();
         IOrderPersistence orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence();
-        ModelAndView modelAndView = new ModelAndView("view-selected-order", "order",
-                sellerOrder.getOrderAndItemDetails(orderID, orderPersistence));
+        ModelAndView modelAndView = null;
+        try {
+            modelAndView = new ModelAndView("view-selected-order", "order",
+                    sellerOrder.getOrderAndItemDetails(orderID, orderPersistence));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error getting order");
+            return new ModelAndView("redirect:/seller/orders/view");
+        }
         modelAndView.addObject("page", "current");
         return modelAndView;
     }
 
     @GetMapping("/seller/orders/previous/{orderID}")
-    public ModelAndView sellerPreviousOrderView(@PathVariable String orderID) {
+    public ModelAndView sellerPreviousOrderView(@PathVariable String orderID, RedirectAttributes redirectAttributes) {
         ISellerOrderManagement sellerOrder = new OrderDetails();
         IOrderPersistence orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence();
-        ModelAndView modelAndView = new ModelAndView("view-selected-order", "order",
-                sellerOrder.getOrderAndItemDetails(orderID, orderPersistence));
+        ModelAndView modelAndView = null;
+        try {
+            modelAndView = new ModelAndView("view-selected-order", "order",
+                    sellerOrder.getOrderAndItemDetails(orderID, orderPersistence));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error getting order");
+            return new ModelAndView("redirect:/seller/orders/view");
+        }
         modelAndView.addObject("page", "previous");
         return modelAndView;
     }
 
     @GetMapping("/seller/orders/assign_delivery_person/{sellerID}")
-    public ModelAndView assignDeliveryPerson(@PathVariable String sellerID) {
+    public ModelAndView assignDeliveryPerson(@PathVariable String sellerID) throws SQLException {
         IDeliveryPerson deliveryPersons = new DeliveryPerson();
         IDeliveryPersonPersistence deliveryPersonPersistence = DeliveryPersonFactory.instance().makeDeliveryPersonPersistence();
         return new ModelAndView("assign-delivery-person", "delivery_persons",
@@ -197,8 +244,14 @@ public class SellerController {
             return notLoggedInRedirect;
         }
 
-        IInventoryItemPersistence inventoryItemPersistence = InventoryFactory.instance().makeInventoryItemPersistence();
-        IInventoryItem item = inventoryItemPersistence.getItemByID(itemID);
+        IInventoryItem item = null;
+        try {
+            item = inventoryItemPersistence.getItemByID(itemID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Error getting item");
+            return "redirect:/seller/items";
+        }
         model.addAttribute("item", item);
         return "seller-items-update";
     }
@@ -207,13 +260,11 @@ public class SellerController {
     public String updateSellerItem(@RequestParam("itemName") String itemName,
                                    @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
                                    @RequestParam("quantity") int itemQuantity, @RequestParam("price") double itemPrice,
-                                   @PathVariable String itemID, HttpSession session, RedirectAttributes redirAttrs) {
+                                   @PathVariable String itemID, HttpSession session, RedirectAttributes redirectAttributes) throws SQLException {
         String userID = getUserID(session);
         if (userID == null || userID.isEmpty()) {
             return notLoggedInRedirect;
         }
-
-        IInventoryItemPersistence inventoryItemPersistence = InventoryFactory.instance().makeInventoryItemPersistence();
 
         IInventoryItem item = InventoryFactory.instance().makeInventoryItem(itemID, userID, ItemCategory.valueOf(itemCategory), itemQuantity, itemPrice, itemName, itemDescription);
 
@@ -225,14 +276,14 @@ public class SellerController {
                     .update(inventoryItemPersistence);
 
             if (status == IInventoryItemPersistence.InventoryItemPersistenceOperationStatus.SUCCESS) {
-                redirAttrs.addFlashAttribute("success", "Item updated successfully.");
+                redirectAttributes.addFlashAttribute("success", "Item updated successfully.");
                 return "redirect:/seller/items";
             } else {
-                redirAttrs.addFlashAttribute("error", "Something went wrong. Please try again.");
+                redirectAttributes.addFlashAttribute("error", "Something went wrong. Please try again.");
                 return "redirect:/seller/items/edit/" + itemID;
             }
         } else {
-            redirAttrs.addFlashAttribute("error", validationStatus.label);
+            redirectAttributes.addFlashAttribute("error", validationStatus.label);
             return "redirect:/seller/items/edit/" + itemID;
         }
     }
@@ -244,8 +295,6 @@ public class SellerController {
             return notLoggedInRedirect;
         }
 
-
-        IInventoryItemPersistence inventoryItemPersistence = InventoryFactory.instance().makeInventoryItemPersistence();
         IInventoryItem item = InventoryFactory.instance().makeInventoryItemWithItemID(itemID);
 
         item.delete(inventoryItemPersistence);
@@ -253,9 +302,14 @@ public class SellerController {
     }
 
     @GetMapping("/seller/coupons")
-    public String view(Model model) {
-        CouponsPersistence persistenceObj = new CouponsPersistence();
-        model.addAttribute("coupons", persistenceObj.getCoupons());
+    public String view(Model model, RedirectAttributes redirectAttributes, HttpSession session) {
+        try {
+            model.addAttribute("coupons", couponsPersistence.getCoupons());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error getting coupons");
+            return "redirect:/seller/coupons";
+        }
         return "view-coupons";
     }
 
@@ -273,10 +327,16 @@ public class SellerController {
 
     @PostMapping("/seller/create-coupon")
     public String create(@RequestParam("name") String couponName, @RequestParam("amount") String amount,
-                         @RequestParam("percent") String percent) {
-        CouponsPersistence persistenceObj = new CouponsPersistence();
+                         @RequestParam("percent") String percent, RedirectAttributes redirectAttributes) {
+        int id = 0;
+        try {
+            id = couponsPersistence.getCoupons().size() + 1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error getting coupons");
+            return "redirect:/seller/coupons";
+        }
 
-        int id = persistenceObj.getCoupons().size() + 1;
         String error = "";
         CouponValidator validator = new CouponValidator();
         if (!validator.isValidAmount(amount)) {
@@ -287,48 +347,72 @@ public class SellerController {
             return "redirect:/seller/add-coupon/" + error;
         } else {
             Coupon coupon = new Coupon(id, couponName, Double.parseDouble(amount), Double.parseDouble(percent));
-            persistenceObj.saveCoupon(coupon);
+            try {
+                couponsPersistence.saveCoupon(coupon);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                redirectAttributes.addFlashAttribute("error", "Error saving coupon");
+                return "redirect:/seller/coupons";
+            }
         }
 
         return "redirect:/seller/coupons";
     }
 
     @RequestMapping(value = "/seller/coupons/view/{id}", method = RequestMethod.GET)
-    public String view_details(@PathVariable("id") int id, Model model) {
-
-        CouponsPersistence persistenceObj = new CouponsPersistence();
-        model.addAttribute("coupon", persistenceObj.getCouponById(id));
+    public String viewCouponDetails(@PathVariable("id") int id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            model.addAttribute("coupon", couponsPersistence.getCouponById(id));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error loading coupon");
+            return "redirect:/seller/coupons";
+        }
 
         return "coupon-detail";
     }
 
     @RequestMapping(value = "/seller/coupons/delete/{id}", method = RequestMethod.GET)
-    public String delete(@PathVariable("id") int id, Model model) {
-
-        CouponsPersistence persistenceObj = new CouponsPersistence();
-        persistenceObj.deleteCoupon(id);
-        model.addAttribute("coupons", persistenceObj.getCoupons());
+    public String delete(@PathVariable("id") int id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            couponsPersistence.deleteCoupon(id);
+            model.addAttribute("coupons", couponsPersistence.getCoupons());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error deleting coupn");
+            return "redirect:/seller/coupons";
+        }
 
         return "view-coupons";
     }
 
     @RequestMapping(value = "/seller/coupons/edit/{id}", method = RequestMethod.GET)
-    public String edit(@PathVariable("id") int id, Model model) {
-        CouponsPersistence persistenceObj = new CouponsPersistence();
-        model.addAttribute("coupon", persistenceObj.getCouponById(id));
+    public String edit(@PathVariable("id") int id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            model.addAttribute("coupon", couponsPersistence.getCouponById(id));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error fetching coupon");
+            return "redirect:/seller/coupons";
+        }
 
         return "edit-coupon";
     }
 
     @RequestMapping(value = "/seller/coupons/update/{id}", method = RequestMethod.POST)
     public String update(@PathVariable("id") int id, @RequestParam("name") String couponName,
-                         @RequestParam("amount") String amount, @RequestParam("percent") String percent) {
-        CouponsPersistence persistenceObj = new CouponsPersistence();
-
+                         @RequestParam("amount") String amount, @RequestParam("percent") String percent, RedirectAttributes redirectAttributes) {
         CouponValidator validator = new CouponValidator();
         if (validator.isValidPercent(percent) && validator.isValidAmount(amount)) {
             Coupon coupon = new Coupon(id, couponName, Double.parseDouble(amount), Double.parseDouble(percent));
-            persistenceObj.updateCoupon(coupon);
+            try {
+                couponsPersistence.updateCoupon(coupon);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                redirectAttributes.addFlashAttribute("error", "Error fetching coupon");
+                return "redirect:/seller/coupons";
+
+            }
             return "redirect:/seller/coupons";
         } else {
             return "redirect:/seller/coupons/edit/" + id;

@@ -13,11 +13,16 @@ import com.project.estorefront.model.*;
 
 public class SellerPersistence implements ISellerPersistence {
 
+    private IDatabase database;
+
+    public SellerPersistence(IDatabase database) {
+        this.database = database;
+    }
+
     @Override
-    public ArrayList<User> getAllSellers() {
-        ArrayList<User> sellerList = new ArrayList<>();
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    public ArrayList<User> getAllSellers() throws SQLException {
         Connection connection = database.getConnection();
+        ArrayList<User> sellerList = new ArrayList<>();
 
         PreparedStatement preparedStatement;
         try {
@@ -48,9 +53,8 @@ public class SellerPersistence implements ISellerPersistence {
     }
 
     @Override
-    public ArrayList<User> getAllSellersByCity(String city) {
+    public ArrayList<User> getAllSellersByCity(String city) throws SQLException {
         ArrayList<User> sellerList = new ArrayList<>();
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
 
         PreparedStatement preparedStatement;
@@ -83,9 +87,8 @@ public class SellerPersistence implements ISellerPersistence {
     }
 
     @Override
-    public ArrayList<User> getAllSellersByCategory(ItemCategory itemCategory, String city) {
+    public ArrayList<User> getAllSellersByCategory(ItemCategory itemCategory, String city) throws SQLException {
         ArrayList<User> sellerList = new ArrayList<>();
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
 
         PreparedStatement preparedStatement;
@@ -118,8 +121,7 @@ public class SellerPersistence implements ISellerPersistence {
     }
 
     @Override
-    public User getSellerByID(String sellerID) {
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    public User getSellerByID(String sellerID) throws SQLException {
         Connection connection = database.getConnection();
 
         PreparedStatement preparedStatement;
@@ -152,9 +154,8 @@ public class SellerPersistence implements ISellerPersistence {
     }
 
     @Override
-    public boolean deactivateSellerAccount(User seller) {
+    public boolean deactivateSellerAccount(User seller) throws SQLException {
         PreparedStatement preparedStatement = null;
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
 
         try {
@@ -169,9 +170,8 @@ public class SellerPersistence implements ISellerPersistence {
     }
 
     @Override
-    public boolean updateSellerAccount(User seller) {
+    public boolean updateSellerAccount(User seller) throws SQLException {
         PreparedStatement preparedStatement = null;
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
 
         try {

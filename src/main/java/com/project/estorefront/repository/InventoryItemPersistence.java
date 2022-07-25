@@ -11,19 +11,17 @@ import java.util.UUID;
 
 public class InventoryItemPersistence implements IInventoryItemPersistence {
 
-    private Connection connection;
+    private IDatabase database;
 
-    public InventoryItemPersistence() {
-
+    public InventoryItemPersistence(IDatabase database) {
+        this.database = database;
     }
 
     @Override
-    public InventoryItemPersistenceOperationStatus save(String itemID, String userID, ItemCategory itemCategory, int quantity, double price, String itemName, String itemDescription) {
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    public InventoryItemPersistenceOperationStatus save(String itemID, String userID, ItemCategory itemCategory, int quantity, double price, String itemName, String itemDescription) throws SQLException {
         Connection connection = database.getConnection();
 
         PreparedStatement preparedStatement;
-
         try {
             preparedStatement = connection.prepareStatement("INSERT INTO seller_inventory (item_id, user_id, category_id, quantity, price, item_name, item_description) VALUES (?, ?, ?, ?, ?, ?, ?)");
             preparedStatement.setString(1, itemID);
@@ -49,11 +47,10 @@ public class InventoryItemPersistence implements IInventoryItemPersistence {
     }
 
     @Override
-    public InventoryItemPersistenceOperationStatus delete(String itemID) {
-        PreparedStatement preparedStatement;
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    public InventoryItemPersistenceOperationStatus delete(String itemID) throws SQLException {
         Connection connection = database.getConnection();
 
+        PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement("DELETE FROM seller_inventory WHERE item_id = ?");
             preparedStatement.setString(1, itemID);
@@ -73,11 +70,10 @@ public class InventoryItemPersistence implements IInventoryItemPersistence {
     }
 
     @Override
-    public InventoryItemPersistenceOperationStatus update(String userID, ItemCategory itemCategory, int quantity, double price, String name, String description, String itemID) {
-        PreparedStatement preparedStatement;
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    public InventoryItemPersistenceOperationStatus update(String userID, ItemCategory itemCategory, int quantity, double price, String name, String description, String itemID) throws SQLException {
         Connection connection = database.getConnection();
 
+        PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement("UPDATE seller_inventory SET user_id = ?, category_id = ?, quantity = ?, price = ?, item_name = ?, item_description = ? WHERE item_id = ?");
             preparedStatement.setString(1, userID);
@@ -104,11 +100,10 @@ public class InventoryItemPersistence implements IInventoryItemPersistence {
     }
 
     @Override
-    public ArrayList<IInventoryItem> getAll(String userID) {
-        PreparedStatement preparedStatement = null;
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    public ArrayList<IInventoryItem> getAll(String userID) throws SQLException {
         Connection connection = database.getConnection();
 
+        PreparedStatement preparedStatement;
         ArrayList<IInventoryItem> inventoryItems = new ArrayList<>();
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM seller_inventory WHERE user_id = ?");
@@ -138,11 +133,10 @@ public class InventoryItemPersistence implements IInventoryItemPersistence {
     }
 
     @Override
-    public IInventoryItem getItemByID(String itemID) {
-        PreparedStatement preparedStatement;
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    public IInventoryItem getItemByID(String itemID) throws SQLException {
         Connection connection = database.getConnection();
 
+        PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement("SELECT * FROM seller_inventory WHERE item_id = ?");
             preparedStatement.setString(1, itemID);

@@ -2,6 +2,7 @@ package com.project.estorefront.model;
 
 import com.project.estorefront.repository.Authentication;
 import com.project.estorefront.repository.IAuthentication;
+import com.project.estorefront.repository.IDatabase;
 
 public class AuthenticationFactory implements IAuthenticationFactory {
 
@@ -18,7 +19,8 @@ public class AuthenticationFactory implements IAuthenticationFactory {
     }
 
     @Override
-    public IAuthentication makeAuthentication() {
-        return new Authentication();
+    public IAuthentication makeAuthentication(IDatabase database) {
+
+        return new Authentication(database);
     }
 }

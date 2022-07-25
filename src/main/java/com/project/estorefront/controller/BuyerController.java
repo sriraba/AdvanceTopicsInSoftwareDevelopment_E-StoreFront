@@ -6,30 +6,52 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 @Controller
 public class BuyerController {
 
+    private IDatabase database;
+    private ISellerPersistence sellerPersistence;
+    private IBuyerPersistence buyerPersistence;
+    private IInventoryItemPersistence inventoryItemPersistence;
+    private IBuyerOrderPersistence buyerOrderPersistence;
+
+    public BuyerController() {
+        database = DatabaseFactory.instance().makeDatabase();
+        sellerPersistence = SellerFactory.instance().makeSellerPersistence(database);
+        buyerPersistence = BuyerFactory.instance().makeBuyerPersistence(database);
+        inventoryItemPersistence = InventoryFactory.instance().makeInventoryItemPersistence(database);
+        buyerOrderPersistence = BuyerFactory.instance().makeBuyerOrderPersistence(database);
+    }
+
+
     private static final String notLoggedInRedirect = "redirect:/login";
 
     @GetMapping("/buyer")
-    public String buyerHome(@RequestParam(required = false, name = "category") String categoryFilter, Model model, HttpSession session) {
+    public String buyerHome(@RequestParam(required = false, name = "category") String categoryFilter, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         String userID = getUserID(session);
         if (userID == null || userID.isEmpty()) {
             return notLoggedInRedirect;
         }
 
-        ISellerPersistence persistence = SellerFactory.instance().makeSellerPersistence();
-
         ArrayList<User> sellers;
-        if (categoryFilter == null || categoryFilter.isEmpty()) {
-            sellers = Seller.getAllSellersByCity(persistence, "Halifax");
-        } else {
-            sellers = Seller.getAllSellersByCategory(persistence, ItemCategory.valueOf(categoryFilter), "Halifax");
+        try {
+            if (categoryFilter == null || categoryFilter.isEmpty()) {
+                sellers = Seller.getAllSellersByCity(sellerPersistence, "Halifax");
+            } else {
+                sellers = Seller.getAllSellersByCategory(sellerPersistence, ItemCategory.valueOf(categoryFilter), "Halifax");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error fetching nearby sellers");
+            return "redirect:/error";
         }
+
 
         model.addAttribute("sellers", sellers);
 
@@ -43,24 +65,34 @@ public class BuyerController {
     }
 
     @GetMapping("/buyer/account")
-    public String buyerAccount(Model model, HttpSession session) {
+    public String buyerAccount(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         String userID = getUserID(session);
         if (userID == null || userID.isEmpty()) {
             return notLoggedInRedirect;
         }
 
-        IBuyerPersistence buyerPersistence = new BuyerPersistence();
-        User buyer = new Buyer();
-        buyer = ((Buyer) buyer).getBuyerByID(buyerPersistence, userID);
+        User buyer = BuyerFactory.instance().makeBuyer();
+        try {
+            buyer = ((Buyer) buyer).getBuyerByID(buyerPersistence, userID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error getting buyer account");
+            return "redirect:/error";
+        }
         model.addAttribute("buyer", buyer);
         return "buyer-account";
     }
 
     @GetMapping("/buyer/account/edit/{userID}")
-    public String editSellerAccount(@PathVariable String userID, Model model) {
-        IBuyerPersistence buyerPersistence = new BuyerPersistence();
-        User buyer = new Buyer();
-        buyer = ((Buyer) buyer).getBuyerByID(buyerPersistence, userID);
+    public String editSellerAccount(@PathVariable String userID, Model model, RedirectAttributes redirectAttributes) {
+        User buyer = BuyerFactory.instance().makeBuyer();
+        try {
+            buyer = ((Buyer) buyer).getBuyerByID(buyerPersistence, userID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error getting buyer account");
+            return "redirect:/error";
+        }
         model.addAttribute("buyer", buyer);
         return "buyer-account-update";
     }
@@ -68,64 +100,90 @@ public class BuyerController {
     @PostMapping("/buyer/account/update/{userID}")
     public String updateBuyerAccount(@RequestParam("firstName") String firstName,
                                      @RequestParam("lastName") String lastName,
-                                     @RequestParam("phone") String phone, @RequestParam("address") String address, @PathVariable String userID, HttpSession session) {
-        User buyer = new Buyer();
+                                     @RequestParam("phone") String phone, @RequestParam("address") String address, @PathVariable String userID, HttpSession session, RedirectAttributes redirectAttributes) {
+        User buyer = BuyerFactory.instance().makeBuyer();
         buyer.setFirstName(firstName);
         buyer.setLastName(lastName);
         buyer.setPhone(phone);
         buyer.setAddress(address);
         buyer.setUserID(userID);
-        IBuyerPersistence buyerPersistence = new BuyerPersistence();
-        ((Buyer) buyer).updateBuyerAccount(buyerPersistence);
+        try {
+            ((Buyer) buyer).updateBuyerAccount(buyerPersistence);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error updating buyer account");
+            return "redirect:/error";
+        }
         return "redirect:/buyer/account";
     }
 
     @GetMapping("/buyer/account/deactivate")
-    public String deactivateBuyerAccount(HttpSession session) {
+    public String deactivateBuyerAccount(HttpSession session, RedirectAttributes redirectAttributes) {
         String userID = getUserID(session);
         if (userID == null || userID.isEmpty()) {
             return notLoggedInRedirect;
         }
 
         User buyer = BuyerFactory.instance().makeBuyer(userID);
-        IBuyerPersistence buyerPersistence = new BuyerPersistence();
-        ((Buyer) buyer).deactivateBuyerAccount(buyerPersistence);
+        try {
+            ((Buyer) buyer).deactivateBuyerAccount(buyerPersistence);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error deactivating buyer account");
+            return "redirect:/error";
+        }
         return "redirect:/login";
     }
 
 
     @GetMapping("/buyer/view-seller/{sellerID}")
-    public String sellerDetails(Model model, @PathVariable int sellerID) {
-        ISellerPersistence persistence = SellerFactory.instance().makeSellerPersistence();
-        User seller = persistence.getSellerByID(String.valueOf(sellerID));
+    public String sellerDetails(Model model, @PathVariable String sellerID, RedirectAttributes redirectAttributes) {
+        User seller = null;
+        try {
+            seller = sellerPersistence.getSellerByID(sellerID);
+            ArrayList<IInventoryItem> inventory = inventoryItemPersistence.getAll(String.valueOf(sellerID));
+            model.addAttribute("seller", seller);
+            model.addAttribute("inventory", inventory);
 
-        IInventoryItemPersistence inventoryPersistence = InventoryFactory.instance().makeInventoryItemPersistence();
-        ArrayList<IInventoryItem> inventory = inventoryPersistence.getAll(String.valueOf(sellerID));
+            return "seller-details";
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error fetching coupon");
+            return "redirect:/seller/coupons";
+        }
 
-        model.addAttribute("seller", seller);
-        model.addAttribute("inventory", inventory);
-
-        return "seller-details";
     }
 
     @GetMapping("/buyer/orders/view")
-    public ModelAndView buyerOrdersView(HttpSession session) {
+    public ModelAndView buyerOrdersView(HttpSession session, RedirectAttributes redirectAttributes) {
         String userID = (String) session.getAttribute("userID");
         if (userID == null || userID.isEmpty()) {
             return new ModelAndView("redirect:/login");
         }
 
         IBuyerOrderManagement buyerOrder = new OrderDetails();
-        IBuyerOrderPersistence orderPersistence = BuyerFactory.instance().makeBuyerOrderPersistence();
-        return new ModelAndView("buyer-orders", "orders", buyerOrder.getBuyerOrders(userID, orderPersistence));
+        try {
+            return new ModelAndView("buyer-orders", "orders", buyerOrder.getBuyerOrders(userID, buyerOrderPersistence));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error fetching orders");
+            return new ModelAndView("redirect:/buyer");
+        }
     }
 
     @GetMapping("/buyer/order/details/{orderID}")
-    public ModelAndView buyerItems(@PathVariable String orderID) {
+    public ModelAndView buyerItems(@PathVariable String orderID, RedirectAttributes redirectAttributes) {
         IBuyerOrderManagement buyerOrder = new OrderDetails();
         IOrderPersistence orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence();
-        ModelAndView modelAndView = new ModelAndView("view-selected-order", "order",
-                buyerOrder.getOrderAndItemDetails(orderID, orderPersistence));
+        ModelAndView modelAndView = null;
+        try {
+            modelAndView = new ModelAndView("view-selected-order", "order",
+                    buyerOrder.getOrderAndItemDetails(orderID, orderPersistence));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error fetching order");
+            return new ModelAndView("redirect:/error");
+        }
         modelAndView.addObject("page", "buyer");
         return modelAndView;
     }
@@ -140,9 +198,15 @@ public class BuyerController {
 
     @GetMapping("/buyer/order/submit-review/{userID}/{orderID}")
     public String submitReview(@PathVariable("userID") String userID, @PathVariable("orderID") String orderID,
-                               @RequestParam("review") String description, Model model) {
+                               @RequestParam("review") String description, Model model, RedirectAttributes redirectAttributes) {
         IBuyerOrderManagement buyerOrder = new OrderDetails();
-        buyerOrder.submitReview(userID, orderID, description);
+        try {
+            buyerOrder.submitReview(buyerOrderPersistence, userID, orderID, description);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error submitting review");
+            return "redirect:/buyer-orders/view";
+        }
         model.addAttribute("page", "buyer");
         return "submit-success";
     }
@@ -166,11 +230,17 @@ public class BuyerController {
     }
 
     @RequestMapping(value = "/buyer/cart/add/{itemID}", method = RequestMethod.POST)
-    public String addToCart(@PathVariable String itemID, @RequestParam("quantity") String qty, HttpSession session) {
+    public String addToCart(@PathVariable String itemID, @RequestParam("quantity") String qty, HttpSession session, RedirectAttributes redirectAttributes) {
         ICart cart = getCart(session);
-        IInventoryItemPersistence inventoryPersistence = new InventoryItemPersistence();
 
-        IInventoryItem inventory = inventoryPersistence.getItemByID(itemID);
+        IInventoryItem inventory = null;
+        try {
+            inventory = inventoryItemPersistence.getItemByID(itemID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error");
+            return "redirect:/buyer";
+        }
         ((InventoryItem) inventory).setItemQuantity(Integer.parseInt(qty));
 
         cart.addItem(inventory);
@@ -189,10 +259,16 @@ public class BuyerController {
     }
 
     @RequestMapping(value = "/buyer/cart/delete/{itemID}", method = RequestMethod.GET)
-    public String deleteItemFromCart(@PathVariable String itemID, Model model, HttpSession session) {
+    public String deleteItemFromCart(@PathVariable String itemID, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
         ICart cart = getCart(session);
-        IInventoryItemPersistence inventoryPersistence = new InventoryItemPersistence();
-        IInventoryItem inventory = inventoryPersistence.getItemByID(itemID);
+        IInventoryItem inventory = null;
+        try {
+            inventory = inventoryItemPersistence.getItemByID(itemID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error");
+            return "redirect:/buyer";
+        }
 
         cart.removeItem(inventory);
         session.setAttribute("cart", cart);

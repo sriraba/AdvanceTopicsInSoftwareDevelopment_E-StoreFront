@@ -11,15 +11,15 @@ public interface ISellerPersistence {
 
     ArrayList<User> getAllSellers() throws SQLException;
 
-    ArrayList<User> getAllSellersByCity(String city);
+    ArrayList<User> getAllSellersByCity(String city) throws SQLException;
 
-    ArrayList<User> getAllSellersByCategory(ItemCategory itemCategory, String city);
+    ArrayList<User> getAllSellersByCategory(ItemCategory itemCategory, String city) throws SQLException;
 
-    User getSellerByID(String sellerID);
+    User getSellerByID(String sellerID) throws SQLException;
 
-    boolean deactivateSellerAccount(User seller);
+    boolean deactivateSellerAccount(User seller) throws SQLException;
 
-    boolean updateSellerAccount(User seller);
+    boolean updateSellerAccount(User seller) throws SQLException;
 
 }
 

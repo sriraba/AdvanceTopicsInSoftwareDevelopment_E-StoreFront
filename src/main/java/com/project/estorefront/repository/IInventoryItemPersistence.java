@@ -16,12 +16,12 @@ public interface IInventoryItemPersistence {
 
     InventoryItemPersistenceOperationStatus save(String itemID, String userID, ItemCategory itemCategory, int quantity, double price, String itemName, String itemDescription) throws SQLException;
 
-    InventoryItemPersistenceOperationStatus delete(String itemID);
+    InventoryItemPersistenceOperationStatus delete(String itemID) throws SQLException;
 
-    InventoryItemPersistenceOperationStatus update(String userID, ItemCategory itemCategory, int quantity, double price, String name, String description, String itemID);
+    InventoryItemPersistenceOperationStatus update(String userID, ItemCategory itemCategory, int quantity, double price, String name, String description, String itemID) throws SQLException;
 
-    ArrayList<IInventoryItem> getAll(String userID);
+    ArrayList<IInventoryItem> getAll(String userID) throws SQLException;
 
-    IInventoryItem getItemByID(String itemID);
+    IInventoryItem getItemByID(String itemID) throws SQLException;
 
 }

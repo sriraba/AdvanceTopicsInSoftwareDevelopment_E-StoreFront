@@ -115,12 +115,12 @@ public class InventoryItem implements IInventoryItem {
     }
 
     @Override
-    public IInventoryItemPersistence.InventoryItemPersistenceOperationStatus delete(IInventoryItemPersistence persistence) {
+    public IInventoryItemPersistence.InventoryItemPersistenceOperationStatus delete(IInventoryItemPersistence persistence) throws SQLException {
         return persistence.delete(itemID);
     }
 
     @Override
-    public IInventoryItemPersistence.InventoryItemPersistenceOperationStatus update(IInventoryItemPersistence persistence) {
+    public IInventoryItemPersistence.InventoryItemPersistenceOperationStatus update(IInventoryItemPersistence persistence) throws SQLException {
         return persistence.update(userID, itemCategory, itemQuantity, itemPrice, itemName, itemDescription, itemID);
     }
 

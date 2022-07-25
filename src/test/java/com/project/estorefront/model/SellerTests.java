@@ -5,11 +5,11 @@ import com.project.estorefront.repository.SellerPersistenceMock;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest
 public class SellerTests {
 
     @Test
@@ -21,7 +21,7 @@ public class SellerTests {
     }
 
     @Test
-    public void testGetAllSellers() {
+    public void testGetAllSellers() throws SQLException {
         ISellerPersistence persistence = new SellerPersistenceMock();
         ((SellerPersistenceMock) persistence).addMockSellerWithCity("Halifax");
         ArrayList<User> sellers = Seller.getAllSellersByCity(persistence, "Halifax");
@@ -29,14 +29,14 @@ public class SellerTests {
     }
 
     @Test
-    public void testGetAllSellersWithNoSellers() {
+    public void testGetAllSellersWithNoSellers() throws SQLException {
         ISellerPersistence persistence = new SellerPersistenceMock();
         ArrayList<User> sellers = Seller.getAllSellersByCity(persistence, "Halifax");
         assert(sellers == null);
     }
 
     @Test
-    public void testGetAllSellersByCategory() {
+    public void testGetAllSellersByCategory() throws SQLException {
         ISellerPersistence persistence = new SellerPersistenceMock();
         ((SellerPersistenceMock) persistence).addMockSellerForCategoryTest();
         ArrayList<User> sellers = Seller.getAllSellersByCategory(persistence, ItemCategory.GROCERY, "Halifax");
@@ -44,7 +44,7 @@ public class SellerTests {
     }
 
     @Test
-    public void testGetAllSellersByCategoryWithNoSellers() {
+    public void testGetAllSellersByCategoryWithNoSellers() throws SQLException {
         ISellerPersistence persistence = new SellerPersistenceMock();
         ArrayList<User> sellers = Seller.getAllSellersByCategory(persistence, ItemCategory.GROCERY, "Halifax");
         assert(sellers == null);
