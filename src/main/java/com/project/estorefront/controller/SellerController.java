@@ -135,15 +135,17 @@ public class SellerController {
             return new ModelAndView("redirect:/login");
         }
         ISellerOrderManagement sellerOrder = new OrderDetails();
-        return new ModelAndView("seller-orders","orders", sellerOrder.getSellerOrders(userID));
+        ISellerOrderPersistence orderPersistence =  SellerFactory.instance().makeSellerOrderPersistence();
+        return new ModelAndView("seller-orders","orders", sellerOrder.getSellerOrders(userID, orderPersistence));
 
     }
 
     @GetMapping("/seller/orders/current/{orderID}")
     public ModelAndView sellerCurrentOrderView(@PathVariable String orderID) {
         ISellerOrderManagement sellerOrder = new OrderDetails();
+        IOrderPersistence orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence();
         ModelAndView modelAndView = new ModelAndView("view-selected-order", "order",
-                sellerOrder.getOrderAndItemDetails(orderID));
+                sellerOrder.getOrderAndItemDetails(orderID,orderPersistence));
         modelAndView.addObject("page", "current");
         return modelAndView;
     }
@@ -151,8 +153,9 @@ public class SellerController {
     @GetMapping("/seller/orders/previous/{orderID}")
     public ModelAndView sellerPreviousOrderView(@PathVariable String orderID) {
         ISellerOrderManagement sellerOrder = new OrderDetails();
+        IOrderPersistence orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence();
         ModelAndView modelAndView = new ModelAndView("view-selected-order", "order",
-                sellerOrder.getOrderAndItemDetails(orderID));
+                sellerOrder.getOrderAndItemDetails(orderID,orderPersistence));
         modelAndView.addObject("page", "previous");
         return modelAndView;
     }

@@ -108,44 +108,54 @@ public class OrderDetails implements ISellerOrderManagement, IBuyerOrderManageme
     }
 
     @Override
-    public Map<String, ArrayList<OrderDetails>> getSellerOrders(String sellerID) {
-        ISellerOrderPersistence orderPersistence =  SellerFactory.instance().makeSellerOrderPersistence();
+    public Map<String, ArrayList<OrderDetails>> getSellerOrders(String sellerID, ISellerOrderPersistence orderPersistence) {
         ArrayList<OrderDetails> allOrderDetails = orderPersistence.loadOrders(sellerID);
         ArrayList<OrderDetails> currentOrderDetails = new ArrayList<>();
         ArrayList<OrderDetails> previousOrderDetails = new ArrayList<>();
         Map<String, ArrayList<OrderDetails>> sellerOrders = new HashMap<>();
-        allOrderDetails.forEach(orderdetail->{
-            if(orderdetail.getOrderStatus().equalsIgnoreCase(String.valueOf(OrderStatus.PLACED))){
-                currentOrderDetails.add(orderdetail);
-            }
-            else{
-                previousOrderDetails.add(orderdetail);
-            }
-        });
-        sellerOrders.put("current", currentOrderDetails);
-        sellerOrders.put("previous", previousOrderDetails);
-        return sellerOrders;
+        if(allOrderDetails!= null && allOrderDetails.size()>0){
+            allOrderDetails.forEach(orderdetail->{
+                if(orderdetail.getOrderStatus().equalsIgnoreCase(String.valueOf(OrderStatus.PLACED))){
+                    currentOrderDetails.add(orderdetail);
+                }
+                else{
+                    previousOrderDetails.add(orderdetail);
+                }
+            });
+            sellerOrders.put("current", currentOrderDetails);
+            sellerOrders.put("previous", previousOrderDetails);
+            return sellerOrders;
+        }
+        else{
+            return null;
+        }
+
     }
 
     @Override
-    public Map<String, ArrayList<OrderDetails>> getBuyerOrders(String buyerID) {
-        IBuyerOrderPersistence orderPersistence = BuyerFactory.instance().makeBuyerOrderPersistence();
+    public Map<String, ArrayList<OrderDetails>> getBuyerOrders(String buyerID, IBuyerOrderPersistence orderPersistence) {
         ArrayList<OrderDetails> allOrderDetails = orderPersistence.loadOrders(buyerID);
         ArrayList<OrderDetails> currentOrderDetails = new ArrayList<>();
         ArrayList<OrderDetails> previousOrderDetails = new ArrayList<>();
         Map<String, ArrayList<OrderDetails>> sellerOrders = new HashMap<>();
-        allOrderDetails.forEach(orderdetail->{
-            if(orderdetail.getOrderStatus().equalsIgnoreCase(String.valueOf(OrderStatus.PLACED)) || orderdetail.getOrderStatus().equalsIgnoreCase(String.valueOf(OrderStatus.DELIVERY_PERSON_ASSIGNED))){
-                currentOrderDetails.add(orderdetail);
-            }
-            else{
-                previousOrderDetails.add(orderdetail);
-            }
-        });
-        sellerOrders.put("current", currentOrderDetails);
-        sellerOrders.put("previous", previousOrderDetails);
+        if(allOrderDetails != null && allOrderDetails.size()>0){
+            allOrderDetails.forEach(orderdetail->{
+                if(orderdetail.getOrderStatus().equalsIgnoreCase(String.valueOf(OrderStatus.PLACED)) || orderdetail.getOrderStatus().equalsIgnoreCase(String.valueOf(OrderStatus.DELIVERY_PERSON_ASSIGNED))){
+                    currentOrderDetails.add(orderdetail);
+                }
+                else{
+                    previousOrderDetails.add(orderdetail);
+                }
+            });
+            sellerOrders.put("current", currentOrderDetails);
+            sellerOrders.put("previous", previousOrderDetails);
 
-        return sellerOrders;
+            return sellerOrders;
+        }
+        else{
+            return null;
+        }
+
     }
 
     @Override
@@ -154,8 +164,7 @@ public class OrderDetails implements ISellerOrderManagement, IBuyerOrderManageme
         orderPersistence.submitReview(userID,orderID,description);
     }
 
-    public OrderDetails getOrderAndItemDetails(String orderID){
-        IOrderPersistence orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence();
-        return orderPersistence.loadOrderAndItems(orderID);
+    public OrderDetails getOrderAndItemDetails(String orderID, IOrderPersistence orderPersistence){
+        return (orderID == null || orderID.isEmpty()) ? null : orderPersistence.loadOrderAndItems(orderID);
     }
 }
