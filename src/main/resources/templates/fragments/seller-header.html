@@ -12,10 +12,10 @@
         <a class="nav-link" th:href="@{/seller/items/}">Inventory</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Analytics</a>
+        <a class="nav-link" th:href="@{/seller/analytics/}">Analytics</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Coupons</a>
+        <a class="nav-link" th:href="@{/seller/coupon/}">Coupons</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" th:href="@{/seller/account/}">Seller Account</a>
@@ -29,5 +29,4 @@
       </li>
     </ul>
   </div>
-  <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
 </nav>

@@ -49,7 +49,7 @@ public class AuthenticationController {
 
     @PostMapping("/validate-login")
     public ModelAndView validateLogin(@RequestParam("email") String email, @RequestParam("password") String password,
-                                      @RequestParam("role") String role, HttpSession session, RedirectAttributes redirectAttributes) {
+            @RequestParam("role") String role, HttpSession session, RedirectAttributes redirectAttributes) {
 
         IValidator emailValidator = ValidatorFactory.instance().makeEmailValidator();
         IPasswordValidator passwordValidator = ValidatorFactory.instance().makePasswordValidator();
@@ -92,13 +92,13 @@ public class AuthenticationController {
 
     @PostMapping("/validate-register")
     public ModelAndView validateRegister(@RequestParam("firstName") String firstName,
-                                         @RequestParam("lastName") String lastName,
-                                         @RequestParam("email") String email, @RequestParam("password") String password,
-                                         @RequestParam("confirmPassword") String confirmPassword,
-                                         @RequestParam("contact") String contact, @RequestParam("city") String city, @RequestParam String address,
-                                         @RequestParam("role") String role, @RequestParam("businessName") String businessName,
-                                         @RequestParam("businessDescription") String businessDescription, HttpSession session,
-                                         RedirectAttributes redirectAttributes) {
+            @RequestParam("lastName") String lastName,
+            @RequestParam("email") String email, @RequestParam("password") String password,
+            @RequestParam("confirmPassword") String confirmPassword,
+            @RequestParam("contact") String contact, @RequestParam("city") String city, @RequestParam String address,
+            @RequestParam("role") String role, @RequestParam("businessName") String businessName,
+            @RequestParam("businessDescription") String businessDescription, HttpSession session,
+            RedirectAttributes redirectAttributes) {
 
         IValidator nameValidator = ValidatorFactory.instance().makeNameValidator();
         IValidator emailValidator = ValidatorFactory.instance().makeEmailValidator();
@@ -114,7 +114,13 @@ public class AuthenticationController {
         if (nameValidator.validate(city) == false) {
             errors.add("Invalid City.");
         }
-
+        if (nameValidator.validate(businessName) == false) {
+            errors.add("Invalid Business Name");
+        }
+        if (nameValidator.validate(businessDescription) == false) {
+            errors.add("Invalid Business Description");
+        }
+        // phone number
         if (phoneNumberValidator.validate(contact) == false) {
             errors.add("Invalid Phone Number. Phone should only contain numbers and should be 10-digit");
         }
@@ -123,7 +129,8 @@ public class AuthenticationController {
             errors.add("Invalid email");
         }
         if (passwordValidator.validate(password) == false) {
-            errors.add("Invalid password. Password should contain an uppercase letter, one lowercase, one number, one symbol and should be greater than 8 digits.");
+            errors.add(
+                    "Invalid password. Password should contain an uppercase letter, one lowercase, one number, one symbol and should be greater than 8 digits.");
         }
         if ((passwordValidator.comparePassword(password, confirmPassword) == false)) {
             errors.add("Passwords do not match");
@@ -208,7 +215,7 @@ public class AuthenticationController {
 
     @PostMapping("/reset-password/send-otp")
     public String sendOTP(@RequestParam("email") String email, Model model, RedirectAttributes redirectAttributes,
-                          HttpSession session) {
+            HttpSession session) {
         try {
             if (User.checkIfUserExists(authentication, email)) {
                 IMailSender mailSender = MailSenderFactory.instance().makeMailSender();
@@ -237,7 +244,7 @@ public class AuthenticationController {
 
     @PostMapping("/reset-password/verify-otp")
     public String verifyOTP(@RequestParam("otp") String otp, HttpSession session,
-                            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes) {
         String otpFromSession = (String) session.getAttribute("resetPwdOTP");
         if (otp.equals(otpFromSession)) {
             return "new-password";
@@ -249,7 +256,7 @@ public class AuthenticationController {
 
     @PostMapping("/reset-password/reset")
     public String resetPassword(@RequestParam("password") String password, HttpSession session,
-                                RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes) {
         String email = (String) session.getAttribute("resetPwdEmail");
 
         IValidator passwordValidator = ValidatorFactory.instance().makePasswordValidator();

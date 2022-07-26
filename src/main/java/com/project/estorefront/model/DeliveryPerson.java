@@ -28,7 +28,11 @@ public class DeliveryPerson implements IDeliveryPerson{
     }
 
     public ArrayList<IDeliveryPerson> getDeliveryPersonDetails(String sellerID, IDeliveryPersonPersistence deliveryPersonPersistence) throws SQLException {
-        return (sellerID == null || sellerID.isEmpty()) ? null : deliveryPersonPersistence.getAll(sellerID);
+        if((sellerID == null || sellerID.isEmpty())){
+            return null;
+        }
+        ArrayList<IDeliveryPerson> deliveryPersons = deliveryPersonPersistence.getAll(sellerID);
+        return (deliveryPersons == null || deliveryPersons.isEmpty()) ? null : deliveryPersons;
     }
 
 }
