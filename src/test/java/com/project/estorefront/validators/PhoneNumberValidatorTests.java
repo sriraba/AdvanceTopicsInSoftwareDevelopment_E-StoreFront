@@ -37,7 +37,7 @@ class PhoneNumberValidatorTests {
 
     @Test
     void testInvalidPhoneMoreThan10Digits(){
-        String invalidPhone = "9029895563";
+        String invalidPhone = "902989556311";
         IValidator phoneNumberValidator = new PhoneNumberValidator();
         assertFalse(phoneNumberValidator.validate(invalidPhone));
     }
