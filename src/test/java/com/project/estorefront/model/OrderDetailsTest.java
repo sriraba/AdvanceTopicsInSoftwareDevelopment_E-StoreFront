@@ -66,7 +66,7 @@ class OrderDetailsTest {
     }
 
     @Test
-    void submitReviewForValidOrder() {
+    void submitReviewForValidOrder() throws SQLException {
         IBuyerOrderManagement orderManagement = new OrderDetails();
         IBuyerOrderPersistence buyerOrderPersistence = new BuyerOrderPersistenceMock();
         PersistenceStatus status = orderManagement.submitReview("1","OR12365","Good service",buyerOrderPersistence);
@@ -74,7 +74,7 @@ class OrderDetailsTest {
     }
 
     @Test
-    void submitReviewForInValidOrder() {
+    void submitReviewForInValidOrder() throws SQLException {
         IBuyerOrderManagement orderManagement = new OrderDetails();
         IBuyerOrderPersistence buyerOrderPersistence = new BuyerOrderPersistenceMock();
         PersistenceStatus status = orderManagement.submitReview("1","OR1236789","Good service",buyerOrderPersistence);
