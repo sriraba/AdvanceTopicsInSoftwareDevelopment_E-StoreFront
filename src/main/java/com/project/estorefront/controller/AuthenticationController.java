@@ -110,25 +110,25 @@ public class AuthenticationController {
         ArrayList<String> errors = new ArrayList<>();
 
         if (nameValidator.validate(firstName) == false) {
-            errors.add("Invalid First name");
+            errors.add("Invalid First name. Name should only contain letters.");
         }
 
         if (nameValidator.validate(city) == false) {
-            errors.add("Invalid City");
+            errors.add("Invalid City.");
         }
 
         if (phoneNumberValidator.validate(contact) == false) {
-            errors.add("Invalid Phone Number");
+            errors.add("Invalid Phone Number. Phone should only contain numbers and should be 10-digit");
         }
 
         if (emailValidator.validate(email) == false) {
             errors.add("Invalid email");
         }
         if (passwordValidator.validate(password) == false) {
-            errors.add("Invalid password");
+            errors.add("Invalid password. Password should contain an uppercase letter, one lowercase, one number, one symbol and should be greater than 8 digits.");
         }
         if ((passwordValidator.comparePassword(password, confirmPassword) == false)) {
-            errors.add("Password not matched");
+            errors.add("Passwords do not match");
         }
 
         if (errors.size() == 0) {
