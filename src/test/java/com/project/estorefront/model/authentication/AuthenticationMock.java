@@ -21,7 +21,7 @@ public class AuthenticationMock implements IAuthentication {
     }
 
     @Override
-    public String login(String email, String password) {
+    public User login(String email, String password) {
         if (email == null || password == null) {
             return null;
         }
@@ -30,7 +30,7 @@ public class AuthenticationMock implements IAuthentication {
                 User userDetail = entry.getValue();
                 if (userDetail.getEmail().equalsIgnoreCase(email)
                         && userDetail.getPassword().equalsIgnoreCase(password)) {
-                    return entry.getKey();
+                    return userDetail;
                 }
             }
         }
