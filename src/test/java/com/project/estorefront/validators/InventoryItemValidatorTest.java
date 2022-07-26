@@ -83,7 +83,7 @@ public class InventoryItemValidatorTest {
         IInventoryItem item = InventoryFactory.instance().makeInventoryItem("af638b8e-c12f-48bd-8f6a-72f716cb4b18", "", ItemCategory.GROCERY, 10, 10.0, "Test", "");
 
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_DESCRIPTION);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.INVALID_USER_ID);
     }
 
     @Test

@@ -19,7 +19,6 @@ class PhoneNumberValidatorTests {
 
         assertTrue(phoneNumberValidator.validate(validPhone));
     }
-
     @Test
     void testInvalidPhoneWithALetter() {
         String invalidPhone = "9029895569a";
@@ -36,4 +35,10 @@ class PhoneNumberValidatorTests {
         assertFalse(phoneNumberValidator.validate(invalidPhone));
     }
 
+    @Test
+    void testInvalidPhoneMoreThan10Digits(){
+        String invalidPhone = "9029895563";
+        IValidator phoneNumberValidator = new PhoneNumberValidator();
+        assertFalse(phoneNumberValidator.validate(invalidPhone));
+    }
 }
