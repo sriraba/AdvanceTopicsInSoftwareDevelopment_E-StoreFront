@@ -10,7 +10,7 @@ public class ResetPasswordMailSender implements IMailSender {
 
     private JavaMailSender emailSender;
 
-    private static final String SUBJECT = "eStore - Reset Password";
+    private static final String SUBJECT = "eStorefront - Reset Password";
     private static final String BODY = "Your OTP is: ";
 
     public ResetPasswordMailSender() {
@@ -39,16 +39,22 @@ public class ResetPasswordMailSender implements IMailSender {
 
     // reference: https://www.baeldung.com/spring-email
     public boolean sendMail(String to, String otp) {
+        String body = generateBody(otp);
+
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom("estorefrontdal@gmail.com");
             message.setTo(to);
             message.setSubject(SUBJECT);
-            message.setText(otp);
+            message.setText(body);
             emailSender.send(message);
             return true;
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private String generateBody(String otp) {
+        return BODY + " " + otp;
     }
 }
