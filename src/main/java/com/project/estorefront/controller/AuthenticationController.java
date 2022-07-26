@@ -134,15 +134,6 @@ public class AuthenticationController {
             errors.add("Passwords do not match");
         }
 
-        if (role.contains("seller")) {
-            if (nameValidator.validate(businessName) == false) {
-                errors.add("Invalid Business Name");
-            }
-            if (nameValidator.validate(businessDescription) == false) {
-                errors.add("Invalid Business Description");
-            }
-        }
-
         if (errors.size() == 0) {
             User user;
 
