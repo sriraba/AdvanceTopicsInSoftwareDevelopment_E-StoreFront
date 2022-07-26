@@ -55,7 +55,6 @@ public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrd
     @Override
     public PersistenceStatus submitReview(String userID, String orderID, String description) throws SQLException {
         Connection connection = database.getConnection();
-
         PreparedStatement preparedStatement;
         try {
 
@@ -70,9 +69,9 @@ public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrd
             preparedStatement.setString(4, orderID);
             boolean status = preparedStatement.execute();
             if (status) {
-                return PersistenceStatus.SUCCESS;
-            } else {
                 return PersistenceStatus.FAILURE;
+            } else {
+                return PersistenceStatus.SUCCESS;
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -188,7 +188,7 @@ public class BuyerController {
 
     @GetMapping("/buyer/orders/view")
     public ModelAndView buyerOrdersView(HttpSession session, RedirectAttributes redirectAttributes) {
-        String userID = (String) session.getAttribute("userID");
+        String userID = getUserID(session);
         if (userID == null || userID.isEmpty()) {
             return new ModelAndView("redirect:/login");
         }
@@ -208,8 +208,8 @@ public class BuyerController {
         }
     }
 
-    @GetMapping("/buyer/order/details/{orderID}")
-    public ModelAndView buyerItems(@PathVariable String orderID, RedirectAttributes redirectAttributes) {
+    @GetMapping("/buyer/order/details/{orderID}/{orderStatus}")
+    public ModelAndView buyerItems(@PathVariable String orderID, @PathVariable String orderStatus,RedirectAttributes redirectAttributes) {
         IBuyerOrderManagement buyerOrder = BuyerFactory.instance().makeBuyerOrderManagement();
         ModelAndView modelAndView = null;
         try {
@@ -224,7 +224,7 @@ public class BuyerController {
             redirectAttributes.addFlashAttribute("error", "Error fetching order");
             return new ModelAndView("redirect:/error");
         }
-        modelAndView.addObject("page", "buyer");
+        modelAndView.addObject("page", orderStatus);
         return modelAndView;
     }
 
@@ -236,9 +236,10 @@ public class BuyerController {
         return "add-review";
     }
 
-    @GetMapping("/buyer/order/submit-review/{userID}/{orderID}")
-    public String submitReview(@PathVariable("userID") String userID, @PathVariable("orderID") String orderID,
-            @RequestParam("review") String description, Model model, RedirectAttributes redirectAttributes) {
+    @GetMapping("/buyer/order/submit-review/{orderID}")
+    public String submitReview(@PathVariable("orderID") String orderID,
+                               @RequestParam("review") String description, Model model, RedirectAttributes redirectAttributes,HttpSession session) {
+        String userID = getUserID(session);
         IBuyerOrderManagement buyerOrder = BuyerFactory.instance().makeBuyerOrderManagement();
         try {
             PersistenceStatus status = buyerOrder.submitReview(userID, orderID, description, buyerOrderPersistence);
@@ -251,7 +252,7 @@ public class BuyerController {
         } catch (SQLException e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Error submitting review");
-            return "redirect:/buyer-orders/view";
+            return "redirect:/buyer/orders/view";
         }
 
     }
