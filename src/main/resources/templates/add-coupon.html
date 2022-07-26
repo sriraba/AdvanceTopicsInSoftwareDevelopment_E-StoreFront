@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Coupon</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <style>
         span{
             font-weight: bold;
@@ -12,6 +13,7 @@
     </style>
 </head>
 <body>
+<div th:replace="fragments/seller-header.html"></div>
 <h2>Add New Coupon</h2>
 <form th:action="@{/seller/create-coupon}" method="post">
     <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
