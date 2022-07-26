@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 import com.project.estorefront.model.database.IDatabase;
+import com.project.estorefront.model.user.User;
+import com.project.estorefront.model.user.UserFactory;
 
 public class Authentication implements IAuthentication {
 
@@ -17,7 +19,7 @@ public class Authentication implements IAuthentication {
     }
 
     @Override
-    public String login(String email, String password) throws SQLException {
+    public User login(String email, String password) throws SQLException {
         Connection connection = database.getConnection();
         try {
             String userDetailsQuery = "select * from user where email =?";
@@ -27,7 +29,21 @@ public class Authentication implements IAuthentication {
             while (resultSet.next()) {
                 String hashedPassword = resultSet.getString("password");
                 if (ICryptoFactory.CryptoFactory.instance().makeCrypto().checkPassword(password, hashedPassword)) {
-                    return resultSet.getString("user_id");
+                    String userID = resultSet.getString("user_id");
+                    String firstName = resultSet.getString("first_name");
+                    String lastName = resultSet.getString("last_name");
+                    String address = resultSet.getString("address");
+                    String phone = resultSet.getString("contact_num");
+                    String city = resultSet.getString("city");
+
+                    boolean isSeller = resultSet.getBoolean("seller");
+                    String businessName = null;
+                    String businessDescription = null;
+                    if (isSeller) {
+                        businessName = resultSet.getString("businessName");
+                        businessDescription = resultSet.getString("businessDescription");
+                    }
+                    return UserFactory.instance().makeUserWithAllFields(userID, firstName, lastName, email, address, phone, city, isSeller, businessName, businessDescription);
                 }
                 return null;
             }
@@ -41,8 +57,8 @@ public class Authentication implements IAuthentication {
 
     @Override
     public String register(String firstName, String lastName, String email, String password, String phone,
-            boolean isSeller, String city, String businessName, String address, String businessDescription,
-            boolean isUserEnabled) throws SQLException {
+                           boolean isSeller, String city, String businessName, String address, String businessDescription,
+                           boolean isUserEnabled) throws SQLException {
         Connection connection = database.getConnection();
 
         String userID = UUID.randomUUID().toString();

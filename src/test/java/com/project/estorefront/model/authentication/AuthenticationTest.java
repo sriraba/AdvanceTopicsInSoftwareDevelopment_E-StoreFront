@@ -44,15 +44,15 @@ public class AuthenticationTest {
         User user = new Buyer("Sri Ramya", "Basam", "sriramya7666@gmail.com", "133 South Park Street ", "9875432466", "ramya@09876", "halifax");
         authenticationMock.addMockUser(user);
 
-        String userID = authenticationMock.login("sriramya7666@gmail.com", "ramya@09876");
-        assertNotNull(userID);
+        User loggedInUser = authenticationMock.login("sriramya7666@gmail.com", "ramya@09876");
+        assertNotNull(loggedInUser);
     }
 
     @Test
     void testInValidUserLogin() {
         AuthenticationMock authenticationMock = new AuthenticationMock();
-        String userID = authenticationMock.login("srsiramya766@gmail.com", "ramya@09876");
-        assertNull(userID);
+        User user = authenticationMock.login("srsiramya766@gmail.com", "ramya@09876");
+        assertNull(user);
     }
 
 	@Test

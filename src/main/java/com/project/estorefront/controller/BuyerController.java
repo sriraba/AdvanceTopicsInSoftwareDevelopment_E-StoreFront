@@ -52,17 +52,19 @@ public class BuyerController {
     public String buyerHome(@RequestParam(required = false, name = "category") String categoryFilter, Model model,
             HttpSession session, RedirectAttributes redirectAttributes) {
         String userID = getUserID(session);
+        String city = getCity(session);
+
         if (userID == null || userID.isEmpty()) {
             return notLoggedInRedirect;
         }
 
         ArrayList<User> sellers;
         try {
-            if (categoryFilter == null || categoryFilter.isEmpty()) {
-                sellers = Seller.getAllSellersByCity(sellerPersistence, "Halifax");
+            if (categoryFilter == null || categoryFilter.isEmpty() || categoryFilter.equals("Select")) {
+                sellers = Seller.getAllSellersByCity(sellerPersistence, city);
             } else {
                 sellers = Seller.getAllSellersByCategory(sellerPersistence, ItemCategory.valueOf(categoryFilter),
-                        "Halifax");
+                        city);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -336,10 +338,6 @@ public class BuyerController {
         return "redirect:/buyer/cart/view";
     }
 
-    private String getUserID(HttpSession session) {
-        return (String) session.getAttribute("userID");
-    }
-
     @RequestMapping(value = "/buyer/checkout", method = RequestMethod.POST)
     public String checkout(@RequestParam("address") String address, @RequestParam("pincode") String pincode,
                            HttpSession session) throws SQLException {
@@ -357,5 +355,13 @@ public class BuyerController {
             return "thank-you";
         }
         return "redirect:/buyer/cart/view/" + "Error: Unable to place order right now, please try again later!";
+    }
+
+    private String getUserID(HttpSession session) {
+        return (String) session.getAttribute("userID");
+    }
+
+    private String getCity(HttpSession session) {
+        return (String) session.getAttribute("city");
     }
 }
