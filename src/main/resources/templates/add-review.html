@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Review</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+<div th:replace="fragments/buyer-header.html"></div>
+<form th:action="@{/buyer/order/submit-review/{orderID}(userID=${session.userID}, orderID=${orderID})}">
+<!--    <form th:action="@{/buyer/order/submit-review/{userID}/{orderID}(userID=${userID}, orderID=${orderID})}">-->
+    <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
+    <div style="display: flex; align-items: center; justify-content: center;">
+    <table>
+        <tr class="form-group">
+            <td>Add Review:</td>
+            <td><textarea id="review" name="review" rows="3" cols="50" class="form-control"></textarea></td>
+        </tr>
+        <tr class="form-group">
+            <td><input type="submit" value="submit" class="btn btn-primary"></td>
+        </tr>
+    </table>
+</div>
+</form>
+</body>
+</html>
+

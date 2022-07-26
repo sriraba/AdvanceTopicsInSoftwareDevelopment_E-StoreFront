@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Buyer Orders</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+<div th:replace="fragments/buyer-header.html"></div>
+<table class="table table-striped">
+  <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
+  <thead>
+  <h2>Current orders:</h2>
+  <br/>
+  <tr>
+    <th> Order Number </th>
+    <th> Link </th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:if="${#lists.isEmpty(orders['current'])}">
+    <td colspan="2"> No current orders </td>
+  </tr>
+  <tr th:each="current : ${orders['current']}">
+    <td><span th:text="${current.getOrderID()}"> Order Number </span></td>
+    <td><a th:href="@{/buyer/order/details/{orderID}/{orderStatus}(orderID=${current.getOrderID()},orderStatus=${'buyer-current'})}">View Order</a></td>
+  </tr>
+  </tbody>
+</table>
+<table class="table table-striped">
+  <thead>
+  <h2>Previous orders:</h2>
+  <br/>
+  <tr>
+    <th> Order Number </th>
+    <th> Link </th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:if="${#lists.isEmpty(orders['previous'])}">
+    <td colspan="2"> No previous orders </td>
+  </tr>
+  <tr th:each="previous : ${orders['previous']}">
+    <td><span th:text="${previous.getOrderID()}"> Order Number </span></td>
+    <td><a th:href="@{/buyer/order/details/{orderID}/{orderStatus}(orderID=${previous.getOrderID()},orderStatus=${'buyer-previous'})}">View Order</a></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

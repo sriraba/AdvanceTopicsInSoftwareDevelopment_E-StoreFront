@@ -1,20 +1,27 @@
 package com.project.estorefront.repository;
 
 import com.project.estorefront.model.IInventoryItem;
+import com.project.estorefront.model.ItemCategory;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface IInventoryItemPersistence {
 
-    boolean save(IInventoryItem item) throws SQLException;
+    enum InventoryItemPersistenceOperationStatus {
+        SUCCESS,
+        FAILURE,
+        SQL_EXCEPTION,
+    }
 
-    boolean delete(IInventoryItem item);
+    InventoryItemPersistenceOperationStatus save(String itemID, String userID, ItemCategory itemCategory, int quantity, double price, String itemName, String itemDescription) throws SQLException;
 
-    boolean update(IInventoryItem item);
+    InventoryItemPersistenceOperationStatus delete(String itemID) throws SQLException;
 
-    ArrayList<IInventoryItem> getAll(String userID);
+    InventoryItemPersistenceOperationStatus update(String userID, ItemCategory itemCategory, int quantity, double price, String name, String description, String itemID) throws SQLException;
 
-    IInventoryItem getItemByID(String itemID);
+    ArrayList<IInventoryItem> getAll(String userID) throws SQLException;
+
+    IInventoryItem getItemByID(String itemID) throws SQLException;
 
 }

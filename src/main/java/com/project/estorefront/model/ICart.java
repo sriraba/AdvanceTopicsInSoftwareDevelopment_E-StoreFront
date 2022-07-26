@@ -1,5 +1,7 @@
 package com.project.estorefront.model;
 
+import java.util.ArrayList;
+
 public interface ICart {
 
     void addItem(IInventoryItem item);
@@ -11,4 +13,12 @@ public interface ICart {
     void clearCart();
 
     void pay();
+
+    int getTotalItems();
+
+    double getTotal();
+
+    ArrayList<IInventoryItem> getCartItems();
+
+    IInventoryItem getItemByID(String id);
 }

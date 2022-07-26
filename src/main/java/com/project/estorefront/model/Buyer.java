@@ -1,27 +1,42 @@
 package com.project.estorefront.model;
 
-/**
- * Buyer user (Implementation of IUser)
- *
- * @author Hrishi Patel
- * @version 1.0
- * @since 15-06-2022
- */
+import java.sql.SQLException;
 
-public class Buyer extends User {
+import com.project.estorefront.repository.IAuthentication;
+import com.project.estorefront.repository.IBuyerPersistence;
 
+public class Buyer extends User implements IBuyer {
 
     public Buyer() {
         super();
     }
 
-    @Override
-    public void updateProfile() {
-        // TODO To be implemented
+    public Buyer(String buyerID) {
+        super();
+        this.userID = buyerID;
+    }
+
+    public Buyer(String firstName, String lastName, String email, String address, String contact, String password,
+                 String city) {
+        super(firstName, lastName, email, address, "", password, city, false, false);
     }
 
     @Override
-    public void deleteProfile() {
-        // TODO To be implemented
+    public String register(IAuthentication authentication) throws SQLException {
+        return authentication.register(firstName, lastName, email, password, phone, isSeller, city, null, address, null, isUserEnabled);
+    }
+
+    @Override
+    public boolean updateBuyerAccount(IBuyerPersistence persistence) throws SQLException {
+        return persistence.updateBuyerAccount(this);
+    }
+
+    @Override
+    public boolean deactivateBuyerAccount(IBuyerPersistence persistence) throws SQLException {
+        return persistence.deactivateBuyerAccount(this);
+    }
+
+    public User getBuyerByID(IBuyerPersistence persistence, String buyerID) throws SQLException {
+        return persistence.getBuyerByID(buyerID);
     }
 }

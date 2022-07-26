@@ -18,7 +18,7 @@ public class RedirectionController {
             return "redirect:/login";
         } else {
             if (role.equals("seller")) {
-                return "redirect:/sellers";
+                return "redirect:/seller";
             } else if (role.equals("buyer")) {
                 return "redirect:/buyer";
             } else {
@@ -26,5 +26,11 @@ public class RedirectionController {
                 return "redirect:/login";
             }
         }
+    }
+
+    @GetMapping("/logout")
+    public String redirectToLoginOnLogout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
     }
 }

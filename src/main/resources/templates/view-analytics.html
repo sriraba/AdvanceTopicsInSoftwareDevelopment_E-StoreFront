@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:replace="fragments/seller-header.html"></div>
+
+<h2><u>E-Storefront Analytics Report</u></h2><br>
+<h3>Total Orders: </h3><span th:text="${totalOrders}" /><br>
+<h3>Total Sales: </h3><span th:text="${totalSales}" /><br>
+<h3>Returning Buyers: </h3><span th:text="${totalReturningCustomers}" /><br>
+<h3>New Buyers: </h3><span th:text="${totalNewBuyers}" />><br>
+
+</body>
+</html>

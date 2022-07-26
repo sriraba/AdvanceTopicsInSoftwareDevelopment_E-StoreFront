@@ -1,6 +1,7 @@
 package com.project.estorefront.model;
 
 import com.project.estorefront.model.validators.IInventoryItemValidator;
+import com.project.estorefront.model.validators.InventoryItemValidationStatus;
 import com.project.estorefront.repository.IInventoryItemPersistence;
 
 import java.sql.SQLException;
@@ -23,26 +24,12 @@ public interface IInventoryItem {
 
     Integer getItemQuantity();
 
-    void setItemID(String itemID);
+    IInventoryItemPersistence.InventoryItemPersistenceOperationStatus save(IInventoryItemPersistence persistence) throws SQLException;
 
-    void setUserID(String userID);
+    IInventoryItemPersistence.InventoryItemPersistenceOperationStatus delete(IInventoryItemPersistence persistence) throws SQLException;
 
-    void setItemCategory(ItemCategory itemCategory);
+    IInventoryItemPersistence.InventoryItemPersistenceOperationStatus update(IInventoryItemPersistence persistence) throws SQLException;
 
-    void setItemName(String itemName);
-
-    void setItemDescription(String itemDescription);
-
-    void setItemPrice(Double itemPrice);
-
-    void setItemQuantity(Integer itemQuantity);
-
-    boolean save(IInventoryItemPersistence persistence) throws SQLException;
-
-    boolean delete(IInventoryItemPersistence persistence);
-
-    boolean update(IInventoryItemPersistence persistence);
-
-    IInventoryItemValidator.InventoryItemValidationStatus validate(IInventoryItemValidator validator);
+    InventoryItemValidationStatus validate(IInventoryItemValidator validator);
 
 }

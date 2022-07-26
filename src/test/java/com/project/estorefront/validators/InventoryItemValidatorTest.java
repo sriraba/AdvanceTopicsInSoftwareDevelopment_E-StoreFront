@@ -1,163 +1,104 @@
 package com.project.estorefront.validators;
 
-import com.project.estorefront.model.IInventoryItem;
-import com.project.estorefront.model.InventoryItem;
-import com.project.estorefront.model.validators.IInventoryItemValidator;
-import com.project.estorefront.model.validators.InventoryItemValidator;
-import org.junit.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-
 import static org.junit.Assert.assertEquals;
 
-@SpringBootTest
-@TestPropertySource(properties = {"SPRING_DATASOURCE_URL=jdbc:mysql://db-5308.cs.dal.ca:3306/CSCI5308_1_DEVINT?autoreconnect=true", "SPRING_DATASOURCE_USERNAME=CSCI5308_1_DEVINT_USER", "SPRING_DATASOURCE_PASSWORD=uB8c3mUaMW"})public class InventoryItemValidatorTest {
+import org.junit.Test;
+
+import com.project.estorefront.model.IInventoryItem;
+import com.project.estorefront.model.InventoryFactory;
+import com.project.estorefront.model.ItemCategory;
+import com.project.estorefront.model.validators.IInventoryItemValidator;
+import com.project.estorefront.model.validators.InventoryItemValidationStatus;
+import com.project.estorefront.model.validators.InventoryItemValidator;
+
+public class InventoryItemValidatorTest {
 
     @Test
     public void validateInvalidInventoryItem() {
-        IInventoryItem item = new InventoryItem();
+        IInventoryItem item = InventoryFactory.instance().makeInventoryItemWithItemID("");
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.ALL_INVALID);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.ALL_INVALID);
     }
 
     @Test
     public void validateInventoryItemWithInvalidItemID() {
-        IInventoryItem item = new InventoryItem();
-        item.setItemID("5");
-        item.setItemPrice(10.0);
-        item.setItemQuantity(10);
-        item.setItemName("Test");
-        item.setItemDescription("Test");
-        item.setUserID("Test");
+        IInventoryItem item = InventoryFactory.instance().makeInventoryItem("5", "Test", ItemCategory.GROCERY, 10, 10.0,
+                "Test", "Test");
 
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_ID);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_ID);
     }
 
     @Test
     public void validateInventoryItemWithNegativeItemPrice() {
-        IInventoryItem item = new InventoryItem();
-        item.setItemID("b0c36302-fee4-4bb9-9a09-5267e89d8f2b");
-        item.setItemPrice((double) -10);
-        item.setItemQuantity(10);
-        item.setItemName("Test");
-        item.setItemDescription("Test");
-        item.setUserID("Test");
+        IInventoryItem item = InventoryFactory.instance().makeInventoryItem("af638b8e-c12f-48bd-8f6a-72f716cb4b18",
+                "Test", ItemCategory.GROCERY, 10, -10.0, "Test", "Test");
 
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_PRICE);
-    }
-
-    @Test
-    public void validateInventoryItemWithNullItemPrice() {
-        IInventoryItem item = new InventoryItem();
-        item.setItemID("b0c36302-fee4-4bb9-9a09-5267e89d8f2b");
-        item.setItemPrice(null);
-        item.setItemQuantity(10);
-        item.setItemName("Test");
-        item.setItemDescription("Test");
-        item.setUserID("Test");
-
-        IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_PRICE);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_PRICE);
     }
 
     @Test
     public void validateInventoryItemWithNegativeQuantity() {
-        IInventoryItem item = new InventoryItem();
-        item.setItemID("b0c36302-fee4-4bb9-9a09-5267e89d8f2b");
-        item.setItemPrice(10.0);
-        item.setItemQuantity(-10);
-        item.setItemName("Test");
-        item.setItemDescription("Test");
-        item.setUserID("Test");
+        IInventoryItem item = InventoryFactory.instance().makeInventoryItem("af638b8e-c12f-48bd-8f6a-72f716cb4b18",
+                "Test", ItemCategory.GROCERY, -10, 10.0, "Test", "Test");
 
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_QUANTITY);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_QUANTITY);
     }
 
     @Test
     public void validateInventoryItemWithEmptyItemName() {
-        IInventoryItem item = new InventoryItem();
-        item.setItemID("b0c36302-fee4-4bb9-9a09-5267e89d8f2b");
-        item.setItemPrice(10.0);
-        item.setItemQuantity(10);
-        item.setItemName("");
-        item.setItemDescription("Test");
-        item.setUserID("Test");
+        IInventoryItem item = InventoryFactory.instance().makeInventoryItem("af638b8e-c12f-48bd-8f6a-72f716cb4b18",
+                "Test", ItemCategory.GROCERY, 10, 10.0, "", "Test");
 
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_NAME);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_NAME);
     }
 
     @Test
     public void validateInventoryItemWithNullItemName() {
-        IInventoryItem item = new InventoryItem();
-        item.setItemID("b0c36302-fee4-4bb9-9a09-5267e89d8f2b");
-        item.setItemPrice(10.0);
-        item.setItemQuantity(10);
-        item.setItemName(null);
-        item.setItemDescription("Test");
-        item.setUserID("Test");
+        IInventoryItem item = InventoryFactory.instance().makeInventoryItem("af638b8e-c12f-48bd-8f6a-72f716cb4b18",
+                "Test", ItemCategory.GROCERY, 10, 10.0, null, "Test");
 
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_NAME);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_NAME);
     }
 
     @Test
     public void validateInventoryItemWithNullItemDescription() {
-        IInventoryItem item = new InventoryItem();
-        item.setItemID("b0c36302-fee4-4bb9-9a09-5267e89d8f2b");
-        item.setItemPrice(10.0);
-        item.setItemQuantity(10);
-        item.setItemName("TEST");
-        item.setItemDescription(null);
-        item.setUserID("Test");
+        IInventoryItem item = InventoryFactory.instance().makeInventoryItem("af638b8e-c12f-48bd-8f6a-72f716cb4b18",
+                "Test", ItemCategory.GROCERY, 10, 10.0, "Test", null);
 
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_DESCRIPTION);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_DESCRIPTION);
     }
 
     @Test
     public void validateInventoryItemWithEmptyItemDescription() {
-        IInventoryItem item = new InventoryItem();
-        item.setItemID("b0c36302-fee4-4bb9-9a09-5267e89d8f2b");
-        item.setItemPrice(10.0);
-        item.setItemQuantity(10);
-        item.setItemName("TEST");
-        item.setItemDescription("");
-        item.setUserID("Test");
+        IInventoryItem item = InventoryFactory.instance().makeInventoryItem("af638b8e-c12f-48bd-8f6a-72f716cb4b18",
+                "Test", ItemCategory.GROCERY, 10, 10.0, "Test", "");
 
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_DESCRIPTION);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_DESCRIPTION);
     }
 
     @Test
     public void validateInventoryItemWithInvalidUserID() {
-        IInventoryItem item = new InventoryItem();
-        item.setItemID("b0c36302-fee4-4bb9-9a09-5267e89d8f2b");
-        item.setItemPrice(10.0);
-        item.setItemQuantity(10);
-        item.setItemName("TEST");
-        item.setItemDescription("");
-        item.setUserID("");
+        IInventoryItem item = InventoryFactory.instance().makeInventoryItem("af638b8e-c12f-48bd-8f6a-72f716cb4b18", "",
+                ItemCategory.GROCERY, 10, 10.0, "Test", "");
 
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_DESCRIPTION);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_DESCRIPTION);
     }
 
     @Test
     public void validateInventoryItemAllValid() {
-        IInventoryItem item = new InventoryItem();
-        item.setItemID("b0c36302-fee4-4bb9-9a09-5267e89d8f2b");
-        item.setItemPrice(10.0);
-        item.setItemQuantity(100);
-        item.setItemName("TEST");
-        item.setItemDescription("TEST");
-        item.setUserID("Test");
+        IInventoryItem item = InventoryFactory.instance().makeInventoryItem("b0c36302-fee4-4bb9-9a09-5267e89d8f2b",
+                "TEST", ItemCategory.GROCERY, 100, 10.0, "TEST", "TEST");
 
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), IInventoryItemValidator.InventoryItemValidationStatus.VALID);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.VALID);
     }
 
 }

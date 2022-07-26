@@ -1,16 +1,10 @@
 package com.project.estorefront.model;
 
+import com.project.estorefront.repository.IAuthentication;
 import com.project.estorefront.repository.ISellerPersistence;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
-
-/**
- * Seller user (Implementation of IUser)
- *
- * @author  Hrishi Patel
- * @version 1.0
- * @since   15-06-2022
- */
 
 public class Seller extends User implements ISeller {
 
@@ -21,10 +15,16 @@ public class Seller extends User implements ISeller {
         super();
     }
 
+    public Seller(String sellerID) {
+        super();
+        this.userID = sellerID;
+    }
+
     public void setBusinessName(String businessName) {
         this.businessName = businessName;
     }
 
+    @Override
     public String getBusinessName() {
         return businessName;
     }
@@ -33,20 +33,37 @@ public class Seller extends User implements ISeller {
         this.businessDescription = businessDescription;
     }
 
+    @Override
     public String getBusinessDescription() {
         return businessDescription;
     }
 
-    @Override
-    public void updateProfile() {
-    }
 
-    @Override
-    public void deleteProfile() {
-    }
-
-    @Override
-    public ArrayList<User> getAllSellers(ISellerPersistence persistence, String city) {
+    public static ArrayList<User> getAllSellersByCity(ISellerPersistence persistence, String city) throws SQLException {
         return persistence.getAllSellersByCity(city);
     }
+
+    public static ArrayList<User> getAllSellersByCategory(ISellerPersistence persistence, ItemCategory category, String city) throws SQLException {
+        return persistence.getAllSellersByCategory(category, city);
+    }
+
+    @Override
+    public String register(IAuthentication authentication) throws SQLException {
+        return authentication.register(firstName, lastName, email, password, phone, isSeller, city, businessName, address, businessDescription, isUserEnabled);
+    }
+
+    public User getSellerByID(ISellerPersistence persistence, String sellerID) throws SQLException {
+        return persistence.getSellerByID(sellerID);
+    }
+
+    @Override
+    public boolean updateSellerAccount(ISellerPersistence persistence) throws SQLException {
+        return persistence.updateSellerAccount(this);
+    }
+
+    @Override
+    public boolean deactivateSellerAccount(ISellerPersistence persistence) throws SQLException {
+        return persistence.deactivateSellerAccount(this);
+    }
+
 }

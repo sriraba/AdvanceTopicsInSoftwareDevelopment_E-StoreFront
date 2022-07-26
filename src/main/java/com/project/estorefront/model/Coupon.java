@@ -1,23 +1,23 @@
 package com.project.estorefront.model;
 
-public class Coupon {
+public class Coupon implements ICoupon{
 
-    private int coupon_id;
-    private String name;
-    private double max_amt;
-    private double percent;
+    private final int couponID;
+    private final String name;
+    private final double maxAmount;
+    private final double percent;
 
-    public Coupon(int ID, String Name, double Max_Amt, double Percent)
+    public Coupon(int ID, String Name, double maxAmount, double Percent)
     {
-        coupon_id = ID;
-        name = Name;
-        max_amt = Max_Amt;
-        percent = Percent;
+        this.couponID = ID;
+        this.name = Name;
+        this.maxAmount = maxAmount;
+        this.percent = Percent;
     }
 
     public int getCouponID()
     {
-        return coupon_id;
+        return couponID;
     }
 
     public String getName()
@@ -27,7 +27,7 @@ public class Coupon {
 
     public double getMaxAmount()
     {
-        return max_amt;
+        return maxAmount;
     }
 
     public double getPercent()

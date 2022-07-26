@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Details</title>
+</head>
+<body>
+    <form th:action="@{/seller/account/update/} + ${seller.getUserID}" method="POST">
+        <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
+        <table>
+            <h1>Edit Details</h1>
+            <tr>
+                <td>First Name:</td>
+                <td><input type=”text” name="firstName" th:value="${seller.getFirstName()}"></td>
+            </tr>
+            <tr>
+                <td>Last Name:</td>
+                <td><input type=”text” name="lastName"  th:value="${seller.getLastName()}"></td>
+            </tr>
+            <tr>
+                <td>Business Name:</td>
+                <td><input type=”text” name="businessName"  th:value="${seller.getBusinessName()}"></td>
+            </tr>
+            <tr>
+                <td>Business Description:</td>
+                <td><input type=”text” name="businessDescription"  th:value="${seller.getBusinessDescription()}"></td>
+            </tr>
+
+            <tr>
+                <td>Email:</td>
+                <td><input type=”text” name="email"  th:value="${seller.getEmail()}"></td>
+            </tr>
+            <tr>
+                <td>Phone:</td>
+                <td><input type=”text” name="phone"  th:value="${seller.getPhone()}"></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Update"></td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>
