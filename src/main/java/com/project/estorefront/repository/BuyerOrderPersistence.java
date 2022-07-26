@@ -1,16 +1,14 @@
 package com.project.estorefront.repository;
 
-import com.project.estorefront.model.BuyerFactory;
-import com.project.estorefront.model.DatabaseFactory;
-import com.project.estorefront.model.OrderAndItemsFactory;
-import com.project.estorefront.model.OrderDetails;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
+
+import com.project.estorefront.model.OrderAndItemsFactory;
+import com.project.estorefront.model.OrderDetails;
 
 public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrderPersistence {
 

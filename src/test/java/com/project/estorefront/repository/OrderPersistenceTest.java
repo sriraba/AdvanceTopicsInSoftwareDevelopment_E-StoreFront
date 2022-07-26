@@ -1,13 +1,13 @@
 package com.project.estorefront.repository;
 
-import com.project.estorefront.model.IOrderManagement;
-import com.project.estorefront.model.OrderDetails;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import org.junit.jupiter.api.Test;
+
+import com.project.estorefront.model.OrderDetails;
 
 class OrderPersistenceTest {
 

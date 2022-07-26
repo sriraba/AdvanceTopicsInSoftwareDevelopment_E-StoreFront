@@ -1,19 +1,22 @@
 package com.project.estorefront.model;
 
-import com.project.estorefront.repository.*;
-import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 
-import static org.junit.Assert.assertSame;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+import com.project.estorefront.repository.BuyerOrderPersistenceMock;
+import com.project.estorefront.repository.IBuyerOrderPersistence;
+import com.project.estorefront.repository.IOrderPersistence;
+import com.project.estorefront.repository.ISellerOrderPersistence;
+import com.project.estorefront.repository.OrderPersistenceMock;
+import com.project.estorefront.repository.PersistenceStatus;
+import com.project.estorefront.repository.SellerOrderPersistenceMock;
 
 class OrderDetailsTest {
 
@@ -21,7 +24,7 @@ class OrderDetailsTest {
     void testGetSellerOrdersForSellerID() throws SQLException {
         ISellerOrderManagement orderManagement = new OrderDetails();
         ISellerOrderPersistence orderPersistence = new SellerOrderPersistenceMock();
-        Map<String, ArrayList<OrderDetails>> orderDetails = orderManagement.getSellerOrders("5",orderPersistence);
+        Map<String, ArrayList<OrderDetails>> orderDetails = orderManagement.getSellerOrders("5", orderPersistence);
         assertEquals(2, orderDetails.size());
     }
 
@@ -29,7 +32,7 @@ class OrderDetailsTest {
     void testGetSellerOrdersForNullSellerID() throws SQLException {
         ISellerOrderManagement orderManagement = new OrderDetails();
         ISellerOrderPersistence orderPersistence = new SellerOrderPersistenceMock();
-        Map<String, ArrayList<OrderDetails>> orderDetails = orderManagement.getSellerOrders("",orderPersistence);
+        Map<String, ArrayList<OrderDetails>> orderDetails = orderManagement.getSellerOrders("", orderPersistence);
         assertNull(orderDetails);
     }
 
@@ -45,7 +48,7 @@ class OrderDetailsTest {
     void testBuyerOrdersForBuyerID() throws SQLException {
         IBuyerOrderManagement orderManagement = new OrderDetails();
         IBuyerOrderPersistence buyerOrderPersistence = new BuyerOrderPersistenceMock();
-        Map<String, ArrayList<OrderDetails>> orderDetails = orderManagement.getBuyerOrders("1",buyerOrderPersistence);
+        Map<String, ArrayList<OrderDetails>> orderDetails = orderManagement.getBuyerOrders("1", buyerOrderPersistence);
         assertEquals(2, orderDetails.size());
     }
 
@@ -61,7 +64,7 @@ class OrderDetailsTest {
     void testBuyerOrdersForBuyerIDNotPresent() throws SQLException {
         IBuyerOrderManagement orderManagement = new OrderDetails();
         IBuyerOrderPersistence buyerOrderPersistence = new BuyerOrderPersistenceMock();
-        Map<String, ArrayList<OrderDetails>> orderDetails = orderManagement.getBuyerOrders("9",buyerOrderPersistence);
+        Map<String, ArrayList<OrderDetails>> orderDetails = orderManagement.getBuyerOrders("9", buyerOrderPersistence);
         assertNull(orderDetails);
     }
 
@@ -69,7 +72,7 @@ class OrderDetailsTest {
     void submitReviewForValidOrder() throws SQLException {
         IBuyerOrderManagement orderManagement = new OrderDetails();
         IBuyerOrderPersistence buyerOrderPersistence = new BuyerOrderPersistenceMock();
-        PersistenceStatus status = orderManagement.submitReview("1","OR12365","Good service",buyerOrderPersistence);
+        PersistenceStatus status = orderManagement.submitReview("1", "OR12365", "Good service", buyerOrderPersistence);
         assertSame(status, PersistenceStatus.SUCCESS);
     }
 
@@ -77,7 +80,8 @@ class OrderDetailsTest {
     void submitReviewForInValidOrder() throws SQLException {
         IBuyerOrderManagement orderManagement = new OrderDetails();
         IBuyerOrderPersistence buyerOrderPersistence = new BuyerOrderPersistenceMock();
-        PersistenceStatus status = orderManagement.submitReview("1","OR1236789","Good service",buyerOrderPersistence);
+        PersistenceStatus status = orderManagement.submitReview("1", "OR1236789", "Good service",
+                buyerOrderPersistence);
         assertSame(status, PersistenceStatus.FAILURE);
     }
 
@@ -85,7 +89,7 @@ class OrderDetailsTest {
     void testGetOrderAndItemDetailsForOrderID() throws SQLException {
         IOrderManagement orderManagement = new OrderDetails();
         IOrderPersistence orderPersistence = new OrderPersistenceMock();
-        OrderDetails orderDetail = orderManagement.getOrderAndItemDetails("OR12365",orderPersistence);
+        OrderDetails orderDetail = orderManagement.getOrderAndItemDetails("OR12365", orderPersistence);
         assertEquals(orderDetail.getOrderID(), "OR12365");
     }
 
@@ -93,7 +97,7 @@ class OrderDetailsTest {
     void testGetOrderAndItemDetailsForNotPresentOrderID() throws SQLException {
         IOrderManagement orderManagement = new OrderDetails();
         IOrderPersistence orderPersistence = new OrderPersistenceMock();
-        OrderDetails orderDetail = orderManagement.getOrderAndItemDetails("OR1238",orderPersistence);
+        OrderDetails orderDetail = orderManagement.getOrderAndItemDetails("OR1238", orderPersistence);
         assertNull(orderDetail);
     }
 
@@ -101,7 +105,7 @@ class OrderDetailsTest {
     void testGetOrderAndItemDetailsForEmptyOrderID() throws SQLException {
         IOrderManagement orderManagement = new OrderDetails();
         IOrderPersistence orderPersistence = new OrderPersistenceMock();
-        OrderDetails orderDetail = orderManagement.getOrderAndItemDetails("",orderPersistence);
+        OrderDetails orderDetail = orderManagement.getOrderAndItemDetails("", orderPersistence);
         assertNull(orderDetail);
     }
 }

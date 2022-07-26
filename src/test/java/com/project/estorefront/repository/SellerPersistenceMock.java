@@ -52,6 +52,7 @@ public class SellerPersistenceMock implements ISellerPersistence {
         return sellers;
     }
 
+
     @Override
     public ArrayList<User> getAllSellersByCity(String city) {
         ArrayList<User> s = new ArrayList<>();
@@ -85,7 +86,7 @@ public class SellerPersistenceMock implements ISellerPersistence {
     public boolean deactivateSellerAccount(User seller) {
         //User seller = new Seller();
         for (User u: sellers){
-            if(u.getIsSeller() == seller.getIsSeller()){
+            if(u.getUserID() == seller.getUserID()){
                 seller.setIsSeller(false);
                 return true;
             }
@@ -103,7 +104,7 @@ public class SellerPersistenceMock implements ISellerPersistence {
                 currentSeller.setLastName(seller.getLastName());
                 currentSeller.setBusinessName(((Seller)seller).getBusinessName());
                 currentSeller.setPhone(seller.getPhone());
-                currentSeller.setEmail(seller.getEmail());
+                //currentSeller.setEmail(seller.getEmail());
                 return true;
             }
         }

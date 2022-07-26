@@ -2,6 +2,7 @@ package com.project.estorefront.model;
 
 import java.sql.SQLException;
 
+import com.project.estorefront.repository.IAuthentication;
 import com.project.estorefront.repository.IBuyerPersistence;
 
 public class Buyer extends User implements IBuyer {
@@ -16,18 +17,13 @@ public class Buyer extends User implements IBuyer {
     }
 
     public Buyer(String firstName, String lastName, String email, String address, String contact, String password,
-            String city) {
+                 String city) {
         super(firstName, lastName, email, address, "", password, city, false, false);
     }
 
     @Override
-    public void updateProfile() {
-        // TODO To be implemented
-    }
-
-    @Override
-    public void deleteProfile() {
-        // TODO To be implemented
+    public String register(IAuthentication authentication) throws SQLException {
+        return authentication.register(firstName, lastName, email, password, phone, isSeller, city, null, address, null, isUserEnabled);
     }
 
     @Override

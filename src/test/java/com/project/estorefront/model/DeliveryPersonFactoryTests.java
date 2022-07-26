@@ -1,9 +1,8 @@
 package com.project.estorefront.model;
 
-import com.project.estorefront.repository.IDeliveryPersonPersistence;
-import org.junit.Test;
-
 import static org.junit.Assert.assertNotNull;
+
+import org.junit.Test;
 
 public class DeliveryPersonFactoryTests {
 
@@ -12,9 +11,12 @@ public class DeliveryPersonFactoryTests {
         assertNotNull(DeliveryPersonFactory.instance());
     }
 
-    /*@Test
-    public void testMakeBuyerPersistence() {
-        IDeliveryPersonPersistence persistence = DeliveryPersonFactory.instance().makeDeliveryPersonPersistence();
-        assertNotNull(persistence);
-    }*/
+    /*
+     * @Test
+     * public void testMakeBuyerPersistence() {
+     * IDeliveryPersonPersistence persistence =
+     * DeliveryPersonFactory.instance().makeDeliveryPersonPersistence();
+     * assertNotNull(persistence);
+     * }
+     */
 }
