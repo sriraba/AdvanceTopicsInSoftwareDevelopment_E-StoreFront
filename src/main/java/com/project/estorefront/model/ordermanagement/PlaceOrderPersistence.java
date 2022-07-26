@@ -21,7 +21,7 @@ public class PlaceOrderPersistence implements IPlaceOrderPersistence{
             String query = "INSERT INTO buyer_orders VALUES (?,?,?,?,?,?,?,?,?)";
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, newOrderID);
-            preparedStatement.setInt(2, 1);
+            preparedStatement.setInt(2, userID);
             preparedStatement.setString(3, "Placed");
             preparedStatement.setDouble(4, cart.getTotal());
             preparedStatement.setString(5, "");
