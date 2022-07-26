@@ -148,7 +148,7 @@ public class OrderDetails implements ISellerOrderManagement, IBuyerOrderManageme
         ArrayList<OrderDetails> allOrderDetails = orderPersistence.loadOrders(buyerID);
         ArrayList<OrderDetails> currentOrderDetails = new ArrayList<>();
         ArrayList<OrderDetails> previousOrderDetails = new ArrayList<>();
-        Map<String, ArrayList<OrderDetails>> sellerOrders = new HashMap<>();
+        Map<String, ArrayList<OrderDetails>> buyerOrders = new HashMap<>();
         if (allOrderDetails != null && allOrderDetails.size() > 0) {
             allOrderDetails.forEach(orderdetail -> {
                 if (orderdetail.getOrderStatus().equalsIgnoreCase(String.valueOf(OrderStatus.PLACED)) || orderdetail
@@ -158,10 +158,10 @@ public class OrderDetails implements ISellerOrderManagement, IBuyerOrderManageme
                     previousOrderDetails.add(orderdetail);
                 }
             });
-            sellerOrders.put("current", currentOrderDetails);
-            sellerOrders.put("previous", previousOrderDetails);
+            buyerOrders.put("current", currentOrderDetails);
+            buyerOrders.put("previous", previousOrderDetails);
 
-            return sellerOrders;
+            return buyerOrders;
         } else {
             return null;
         }
