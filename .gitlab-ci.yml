@@ -5,7 +5,7 @@ variables:
 test:
   stage: test
   tags:
-    - dalfcs_docker_kvm
+    - dalfcs_gitlab_docker_ci
   image: gradle:alpine
   script: 
   - chmod +x gradlew
@@ -17,7 +17,7 @@ test:
 build:
   stage: build
   tags:
-    - dalfcs_docker_kvm
+    - dalfcs_gitlab_docker_ci
   image: gradle:7.3.3-jdk17-alpine
   script:
   - chmod +x gradlew 
@@ -29,7 +29,7 @@ build:
 deploy-int:
   stage: deploy
   tags: 
-    - dalfcs_docker_kvm
+    - dalfcs_gitlab_docker_ci
   image: ruby:3.2-rc
   script: 
   - apt-get update -qy
@@ -43,7 +43,7 @@ deploy-int:
 deploy-prod:
   stage: deploy
   tags: 
-    - dalfcs_docker_kvm
+    - dalfcs_gitlab_docker_ci
   image: ruby:3.2-rc
   script: 
   - apt-get update -qy
