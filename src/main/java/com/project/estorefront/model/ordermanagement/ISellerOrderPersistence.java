@@ -9,4 +9,5 @@ public interface ISellerOrderPersistence extends IOrderPersistence {
     ArrayList<OrderDetails> loadOrders(String userID) throws SQLException;
 
     IPropertiesReader.PersistenceStatus updateDeliveryCharges(String orderID, String name) throws SQLException;
+    IPropertiesReader.PersistenceStatus updateOrderStatus(String orderID);
 }

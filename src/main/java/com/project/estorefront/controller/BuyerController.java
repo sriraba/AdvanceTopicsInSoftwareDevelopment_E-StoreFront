@@ -215,9 +215,10 @@ public class BuyerController {
         return modelAndView;
     }
 
-    @GetMapping("/buyer/order/add-review/{userID}/{orderID}")
-    public String addReview(@PathVariable("userID") String userID, @PathVariable("orderID") String orderID,
-            Model model) {
+    @GetMapping("/buyer/order/add-review/{orderID}")
+    public String addReview(@PathVariable("orderID") String orderID,
+            Model model,HttpSession session) {
+        String userID = getUserID(session);
         model.addAttribute("userID", userID);
         model.addAttribute("orderID", orderID);
         return "add-review";
