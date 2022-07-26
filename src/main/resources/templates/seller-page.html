@@ -8,5 +8,6 @@
     </head>
 <body>
 <div th:replace="fragments/seller-header.html"></div>
+<div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
 </body>
 </html>
