@@ -22,16 +22,6 @@ public class Buyer extends User implements IBuyer {
     }
 
     @Override
-    public void updateProfile() {
-        // TODO To be implemented
-    }
-
-    @Override
-    public void deleteProfile() {
-        // TODO To be implemented
-    }
-
-    @Override
     public String register(IAuthentication authentication) throws SQLException {
         return authentication.register(firstName, lastName, email, password, phone, isSeller, city, null, address, null, isUserEnabled);
     }

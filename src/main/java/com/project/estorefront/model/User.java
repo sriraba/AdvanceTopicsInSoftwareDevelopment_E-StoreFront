@@ -97,14 +97,6 @@ public abstract class User {
         this.password = password;
     }
 
-    public abstract void updateProfile();
-
-    // public abstract void updateSellerProfile();
-
-    public void deleteProfile() {
-
-    }
-
     public boolean getIsSeller() {
         return isSeller;
     }

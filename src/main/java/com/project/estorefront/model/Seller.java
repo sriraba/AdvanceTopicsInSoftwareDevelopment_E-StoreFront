@@ -48,11 +48,6 @@ public class Seller extends User implements ISeller {
     }
 
     @Override
-    public void updateProfile() {
-
-    }
-
-    @Override
     public String register(IAuthentication authentication) throws SQLException {
         return authentication.register(firstName, lastName, email, password, phone, isSeller, city, businessName, address, businessDescription, isUserEnabled);
     }
