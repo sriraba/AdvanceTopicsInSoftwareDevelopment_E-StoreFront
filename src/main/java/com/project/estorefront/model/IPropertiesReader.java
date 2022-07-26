@@ -12,4 +12,9 @@ public interface IPropertiesReader {
 
     String getEmailSenderPassword();
 
+    enum PersistenceStatus {
+        SUCCESS,
+        FAILURE,
+        SQL_EXCEPTION,
+    }
 }

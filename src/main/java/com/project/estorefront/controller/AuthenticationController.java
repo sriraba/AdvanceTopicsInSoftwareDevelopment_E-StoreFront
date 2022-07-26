@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpSession;
 
 import com.project.estorefront.model.*;
+import com.project.estorefront.model.authentication.*;
+import com.project.estorefront.model.database.DatabaseFactory;
+import com.project.estorefront.model.user.Seller;
+import com.project.estorefront.model.user.User;
+import com.project.estorefront.model.user.UserFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.project.estorefront.model.validators.IPasswordValidator;
 import com.project.estorefront.model.validators.IValidator;
 import com.project.estorefront.model.validators.ValidatorFactory;
-import com.project.estorefront.repository.IAuthentication;
-import com.project.estorefront.repository.IDatabase;
+import com.project.estorefront.model.database.IDatabase;
 
 @Controller
 public class AuthenticationController {

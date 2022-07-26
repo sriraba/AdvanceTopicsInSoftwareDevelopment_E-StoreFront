@@ -6,7 +6,11 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import com.project.estorefront.repository.*;
+import com.project.estorefront.model.IPropertiesReader;
+import com.project.estorefront.model.database.IDatabase;
+import com.project.estorefront.model.inventory.*;
+import com.project.estorefront.model.ordermanagement.*;
+import com.project.estorefront.model.user.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,21 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.project.estorefront.model.Buyer;
-import com.project.estorefront.model.BuyerFactory;
-import com.project.estorefront.model.CartFactory;
-import com.project.estorefront.model.DatabaseFactory;
-import com.project.estorefront.model.IBuyerOrderManagement;
-import com.project.estorefront.model.ICart;
-import com.project.estorefront.model.IInventoryItem;
-import com.project.estorefront.model.InventoryFactory;
-import com.project.estorefront.model.InventoryItem;
-import com.project.estorefront.model.ItemCategory;
-import com.project.estorefront.model.OrderAndItemsFactory;
-import com.project.estorefront.model.OrderDetails;
-import com.project.estorefront.model.Seller;
-import com.project.estorefront.model.SellerFactory;
-import com.project.estorefront.model.User;
+import com.project.estorefront.model.cart.CartFactory;
+import com.project.estorefront.model.database.DatabaseFactory;
+import com.project.estorefront.model.cart.ICart;
 import com.project.estorefront.model.validators.ICartValidator;
 
 @Controller
@@ -235,9 +227,9 @@ public class BuyerController {
         String userID = getUserID(session);
         IBuyerOrderManagement buyerOrder = BuyerFactory.instance().makeBuyerOrderManagement();
         try {
-            PersistenceStatus status = buyerOrder.submitReview(userID, orderID, description, buyerOrderPersistence);
+            IPropertiesReader.PersistenceStatus status = buyerOrder.submitReview(userID, orderID, description, buyerOrderPersistence);
             model.addAttribute("page", "buyer");
-            if (status == PersistenceStatus.SUCCESS) {
+            if (status == IPropertiesReader.PersistenceStatus.SUCCESS) {
                 return "submit-success";
             } else {
                 return "redirect:/buyer/orders/view";
