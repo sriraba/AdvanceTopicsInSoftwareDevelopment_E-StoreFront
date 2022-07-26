@@ -161,7 +161,7 @@ public class BuyerController {
 
     @GetMapping("/buyer/orders/view")
     public ModelAndView buyerOrdersView(HttpSession session, RedirectAttributes redirectAttributes) {
-        String userID = (String) session.getAttribute("userID");
+        String userID = getUserID(session);
         if (userID == null || userID.isEmpty()) {
             return new ModelAndView("redirect:/login");
         }
@@ -201,17 +201,19 @@ public class BuyerController {
         return modelAndView;
     }
 
-    @GetMapping("/buyer/order/add-review/{userID}/{orderID}")
-    public String addReview(@PathVariable("userID") String userID, @PathVariable("orderID") String orderID,
-                            Model model) {
+    @GetMapping("/buyer/order/add-review/{orderID}")
+    public String addReview(@PathVariable("orderID") String orderID,
+                            Model model,HttpSession session) {
+        String userID = getUserID(session);
         model.addAttribute("userID", userID);
         model.addAttribute("orderID", orderID);
         return "add-review";
     }
 
-    @GetMapping("/buyer/order/submit-review/{userID}/{orderID}")
-    public String submitReview(@PathVariable("userID") String userID, @PathVariable("orderID") String orderID,
-                               @RequestParam("review") String description, Model model, RedirectAttributes redirectAttributes) {
+    @GetMapping("/buyer/order/submit-review/{orderID}")
+    public String submitReview(@PathVariable("orderID") String orderID,
+                               @RequestParam("review") String description, Model model, RedirectAttributes redirectAttributes,HttpSession session) {
+        String userID = getUserID(session);
         IBuyerOrderManagement buyerOrder = BuyerFactory.instance().makeBuyerOrderManagement();
         try {
             PersistenceStatus status = buyerOrder.submitReview(userID, orderID, description, buyerOrderPersistence);
@@ -224,7 +226,7 @@ public class BuyerController {
         } catch (SQLException e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Error submitting review");
-            return "redirect:/buyer-orders/view";
+            return "redirect:/buyer/orders/view";
         }
 
     }
