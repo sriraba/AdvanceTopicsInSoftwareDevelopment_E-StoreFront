@@ -12,7 +12,8 @@
 <p class="card-text" th:text="${seller.getBusinessDescription()}"/>
 <tr th:each="item: ${inventory}">
     <form th:action="@{'/buyer/cart/add/' + ${item.getItemID()}}" method="post">
-    <div class="col-sm-6 mb-4 ml-4">
+        <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
+        <div class="col-sm-6 mb-4 ml-4">
         <div class="card">
             <div class="card-body">
                 <div class="col justify-content-between">

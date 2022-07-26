@@ -11,15 +11,22 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrderPersistence {
+
+    private IDatabase database;
+
+    public BuyerOrderPersistence(IDatabase database) {
+        this.database = database;
+    }
+
     @Override
-    public ArrayList<OrderDetails> loadOrders(String buyerID) {
-        PreparedStatement preparedStatement = null;
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    public ArrayList<OrderDetails> loadOrders(String buyerID) throws SQLException {
         Connection connection = database.getConnection();
 
+        PreparedStatement preparedStatement = null;
         ArrayList<OrderDetails> sellerOrderDetails = new ArrayList<>();
         try {
-            preparedStatement = connection.prepareStatement("SELECT * FROM buyer_orders WHERE buyer_orders.user_id = ?");
+            preparedStatement = connection
+                    .prepareStatement("SELECT * FROM buyer_orders WHERE buyer_orders.user_id = ?");
             preparedStatement.setString(1, buyerID);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
@@ -45,11 +52,11 @@ public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrd
     }
 
     @Override
-    public PersistenceStatus submitReview(String userID, String orderID, String description) {
-        PreparedStatement preparedStatement = null;
-        Database database = (Database) DatabaseFactory.instance().makeDatabase();
+    public PersistenceStatus submitReview(String userID, String orderID, String description) throws SQLException {
         Connection connection = database.getConnection();
-        try{
+
+        PreparedStatement preparedStatement;
+        try {
 
             String persistReview = "insert into reviews (review_id, description, user_id, order_id ) " +
                     "values (?, ?, ?, ?)";
@@ -66,10 +73,10 @@ public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrd
             } else {
                 return PersistenceStatus.FAILURE;
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return PersistenceStatus.SQL_EXCEPTION;
-        }finally {
+        } finally {
             database.closeConnection();
         }
     }

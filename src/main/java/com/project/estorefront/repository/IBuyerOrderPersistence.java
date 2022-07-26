@@ -2,10 +2,11 @@ package com.project.estorefront.repository;
 
 import com.project.estorefront.model.OrderDetails;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface IBuyerOrderPersistence {
-    ArrayList<OrderDetails> loadOrders(String userID);
+    ArrayList<OrderDetails> loadOrders(String userID) throws SQLException;
 
-    PersistenceStatus submitReview(String userID, String orderID, String description);
+    PersistenceStatus submitReview(String userID, String orderID, String description) throws SQLException;;
 }

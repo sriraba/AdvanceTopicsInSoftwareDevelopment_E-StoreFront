@@ -21,13 +21,6 @@ public class Database implements IDatabase {
         init();
     }
 
-    public Database(String springDataSourceUrl, String springDataSourceUsername, String springDataSourcePassword) {
-        this.springDataSourceUrl = springDataSourceUrl;
-        this.springDataSourceUsername = springDataSourceUsername;
-        this.springDataSourcePassword = springDataSourcePassword;
-        init();
-    }
-
     private void init() {
         try {
             connection = DriverManager.getConnection(springDataSourceUrl,
@@ -38,7 +31,10 @@ public class Database implements IDatabase {
         }
     }
 
-    public Connection getConnection() {
+    public Connection getConnection() throws SQLException {
+        if (connection.isClosed()) {
+            init();
+        }
         return connection;
     }
 

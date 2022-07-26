@@ -1,9 +1,6 @@
 package com.project.estorefront.model;
 
-import com.project.estorefront.repository.ISellerOrderPersistence;
-import com.project.estorefront.repository.ISellerPersistence;
-import com.project.estorefront.repository.SellerOrderPersistence;
-import com.project.estorefront.repository.SellerPersistence;
+import com.project.estorefront.repository.*;
 
 public class SellerFactory implements ISellerFactory {
 
@@ -20,9 +17,11 @@ public class SellerFactory implements ISellerFactory {
     }
 
     @Override
-    public ISellerPersistence makeSellerPersistence() {
-        return new SellerPersistence();
+    public ISellerPersistence makeSellerPersistence(IDatabase database) {
+        return new SellerPersistence(database);
     }
+
+
 
     @Override
     public ISellerOrderManagement makeSellerOrderManagement() {
@@ -37,6 +36,11 @@ public class SellerFactory implements ISellerFactory {
     @Override
     public User makeSeller() {
         return new Seller();
+    }
+
+    @Override
+    public User makeSeller(String sellerID) {
+        return new Seller(sellerID);
     }
 
 }

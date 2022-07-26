@@ -3,6 +3,7 @@ package com.project.estorefront.repository;
 import com.project.estorefront.model.Buyer;
 import com.project.estorefront.model.User;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -62,5 +63,10 @@ public class AuthenticationMock implements IAuthentication{
     @Override
     public boolean checkIfUserExists(String email) {
         return false;
+    }
+
+    @Override
+    public boolean checkIfUserIsSeller(String email) throws SQLException {
+        return true;
     }
 }

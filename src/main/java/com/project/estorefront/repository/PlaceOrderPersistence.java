@@ -8,7 +8,7 @@ import java.sql.*;
 
 public class PlaceOrderPersistence implements IPlaceOrderPersistence{
     @Override
-    public boolean placeOrder(ICart cart, String buyerID, String address, String pincode) {
+    public boolean placeOrder(ICart cart, String buyerID, String address, String pincode) throws SQLException {
         boolean res = true;
         String newOrderID = getNewOrderID();
         PreparedStatement preparedStatement;
@@ -48,8 +48,7 @@ public class PlaceOrderPersistence implements IPlaceOrderPersistence{
         return res;
     }
 
-    private String getNewOrderID()
-    {
+    private String getNewOrderID() throws SQLException {
         String orderID = "";
 
         Statement statement;

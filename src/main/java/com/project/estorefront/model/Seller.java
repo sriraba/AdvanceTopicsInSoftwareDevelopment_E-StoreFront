@@ -2,6 +2,7 @@ package com.project.estorefront.model;
 
 import com.project.estorefront.repository.ISellerPersistence;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Seller extends User implements ISeller {
@@ -13,7 +14,11 @@ public class Seller extends User implements ISeller {
         super();
     }
 
-    @Override
+    public Seller(String sellerID) {
+        super();
+        this.userID = sellerID;
+    }
+
     public void setBusinessName(String businessName) {
         this.businessName = businessName;
     }
@@ -23,7 +28,6 @@ public class Seller extends User implements ISeller {
         return businessName;
     }
 
-    @Override
     public void setBusinessDescription(String businessDescription) {
         this.businessDescription = businessDescription;
     }
@@ -34,11 +38,11 @@ public class Seller extends User implements ISeller {
     }
 
 
-    public static ArrayList<User> getAllSellersByCity(ISellerPersistence persistence, String city) {
+    public static ArrayList<User> getAllSellersByCity(ISellerPersistence persistence, String city) throws SQLException {
         return persistence.getAllSellersByCity(city);
     }
 
-    public static ArrayList<User> getAllSellersByCategory(ISellerPersistence persistence, ItemCategory category, String city) {
+    public static ArrayList<User> getAllSellersByCategory(ISellerPersistence persistence, ItemCategory category, String city) throws SQLException {
         return persistence.getAllSellersByCategory(category, city);
     }
 
@@ -47,17 +51,17 @@ public class Seller extends User implements ISeller {
 
     }
 
-    public User getSellerByID(ISellerPersistence persistence, String sellerID) {
+    public User getSellerByID(ISellerPersistence persistence, String sellerID) throws SQLException {
         return persistence.getSellerByID(sellerID);
     }
 
     @Override
-    public boolean updateSellerAccount(ISellerPersistence persistence) {
+    public boolean updateSellerAccount(ISellerPersistence persistence) throws SQLException {
         return persistence.updateSellerAccount(this);
     }
 
     @Override
-    public boolean deactivateSellerAccount(ISellerPersistence persistence) {
+    public boolean deactivateSellerAccount(ISellerPersistence persistence) throws SQLException {
         return persistence.deactivateSellerAccount(this);
     }
 
