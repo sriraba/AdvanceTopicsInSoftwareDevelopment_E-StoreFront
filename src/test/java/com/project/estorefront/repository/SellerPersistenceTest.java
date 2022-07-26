@@ -1,17 +1,16 @@
 package com.project.estorefront.repository;
 
-import com.project.estorefront.model.ItemCategory;
-import com.project.estorefront.model.Seller;
-import com.project.estorefront.model.User;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
+import com.project.estorefront.model.ItemCategory;
+import com.project.estorefront.model.User;
 
 class SellerPersistenceTest {
 
@@ -81,13 +80,14 @@ class SellerPersistenceTest {
     }
 
     @Test
-    void testUpdateSellerAccountWhenUserExists(){
+    void testUpdateSellerAccountWhenUserExists() {
 
     }
+
     @Test
     public void testPersistenceSellerUpdateAccount() {
-//        ISellerPersistence sellerPersistence = new SellerPersistenceMock();
-//        User seller = new Seller();
-//                ArrayList<User> seller = sellerPersistenceMock.getSell
+        // ISellerPersistence sellerPersistence = new SellerPersistenceMock();
+        // User seller = new Seller();
+        // ArrayList<User> seller = sellerPersistenceMock.getSell
     }
 }

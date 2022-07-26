@@ -1,14 +1,14 @@
 package com.project.estorefront.model;
 
-import com.project.estorefront.repository.ISellerPersistence;
-import com.project.estorefront.repository.SellerPersistenceMock;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Test;
+
+import com.project.estorefront.repository.ISellerPersistence;
+import com.project.estorefront.repository.SellerPersistenceMock;
 
 public class SellerTests {
 
@@ -25,14 +25,14 @@ public class SellerTests {
         ISellerPersistence persistence = new SellerPersistenceMock();
         ((SellerPersistenceMock) persistence).addMockSellerWithCity("Halifax");
         ArrayList<User> sellers = Seller.getAllSellersByCity(persistence, "Halifax");
-        assert(sellers != null && sellers.size() > 0);
+        assert (sellers != null && sellers.size() > 0);
     }
 
     @Test
     public void testGetAllSellersWithNoSellers() throws SQLException {
         ISellerPersistence persistence = new SellerPersistenceMock();
         ArrayList<User> sellers = Seller.getAllSellersByCity(persistence, "Halifax");
-        assert(sellers == null);
+        assert (sellers == null);
     }
 
     @Test
@@ -40,14 +40,14 @@ public class SellerTests {
         ISellerPersistence persistence = new SellerPersistenceMock();
         ((SellerPersistenceMock) persistence).addMockSellerForCategoryTest();
         ArrayList<User> sellers = Seller.getAllSellersByCategory(persistence, ItemCategory.GROCERY, "Halifax");
-        assert(sellers != null && sellers.size() > 0);
+        assert (sellers != null && sellers.size() > 0);
     }
 
     @Test
     public void testGetAllSellersByCategoryWithNoSellers() throws SQLException {
         ISellerPersistence persistence = new SellerPersistenceMock();
         ArrayList<User> sellers = Seller.getAllSellersByCategory(persistence, ItemCategory.GROCERY, "Halifax");
-        assert(sellers == null);
+        assert (sellers == null);
     }
 
 }

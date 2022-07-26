@@ -1,6 +1,5 @@
 package com.project.estorefront.repository;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -86,7 +85,7 @@ public class AuthenticationMock implements IAuthentication {
     }
 
     @Override
-    public boolean checkIfUserIsSeller(String email) throws SQLException {
+    public boolean checkIfUserIsSeller(String email) {
         if (userMap.size() > 0) {
             for (Map.Entry<String, User> entry : userMap.entrySet()) {
                 User userDetail = entry.getValue();

@@ -1,7 +1,6 @@
 package com.project.estorefront.model;
 
 import org.junit.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 public class OTPGeneratorTests {
 

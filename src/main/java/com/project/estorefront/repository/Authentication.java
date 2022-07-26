@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 import com.project.estorefront.model.CryptoFactory;
-import com.project.estorefront.model.DatabaseFactory;
-import com.project.estorefront.model.User;
 
 public class Authentication implements IAuthentication {
 
@@ -42,7 +40,9 @@ public class Authentication implements IAuthentication {
     }
 
     @Override
-    public String register(String firstName, String lastName, String email, String password, String phone, boolean isSeller, String city, String businessName, String address, String businessDescription, boolean isUserEnabled) throws SQLException {
+    public String register(String firstName, String lastName, String email, String password, String phone,
+            boolean isSeller, String city, String businessName, String address, String businessDescription,
+            boolean isUserEnabled) throws SQLException {
         Connection connection = database.getConnection();
 
         String userID = UUID.randomUUID().toString();
