@@ -40,8 +40,8 @@ public class Authentication implements IAuthentication {
                     String businessName = null;
                     String businessDescription = null;
                     if (isSeller) {
-                        businessName = resultSet.getString("businessName");
-                        businessDescription = resultSet.getString("businessDescription");
+                        businessName = resultSet.getString("business_name");
+                        businessDescription = resultSet.getString("business_description");
                     }
                     return UserFactory.instance().makeUserWithAllFields(userID, firstName, lastName, email, address, phone, city, isSeller, businessName, businessDescription);
                 }
