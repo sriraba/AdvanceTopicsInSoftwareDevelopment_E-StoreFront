@@ -1,15 +1,8 @@
 package com.project.estorefront.model;
 
-import com.project.estorefront.repository.Database;
-import com.project.estorefront.repository.IOrderPersistence;
-import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-
 import static org.junit.Assert.assertNotNull;
+
+import org.junit.jupiter.api.Test;
 
 public class OrderAndItemsFactoryTests {
 
@@ -18,9 +11,12 @@ public class OrderAndItemsFactoryTests {
         assertNotNull(OrderAndItemsFactory.instance());
     }
 
-/*    @Test
-    public void testMakeOrderPersistence() {
-        IOrderPersistence orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence(new Database());
-        assertNotNull(orderPersistence);
-    }*/
+    /*
+     * @Test
+     * public void testMakeOrderPersistence() {
+     * IOrderPersistence orderPersistence =
+     * OrderAndItemsFactory.instance().makeOrderPersistence(new Database());
+     * assertNotNull(orderPersistence);
+     * }
+     */
 }

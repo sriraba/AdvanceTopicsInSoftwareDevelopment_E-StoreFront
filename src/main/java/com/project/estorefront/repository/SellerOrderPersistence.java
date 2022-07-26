@@ -6,8 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.project.estorefront.model.DatabaseFactory;
-import com.project.estorefront.model.IDeliveryPerson;
 import com.project.estorefront.model.OrderAndItemsFactory;
 import com.project.estorefront.model.OrderDetails;
 

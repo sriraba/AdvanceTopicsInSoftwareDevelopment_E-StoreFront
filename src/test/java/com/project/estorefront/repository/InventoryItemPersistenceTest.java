@@ -1,19 +1,19 @@
 package com.project.estorefront.repository;
 
-import com.project.estorefront.model.IInventoryItem;
-import com.project.estorefront.model.InventoryItem;
-import com.project.estorefront.model.ItemCategory;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
+
+import com.project.estorefront.model.IInventoryItem;
+import com.project.estorefront.model.InventoryItem;
+import com.project.estorefront.model.ItemCategory;
 
 public class InventoryItemPersistenceTest {
 
@@ -37,7 +37,8 @@ public class InventoryItemPersistenceTest {
         IInventoryItemPersistence persistence = new InventoryItemPersistenceMock();
         IInventoryItem item2 = new InventoryItem("2", ItemCategory.valueOf("GROCERY"), "Test", "Desc",
                 11.0, 3);
-        IInventoryItemPersistence.InventoryItemPersistenceOperationStatus status = persistence.delete(item2.getItemID());
+        IInventoryItemPersistence.InventoryItemPersistenceOperationStatus status = persistence
+                .delete(item2.getItemID());
         assertSame(status, IInventoryItemPersistence.InventoryItemPersistenceOperationStatus.FAILURE);
 
     }
@@ -46,7 +47,8 @@ public class InventoryItemPersistenceTest {
     public void testPersistenceUpdate() throws SQLException {
         IInventoryItemPersistence persistence = new InventoryItemPersistenceMock();
         persistence.save("1", "1", ItemCategory.GROCERY, 3, 11.0, "Test", "Desc");
-        IInventoryItemPersistence.InventoryItemPersistenceOperationStatus status = persistence.update("1", ItemCategory.GROCERY, 10, 20, "Test", "Test", "1");
+        IInventoryItemPersistence.InventoryItemPersistenceOperationStatus status = persistence.update("1",
+                ItemCategory.GROCERY, 10, 20, "Test", "Test", "1");
         assertSame(status, IInventoryItemPersistence.InventoryItemPersistenceOperationStatus.SUCCESS);
     }
 
@@ -56,7 +58,8 @@ public class InventoryItemPersistenceTest {
         persistence.save("1", "1", ItemCategory.GROCERY, 3, 11.0, "Test", "Desc");
         persistence.save("2", "1", ItemCategory.GROCERY, 3, 11.0, "Test", "Desc");
 
-        IInventoryItemPersistence.InventoryItemPersistenceOperationStatus status = persistence.update("1", ItemCategory.GROCERY, 10, 20, "Test", "Test", "6");
+        IInventoryItemPersistence.InventoryItemPersistenceOperationStatus status = persistence.update("1",
+                ItemCategory.GROCERY, 10, 20, "Test", "Test", "6");
         assertSame(status, IInventoryItemPersistence.InventoryItemPersistenceOperationStatus.FAILURE);
     }
 

@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 import com.project.estorefront.model.CryptoFactory;
-import com.project.estorefront.model.DatabaseFactory;
-import com.project.estorefront.model.User;
 
 public class Authentication implements IAuthentication {
 
@@ -42,29 +40,33 @@ public class Authentication implements IAuthentication {
     }
 
     @Override
-    public String register(User user) throws SQLException {
+    public String register(String firstName, String lastName, String email, String password, String phone,
+            boolean isSeller, String city, String businessName, String address, String businessDescription,
+            boolean isUserEnabled) throws SQLException {
         Connection connection = database.getConnection();
 
+        String userID = UUID.randomUUID().toString();
+        String hashedPassword = CryptoFactory.instance().makeCrypto().encryptPassword(password);
+
         try {
-            String persistUserDetails = "insert into user (user_id, first_name, last_name, email, password, contact_num, seller, city, business_name, address, isUserEnabled) "
+            String persistUserDetails = "insert into user (user_id, first_name, last_name, email, password, contact_num, seller, city, business_name, address, business_description, isUserEnabled) "
                     +
-                    "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStmt = connection.prepareStatement(persistUserDetails);
 
-            String userID = UUID.randomUUID().toString();
-            String hashedPassword = CryptoFactory.instance().makeCrypto().encryptPassword(user.getPassword());
-
             preparedStmt.setString(1, userID);
-            preparedStmt.setString(2, user.getFirstName());
-            preparedStmt.setString(3, user.getLastName());
-            preparedStmt.setString(4, user.getEmail());
+            preparedStmt.setString(2, firstName);
+            preparedStmt.setString(3, lastName);
+            preparedStmt.setString(4, email);
             preparedStmt.setString(5, hashedPassword);
-            preparedStmt.setString(6, user.getPhone());
-            preparedStmt.setBoolean(7, user.getIsSeller());
-            preparedStmt.setString(8, user.getCity());
-            preparedStmt.setString(9, "");
-            preparedStmt.setString(10, user.getAddress());
-            preparedStmt.setBoolean(11, user.getIsUserEnabled());
+            preparedStmt.setString(6, phone);
+            preparedStmt.setBoolean(7, isSeller);
+            preparedStmt.setString(8, city);
+            preparedStmt.setString(9, businessName);
+            preparedStmt.setString(10, address);
+            preparedStmt.setString(11, businessDescription);
+            preparedStmt.setBoolean(12, isUserEnabled);
+
             preparedStmt.execute();
             return userID;
         } catch (SQLException e) {
