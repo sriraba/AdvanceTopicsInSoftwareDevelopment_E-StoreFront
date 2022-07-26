@@ -1,19 +1,46 @@
 package com.project.estorefront.controller;
 
-import com.project.estorefront.model.*;
-import com.project.estorefront.model.validators.CartValidator;
-import com.project.estorefront.model.validators.ICartValidator;
-import com.project.estorefront.repository.*;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.project.estorefront.model.Buyer;
+import com.project.estorefront.model.BuyerFactory;
+import com.project.estorefront.model.CartFactory;
+import com.project.estorefront.model.DatabaseFactory;
+import com.project.estorefront.model.IBuyerOrderManagement;
+import com.project.estorefront.model.ICart;
+import com.project.estorefront.model.IInventoryItem;
+import com.project.estorefront.model.InventoryFactory;
+import com.project.estorefront.model.InventoryItem;
+import com.project.estorefront.model.ItemCategory;
+import com.project.estorefront.model.OrderAndItemsFactory;
+import com.project.estorefront.model.OrderDetails;
+import com.project.estorefront.model.Seller;
+import com.project.estorefront.model.SellerFactory;
+import com.project.estorefront.model.User;
+import com.project.estorefront.model.validators.ICartValidator;
+import com.project.estorefront.repository.IBuyerOrderPersistence;
+import com.project.estorefront.repository.IBuyerPersistence;
+import com.project.estorefront.repository.IDatabase;
+import com.project.estorefront.repository.IInventoryItemPersistence;
+import com.project.estorefront.repository.IOrderPersistence;
+import com.project.estorefront.repository.IPlaceOrderPersistence;
+import com.project.estorefront.repository.ISellerPersistence;
+import com.project.estorefront.repository.PersistenceStatus;
 
 @Controller
 public class BuyerController {
@@ -38,7 +65,7 @@ public class BuyerController {
 
     @GetMapping("/buyer")
     public String buyerHome(@RequestParam(required = false, name = "category") String categoryFilter, Model model,
-                            HttpSession session, RedirectAttributes redirectAttributes) {
+            HttpSession session, RedirectAttributes redirectAttributes) {
         String userID = getUserID(session);
         if (userID == null || userID.isEmpty()) {
             return notLoggedInRedirect;
@@ -104,9 +131,9 @@ public class BuyerController {
 
     @PostMapping("/buyer/account/update/{userID}")
     public String updateBuyerAccount(@RequestParam("firstName") String firstName,
-                                     @RequestParam("lastName") String lastName,
-                                     @RequestParam("phone") String phone, @RequestParam("address") String address, @PathVariable String userID,
-                                     HttpSession session, RedirectAttributes redirectAttributes) {
+            @RequestParam("lastName") String lastName,
+            @RequestParam("phone") String phone, @RequestParam("address") String address, @PathVariable String userID,
+            HttpSession session, RedirectAttributes redirectAttributes) {
         User buyer = BuyerFactory.instance().makeBuyer();
         buyer.setFirstName(firstName);
         buyer.setLastName(lastName);
@@ -161,7 +188,7 @@ public class BuyerController {
 
     @GetMapping("/buyer/orders/view")
     public ModelAndView buyerOrdersView(HttpSession session, RedirectAttributes redirectAttributes) {
-        String userID = (String) session.getAttribute("userID");
+        String userID = getUserID(session);
         if (userID == null || userID.isEmpty()) {
             return new ModelAndView("redirect:/login");
         }
@@ -169,7 +196,7 @@ public class BuyerController {
 
         try {
             Map<String, ArrayList<OrderDetails>> buyerOrders = buyerOrder.getBuyerOrders(userID, buyerOrderPersistence);
-            if(buyerOrders == null){
+            if (buyerOrders == null) {
                 redirectAttributes.addFlashAttribute("error", "No orders to show");
                 return new ModelAndView("redirect:/buyer");
             }
@@ -181,37 +208,38 @@ public class BuyerController {
         }
     }
 
-    @GetMapping("/buyer/order/details/{orderID}")
-    public ModelAndView buyerItems(@PathVariable String orderID, RedirectAttributes redirectAttributes) {
+    @GetMapping("/buyer/order/details/{orderID}/{orderStatus}")
+    public ModelAndView buyerItems(@PathVariable String orderID, @PathVariable String orderStatus,RedirectAttributes redirectAttributes) {
         IBuyerOrderManagement buyerOrder = BuyerFactory.instance().makeBuyerOrderManagement();
         ModelAndView modelAndView = null;
         try {
-            OrderDetails orderDetails = buyerOrder.getOrderAndItemDetails(orderID,orderPersistence);
-            if(orderDetails == null){
+            OrderDetails orderDetails = buyerOrder.getOrderAndItemDetails(orderID, orderPersistence);
+            if (orderDetails == null) {
                 redirectAttributes.addFlashAttribute("error", "Something went wrong, please try again.");
-                return new ModelAndView("redirect:/buyer","orders", orderDetails);
+                return new ModelAndView("redirect:/buyer", "orders", orderDetails);
             }
-            modelAndView = new ModelAndView("view-selected-order", "order",orderDetails);
+            modelAndView = new ModelAndView("view-selected-order", "order", orderDetails);
         } catch (SQLException e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Error fetching order");
             return new ModelAndView("redirect:/error");
         }
-        modelAndView.addObject("page", "buyer");
+        modelAndView.addObject("page", orderStatus);
         return modelAndView;
     }
 
     @GetMapping("/buyer/order/add-review/{userID}/{orderID}")
     public String addReview(@PathVariable("userID") String userID, @PathVariable("orderID") String orderID,
-                            Model model) {
+            Model model) {
         model.addAttribute("userID", userID);
         model.addAttribute("orderID", orderID);
         return "add-review";
     }
 
-    @GetMapping("/buyer/order/submit-review/{userID}/{orderID}")
-    public String submitReview(@PathVariable("userID") String userID, @PathVariable("orderID") String orderID,
-                               @RequestParam("review") String description, Model model, RedirectAttributes redirectAttributes) {
+    @GetMapping("/buyer/order/submit-review/{orderID}")
+    public String submitReview(@PathVariable("orderID") String orderID,
+                               @RequestParam("review") String description, Model model, RedirectAttributes redirectAttributes,HttpSession session) {
+        String userID = getUserID(session);
         IBuyerOrderManagement buyerOrder = BuyerFactory.instance().makeBuyerOrderManagement();
         try {
             PersistenceStatus status = buyerOrder.submitReview(userID, orderID, description, buyerOrderPersistence);
@@ -224,7 +252,7 @@ public class BuyerController {
         } catch (SQLException e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Error submitting review");
-            return "redirect:/buyer-orders/view";
+            return "redirect:/buyer/orders/view";
         }
 
     }
@@ -249,7 +277,7 @@ public class BuyerController {
 
     @RequestMapping(value = "/buyer/cart/add/{itemID}", method = RequestMethod.POST)
     public String addToCart(@PathVariable String itemID, @RequestParam("quantity") String qty, HttpSession session,
-                            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes) {
         ICart cart = getCart(session);
 
         IInventoryItem inventory = null;
@@ -279,7 +307,7 @@ public class BuyerController {
 
     @RequestMapping(value = "/buyer/cart/delete/{itemID}", method = RequestMethod.GET)
     public String deleteItemFromCart(@PathVariable String itemID, Model model, HttpSession session,
-                                     RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes) {
         ICart cart = getCart(session);
         IInventoryItem inventory = null;
         try {
@@ -314,7 +342,7 @@ public class BuyerController {
 
     @PostMapping("/buyer/cart/update/{itemID}")
     public String updateCartItemQty(@PathVariable String itemID, @RequestParam("quantity") String quantity,
-                                    HttpSession session) {
+            HttpSession session) {
         ICart cart = getCart(session);
         IInventoryItem item = cart.getItemByID(itemID);
         ((InventoryItem) item).setItemQuantity(Integer.parseInt(quantity));
@@ -329,7 +357,7 @@ public class BuyerController {
 
     @RequestMapping(value = "/buyer/checkout", method = RequestMethod.POST)
     public String checkout(@RequestParam("address") String address, @RequestParam("pincode") String pincode,
-                           HttpSession session) throws SQLException {
+            HttpSession session) throws SQLException {
         ICart cart = getCart(session);
         ICartValidator validator = CartFactory.instance().makeCartValidator();
         String error = validator.validateCart(cart);

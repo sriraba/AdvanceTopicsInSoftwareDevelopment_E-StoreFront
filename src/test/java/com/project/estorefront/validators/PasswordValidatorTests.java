@@ -10,6 +10,11 @@ import org.springframework.test.context.TestPropertySource;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Test;
+
+import com.project.estorefront.model.validators.IValidator;
+import com.project.estorefront.model.validators.PasswordValidator;
+
 class PasswordValidatorTests {
 
     @Test

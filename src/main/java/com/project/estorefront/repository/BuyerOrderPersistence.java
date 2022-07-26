@@ -1,16 +1,14 @@
 package com.project.estorefront.repository;
 
-import com.project.estorefront.model.BuyerFactory;
-import com.project.estorefront.model.DatabaseFactory;
-import com.project.estorefront.model.OrderAndItemsFactory;
-import com.project.estorefront.model.OrderDetails;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
+
+import com.project.estorefront.model.OrderAndItemsFactory;
+import com.project.estorefront.model.OrderDetails;
 
 public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrderPersistence {
 
@@ -57,7 +55,6 @@ public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrd
     @Override
     public PersistenceStatus submitReview(String userID, String orderID, String description) throws SQLException {
         Connection connection = database.getConnection();
-
         PreparedStatement preparedStatement;
         try {
 
@@ -72,9 +69,9 @@ public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrd
             preparedStatement.setString(4, orderID);
             boolean status = preparedStatement.execute();
             if (status) {
-                return PersistenceStatus.SUCCESS;
-            } else {
                 return PersistenceStatus.FAILURE;
+            } else {
+                return PersistenceStatus.SUCCESS;
             }
         } catch (SQLException e) {
             e.printStackTrace();
