@@ -1,15 +1,15 @@
 package com.project.estorefront.repository;
 
-import com.project.estorefront.model.*;
-
-import java.sql.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.project.estorefront.model.*;
+import com.project.estorefront.model.ItemCategory;
+import com.project.estorefront.model.Seller;
+import com.project.estorefront.model.User;
+import com.project.estorefront.model.UserFactory;
 
 public class SellerPersistence implements ISellerPersistence {
 
@@ -39,7 +39,8 @@ public class SellerPersistence implements ISellerPersistence {
                 String address = rs.getString("address");
                 String businessDescription = rs.getString("business_description");
 
-                User seller = UserFactory.instance().makeUserWithAllFields(userID, firstName, lastName, email, address, contactNumber, city, true, businessName, businessDescription);
+                User seller = UserFactory.instance().makeUserWithAllFields(userID, firstName, lastName, email, address,
+                        contactNumber, city, true, businessName, businessDescription);
 
                 sellerList.add(seller);
             }
@@ -73,7 +74,8 @@ public class SellerPersistence implements ISellerPersistence {
                 String address = rs.getString("address");
                 String businessDescription = rs.getString("business_description");
 
-                User seller = UserFactory.instance().makeUserWithAllFields(userID, firstName, lastName, email, address, contactNumber, sellerCity, true, businessName, businessDescription);
+                User seller = UserFactory.instance().makeUserWithAllFields(userID, firstName, lastName, email, address,
+                        contactNumber, sellerCity, true, businessName, businessDescription);
 
                 sellerList.add(seller);
             }
@@ -107,7 +109,8 @@ public class SellerPersistence implements ISellerPersistence {
                 String address = rs.getString("address");
                 String businessDescription = rs.getString("business_description");
 
-                User seller = UserFactory.instance().makeUserWithAllFields(userID, null, null, email, address, contactNumber, rsCity, true, businessName, businessDescription);
+                User seller = UserFactory.instance().makeUserWithAllFields(userID, null, null, email, address,
+                        contactNumber, rsCity, true, businessName, businessDescription);
 
                 sellerList.add(seller);
             }
@@ -140,7 +143,8 @@ public class SellerPersistence implements ISellerPersistence {
                 String address = rs.getString("address");
                 String businessDescription = rs.getString("business_description");
 
-                User seller = UserFactory.instance().makeUserWithAllFields(userID, firstName, lastName, email, address, contactNumber, city, true, businessName, businessDescription);
+                User seller = UserFactory.instance().makeUserWithAllFields(userID, firstName, lastName, email, address,
+                        contactNumber, city, true, businessName, businessDescription);
 
                 return seller;
             }
@@ -191,5 +195,3 @@ public class SellerPersistence implements ISellerPersistence {
         }
     }
 }
-
-

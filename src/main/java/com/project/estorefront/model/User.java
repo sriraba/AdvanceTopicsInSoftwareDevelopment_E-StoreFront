@@ -97,14 +97,6 @@ public abstract class User {
         this.password = password;
     }
 
-    public abstract void updateProfile();
-
-    // public abstract void updateSellerProfile();
-
-    public void deleteProfile() {
-
-    }
-
     public boolean getIsSeller() {
         return isSeller;
     }
@@ -125,9 +117,7 @@ public abstract class User {
         return authentication.login(email, password);
     };
 
-    public String register(IAuthentication authentication) throws SQLException {
-        return authentication.register(this);
-    };
+    public abstract String register(IAuthentication authentication) throws SQLException;
 
     public static boolean sendResetEmail(IMailSender mailSender, String email, String otp) {
         return mailSender.sendMail(email, otp);

@@ -1,11 +1,10 @@
 package com.project.estorefront.repository;
 
-import com.project.estorefront.model.IInventoryItem;
-import com.project.estorefront.model.ItemCategory;
-import com.project.estorefront.model.User;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import com.project.estorefront.model.ItemCategory;
+import com.project.estorefront.model.User;
 
 public interface ISellerPersistence {
 
@@ -22,5 +21,3 @@ public interface ISellerPersistence {
     boolean updateSellerAccount(User seller) throws SQLException;
 
 }
-
-

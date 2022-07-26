@@ -1,12 +1,15 @@
 package com.project.estorefront.repository;
 
-import com.project.estorefront.model.Coupon;
-import com.project.estorefront.model.DatabaseFactory;
-import com.project.estorefront.model.ICoupon;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.project.estorefront.model.Coupon;
+import com.project.estorefront.model.ICoupon;
 
 public class CouponsPersistence implements ICouponsPersistence {
 

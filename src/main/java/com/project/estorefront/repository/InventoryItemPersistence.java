@@ -1,13 +1,15 @@
 package com.project.estorefront.repository;
 
-import com.project.estorefront.model.*;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.UUID;
+
+import com.project.estorefront.model.IInventoryItem;
+import com.project.estorefront.model.InventoryFactory;
+import com.project.estorefront.model.InventoryItem;
+import com.project.estorefront.model.ItemCategory;
 
 public class InventoryItemPersistence implements IInventoryItemPersistence {
 
@@ -18,12 +20,14 @@ public class InventoryItemPersistence implements IInventoryItemPersistence {
     }
 
     @Override
-    public InventoryItemPersistenceOperationStatus save(String itemID, String userID, ItemCategory itemCategory, int quantity, double price, String itemName, String itemDescription) throws SQLException {
+    public InventoryItemPersistenceOperationStatus save(String itemID, String userID, ItemCategory itemCategory,
+            int quantity, double price, String itemName, String itemDescription) throws SQLException {
         Connection connection = database.getConnection();
 
         PreparedStatement preparedStatement;
         try {
-            preparedStatement = connection.prepareStatement("INSERT INTO seller_inventory (item_id, user_id, category_id, quantity, price, item_name, item_description) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            preparedStatement = connection.prepareStatement(
+                    "INSERT INTO seller_inventory (item_id, user_id, category_id, quantity, price, item_name, item_description) VALUES (?, ?, ?, ?, ?, ?, ?)");
             preparedStatement.setString(1, itemID);
             preparedStatement.setString(2, userID);
             preparedStatement.setString(3, itemCategory.toString());
@@ -70,12 +74,14 @@ public class InventoryItemPersistence implements IInventoryItemPersistence {
     }
 
     @Override
-    public InventoryItemPersistenceOperationStatus update(String userID, ItemCategory itemCategory, int quantity, double price, String name, String description, String itemID) throws SQLException {
+    public InventoryItemPersistenceOperationStatus update(String userID, ItemCategory itemCategory, int quantity,
+            double price, String name, String description, String itemID) throws SQLException {
         Connection connection = database.getConnection();
 
         PreparedStatement preparedStatement;
         try {
-            preparedStatement = connection.prepareStatement("UPDATE seller_inventory SET user_id = ?, category_id = ?, quantity = ?, price = ?, item_name = ?, item_description = ? WHERE item_id = ?");
+            preparedStatement = connection.prepareStatement(
+                    "UPDATE seller_inventory SET user_id = ?, category_id = ?, quantity = ?, price = ?, item_name = ?, item_description = ? WHERE item_id = ?");
             preparedStatement.setString(1, userID);
             preparedStatement.setString(2, itemCategory.toString());
             preparedStatement.setInt(3, quantity);
@@ -150,7 +156,8 @@ public class InventoryItemPersistence implements IInventoryItemPersistence {
                 String name = rs.getString("item_name");
                 String description = rs.getString("item_description");
 
-                IInventoryItem item = InventoryFactory.instance().makeInventoryItem(itemID, userID1, category, quantity, price, name, description);
+                IInventoryItem item = InventoryFactory.instance().makeInventoryItem(itemID, userID1, category, quantity,
+                        price, name, description);
                 return item;
             }
 
