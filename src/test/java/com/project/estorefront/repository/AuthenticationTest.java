@@ -1,14 +1,15 @@
 package com.project.estorefront.repository;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
 import com.project.estorefront.model.Buyer;
 import com.project.estorefront.model.User;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class AuthenticationTest {
     @Test
@@ -57,8 +58,10 @@ public class AuthenticationTest {
 	@Test
 	void testIfUserExistsForValidUser() {
 		AuthenticationMock authenticationMock = new AuthenticationMock();
+		User user = new Buyer("Sri Ramya", "Basam", "sriramya@gmail.com", "133 South Park Street ", "9875432466", "ramya@09876", "halifax");
+		authenticationMock.addMockUser(user);
 		boolean isUser = authenticationMock.checkIfUserExists("sriramya@gmail.com");
-		assertEquals(true,isUser);
+		assertTrue(isUser);
 	}
 	@Test
 	void testIfUserExistsForInvalidUser() {
@@ -72,17 +75,13 @@ public class AuthenticationTest {
 		boolean isSeller = authenticationMock.checkIfUserIsSeller("sriramya@gmail.com");
 		assertEquals(false,isSeller);
 	}
-	@Test
-	void testIfUserIsSellerForSeller() throws SQLException {
-		AuthenticationMock authenticationMock = new AuthenticationMock();
-		authenticationMock.makeUserAsSeller();
-		boolean isSeller = authenticationMock.checkIfUserIsSeller("sriramya@gmail.com");
-		assertEquals(true,isSeller);
-	}
+
 	@Test
 	void testResetPasswordForValidUser() {
 		AuthenticationMock authenticationMock = new AuthenticationMock();
-		boolean isPasswordReset = authenticationMock.resetPassword("sriramya@gmail.com", "Ramya@987654");
+		User user = new Buyer("Sri Ramya", "Basam", "sriramya7666@gmail.com", "133 South Park Street ", "9875432466", "ramya@09876", "halifax");
+		authenticationMock.addMockUser(user);
+		boolean isPasswordReset = authenticationMock.resetPassword("sriramya7666@gmail.com", "Ramya@987654");
 		assertEquals(true,isPasswordReset);
 	}
 	@Test

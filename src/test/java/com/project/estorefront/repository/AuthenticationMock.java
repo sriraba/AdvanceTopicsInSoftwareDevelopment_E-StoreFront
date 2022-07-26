@@ -15,6 +15,11 @@ public class AuthenticationMock implements IAuthentication {
         userMap.put("ASD", user);
     }
 
+    public void addMockSeller(User user) {
+        user.setIsSeller(true);
+        userMap.put("ASD", user);
+    }
+
     @Override
     public String login(String email, String password) {
         if (email == null || password == null) {
