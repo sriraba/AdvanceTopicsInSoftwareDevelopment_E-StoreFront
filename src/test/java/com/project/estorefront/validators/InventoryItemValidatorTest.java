@@ -89,7 +89,7 @@ public class InventoryItemValidatorTest {
                 ItemCategory.GROCERY, 10, 10.0, "Test", "");
 
         IInventoryItemValidator validator = new InventoryItemValidator();
-        assertEquals(validator.validate(item), InventoryItemValidationStatus.INVALID_INVENTORY_ITEM_DESCRIPTION);
+        assertEquals(validator.validate(item), InventoryItemValidationStatus.INVALID_USER_ID);
     }
 
     @Test

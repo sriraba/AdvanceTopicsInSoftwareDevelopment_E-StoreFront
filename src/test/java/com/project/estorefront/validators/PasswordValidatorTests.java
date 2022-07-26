@@ -1,5 +1,12 @@
 package com.project.estorefront.validators;
 
+import com.project.estorefront.model.validators.IValidator;
+import com.project.estorefront.model.validators.PasswordValidator;
+import com.project.estorefront.model.validators.PhoneNumberValidator;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -39,6 +46,12 @@ class PasswordValidatorTests {
         String invalidPassword = "Aaadsdwewer2";
         IValidator passwordValidator = new PasswordValidator();
 
+        assertFalse(passwordValidator.validate(invalidPassword));
+    }
+    @Test
+    void testInvalidPasswordWithNoAlphabets(){
+        String invalidPassword = "1425637@";
+        IValidator passwordValidator = new PasswordValidator();
         assertFalse(passwordValidator.validate(invalidPassword));
     }
 

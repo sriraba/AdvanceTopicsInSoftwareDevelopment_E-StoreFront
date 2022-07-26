@@ -53,7 +53,7 @@ public class SellerController {
 
         User seller = SellerFactory.instance().makeSeller();
         try {
-            seller = ((Seller) seller).getSellerByID(sellerPersistence, "1");
+            seller = ((Seller) seller).getSellerByID(sellerPersistence, userID);
         } catch (SQLException e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Error getting seller profile.");
@@ -88,7 +88,6 @@ public class SellerController {
         seller.setLastName(lastName);
         ((Seller) seller).setBusinessName(businessName);
         ((Seller) seller).setBusinessDescription(businessDescription);
-        seller.setEmail(email);
         seller.setPhone(phone);
         seller.setUserID(userID);
         try {

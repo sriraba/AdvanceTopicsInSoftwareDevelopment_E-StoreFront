@@ -94,13 +94,12 @@ public class AuthenticationController {
 
     @PostMapping("/validate-register")
     public ModelAndView validateRegister(@RequestParam("firstName") String firstName,
-            @RequestParam("lastName") String lastName,
-            @RequestParam("email") String email, @RequestParam("password") String password,
-            @RequestParam("confirmPassword") String confirmPassword,
-            @RequestParam("contact") String contact, @RequestParam("city") String city, @RequestParam String address,
-            @RequestParam("role") String role, @RequestParam("businessName") String businessName,
-            @RequestParam("businessDescription") String businessDescription, HttpSession session,
-            RedirectAttributes redirectAttributes) {
+                                         @RequestParam("lastName") String lastName, @RequestParam("businessName") String businessName,
+                                         @RequestParam("businessDescription") String businessDescription,
+                                         @RequestParam("email") String email, @RequestParam("password") String password,
+                                         @RequestParam("confirmPassword") String confirmPassword,
+                                         @RequestParam("contact") String contact, @RequestParam("city") String city, @RequestParam String address,
+                                         @RequestParam("role") String role, HttpSession session, RedirectAttributes redirectAttributes) {
 
         IValidator nameValidator = ValidatorFactory.instance().makeNameValidator();
         IValidator emailValidator = ValidatorFactory.instance().makeEmailValidator();
@@ -116,7 +115,13 @@ public class AuthenticationController {
         if (nameValidator.validate(city) == false) {
             errors.add("Invalid City.");
         }
-
+        if(nameValidator.validate(businessName) == false){
+            errors.add("Invalid Business Name");
+        }
+        if(nameValidator.validate(businessDescription) == false){
+            errors.add("Invalid Business Description");
+        }
+        // phone number
         if (phoneNumberValidator.validate(contact) == false) {
             errors.add("Invalid Phone Number. Phone should only contain numbers and should be 10-digit");
         }
