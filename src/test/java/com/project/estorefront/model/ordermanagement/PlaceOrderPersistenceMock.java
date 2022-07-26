@@ -13,7 +13,7 @@ public class PlaceOrderPersistenceMock implements IPlaceOrderPersistence {
     private ArrayList<OrderDetails> orders = new ArrayList<>();
 
     @Override
-    public boolean placeOrder(ICart cart, String buyerID, String address, String pincode) throws SQLException {
+    public boolean placeOrder(String userID, ICart cart, String buyerID, String address, String pincode) throws SQLException {
         OrderDetails order = new OrderDetails();
         order.setOrderID("1");
         order.setSellerID(cart.getCartItems().get(0).getUserID());

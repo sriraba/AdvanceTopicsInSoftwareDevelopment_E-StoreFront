@@ -63,7 +63,7 @@ public class AuthenticationController {
             User user;
             try {
                 user = User.login(authentication, email, password);
-                if (user.getUserID() == null || user.getUserID().isEmpty()) {
+                if (user == null || user.getUserID() == null || user.getUserID().isEmpty()) {
                     redirectAttributes.addFlashAttribute("error", "Invalid email or password");
                     return new ModelAndView("redirect:/login");
                 } else {

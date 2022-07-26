@@ -341,16 +341,17 @@ public class BuyerController {
     @RequestMapping(value = "/buyer/checkout", method = RequestMethod.POST)
     public String checkout(@RequestParam("address") String address, @RequestParam("pincode") String pincode,
                            HttpSession session) throws SQLException {
+        String userID = getUserID(session);
+
         ICart cart = getCart(session);
         ICartValidator validator = CartFactory.instance().makeCartValidator();
         IInventoryItemPersistence obj = new InventoryItemPersistence(DatabaseFactory.instance().makeDatabase());
         String error = validator.validateCart(cart, obj);
-        String userID = (String) session.getAttribute("userID");
         if (!error.matches("")) {
             return "redirect:/buyer/cart/view/" + error;
         }
         IPlaceOrderPersistence orderObj = CartFactory.instance().makeCartPersistence();
-        if (orderObj.placeOrder(cart, userID, address, pincode)) {
+        if (orderObj.placeOrder(userID, cart, userID, address, pincode)) {
             session.setAttribute("cart", "");
             return "thank-you";
         }

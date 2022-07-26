@@ -6,6 +6,7 @@ import com.project.estorefront.model.inventory.IInventoryItem;
 import com.project.estorefront.model.inventory.InventoryItem;
 import com.project.estorefront.model.inventory.ItemCategory;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.SQLException;
@@ -20,7 +21,7 @@ public class PlaceOrderPersistenceTests {
         ICart cart = CartFactory.instance().makeCart();
         cart.addItem(item);
 
-        assertTrue(mockDB.placeOrder(cart, "1", "demo", "demo"));
+        assertTrue(mockDB.placeOrder("1", cart, "1", "demo", "demo"));
     }
 
 }
