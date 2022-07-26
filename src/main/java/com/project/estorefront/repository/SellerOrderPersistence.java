@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import com.project.estorefront.model.DatabaseFactory;
 import com.project.estorefront.model.IDeliveryPerson;
+import com.project.estorefront.model.OrderAndItemsFactory;
 import com.project.estorefront.model.OrderDetails;
 
 public class SellerOrderPersistence extends OrderPersistence implements ISellerOrderPersistence {
@@ -30,7 +31,7 @@ public class SellerOrderPersistence extends OrderPersistence implements ISellerO
             preparedStatement.setString(1, sellerID);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                OrderDetails orderDetail = new OrderDetails();
+                OrderDetails orderDetail = OrderAndItemsFactory.instance().makeOrderDetails();
                 orderDetail.setOrderID(rs.getString("order_id"));
                 orderDetail.setOrderStatus(rs.getString("order_status"));
                 orderDetail.setCouponID(rs.getString("coupon_id"));

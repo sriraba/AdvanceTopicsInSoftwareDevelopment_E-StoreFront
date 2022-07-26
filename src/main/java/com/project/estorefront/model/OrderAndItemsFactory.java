@@ -22,4 +22,8 @@ public class OrderAndItemsFactory implements IOrderAndItemsFactory{
     public IOrderPersistence makeOrderPersistence(IDatabase database) {
         return new OrderPersistence(database);
     }
+    @Override
+    public OrderDetails makeOrderDetails() {
+        return new OrderDetails();
+    }
 }

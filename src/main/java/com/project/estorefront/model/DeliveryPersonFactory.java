@@ -22,4 +22,8 @@ public class DeliveryPersonFactory implements IDeliveryPersonFactory{
     public IDeliveryPersonPersistence makeDeliveryPersonPersistence(IDatabase database) {
         return new DeliveryPersonPersistence(database);
     }
+    @Override
+    public IDeliveryPerson makeDeliveryPerson() {
+        return new DeliveryPerson();
+    }
 }

@@ -5,4 +5,5 @@ import com.project.estorefront.repository.IOrderPersistence;
 
 public interface IOrderAndItemsFactory {
     IOrderPersistence makeOrderPersistence(IDatabase database);
+    OrderDetails makeOrderDetails();
 }

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import com.project.estorefront.model.DatabaseFactory;
 import com.project.estorefront.model.DeliveryPerson;
+import com.project.estorefront.model.DeliveryPersonFactory;
 import com.project.estorefront.model.IDeliveryPerson;
 
 public class DeliveryPersonPersistence implements IDeliveryPersonPersistence {
@@ -29,7 +30,7 @@ public class DeliveryPersonPersistence implements IDeliveryPersonPersistence {
             preparedStatement.setString(1, sellerID);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                IDeliveryPerson deliveryPerson = new DeliveryPerson();
+                IDeliveryPerson deliveryPerson = DeliveryPersonFactory.instance().makeDeliveryPerson();
                 deliveryPerson.setPersonName(rs.getString("delivery_person_name"));
                 deliveryPersonDetails.add(deliveryPerson);
             }
