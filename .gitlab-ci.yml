@@ -6,7 +6,7 @@ test:
   stage: test
   tags:
     - dalfcs_gitlab_docker_ci
-  image: gradle:alpine
+  image: gradle:7.3.3-jdk17-alpine
   script: 
   - chmod +x gradlew
   - ./gradlew check
