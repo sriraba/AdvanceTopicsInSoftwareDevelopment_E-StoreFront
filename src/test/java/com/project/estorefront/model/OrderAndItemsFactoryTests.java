@@ -18,9 +18,9 @@ public class OrderAndItemsFactoryTests {
         assertNotNull(OrderAndItemsFactory.instance());
     }
 
-    @Test
+/*    @Test
     public void testMakeOrderPersistence() {
         IOrderPersistence orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence(new Database());
         assertNotNull(orderPersistence);
-    }
+    }*/
 }
