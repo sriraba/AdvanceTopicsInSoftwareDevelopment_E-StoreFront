@@ -1,5 +1,7 @@
 package com.project.estorefront.repository;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -7,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.project.estorefront.model.Seller;
 import org.junit.jupiter.api.Test;
 
 import com.project.estorefront.model.ItemCategory;

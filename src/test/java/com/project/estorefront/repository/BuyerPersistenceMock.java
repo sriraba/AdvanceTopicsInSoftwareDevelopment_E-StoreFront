@@ -27,7 +27,7 @@ public class BuyerPersistenceMock implements IBuyerPersistence {
     @Override
     public boolean deactivateBuyerAccount(User buyer) {
         for (User u : buyers) {
-            if (u.getIsUserEnabled() == buyer.getIsUserEnabled()) {
+            if (u.getUserID() == buyer.getUserID()) {
                 buyer.setIsUserEnabled(false);
                 return true;
             }
