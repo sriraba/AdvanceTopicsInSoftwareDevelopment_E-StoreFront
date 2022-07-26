@@ -1,6 +1,6 @@
 package com.project.estorefront.model.validators;
 
-import com.project.estorefront.model.IInventoryItem;
+import com.project.estorefront.model.inventory.IInventoryItem;
 
 public class InventoryItemValidator implements IInventoryItemValidator {
 

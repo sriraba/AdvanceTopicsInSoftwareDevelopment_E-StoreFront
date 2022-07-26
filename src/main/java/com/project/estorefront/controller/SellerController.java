@@ -1,10 +1,21 @@
 package com.project.estorefront.controller;
 
-import com.project.estorefront.model.*;
+import com.project.estorefront.model.analytics.AnalyticsPersistence;
+import com.project.estorefront.model.analytics.IAnalyticsPersistence;
+import com.project.estorefront.model.coupons.Coupon;
+import com.project.estorefront.model.coupons.CouponsFactory;
+import com.project.estorefront.model.coupons.ICouponsPersistence;
+import com.project.estorefront.model.database.DatabaseFactory;
+import com.project.estorefront.model.database.IDatabase;
+import com.project.estorefront.model.inventory.*;
+import com.project.estorefront.model.ordermanagement.*;
+import com.project.estorefront.model.user.ISellerPersistence;
+import com.project.estorefront.model.user.Seller;
+import com.project.estorefront.model.user.SellerFactory;
+import com.project.estorefront.model.user.User;
 import com.project.estorefront.model.validators.CouponValidator;
 import com.project.estorefront.model.validators.IInventoryItemValidator;
 import com.project.estorefront.model.validators.InventoryItemValidationStatus;
-import com.project.estorefront.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
