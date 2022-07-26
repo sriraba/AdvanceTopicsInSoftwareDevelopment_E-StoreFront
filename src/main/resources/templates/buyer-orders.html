@@ -23,7 +23,7 @@
   </tr>
   <tr th:each="current : ${orders['current']}">
     <td><span th:text="${current.getOrderID()}"> Order Number </span></td>
-    <td><a th:href="@{/buyer/order/details/{orderID}(orderID=${current.getOrderID()})}">View Order</a></td>
+    <td><a th:href="@{/buyer/order/details/{orderID}/{orderStatus}(orderID=${current.getOrderID()},orderStatus=${'buyer-current'})}">View Order</a></td>
   </tr>
   </tbody>
 </table>
@@ -42,7 +42,7 @@
   </tr>
   <tr th:each="previous : ${orders['previous']}">
     <td><span th:text="${previous.getOrderID()}"> Order Number </span></td>
-    <td><a th:href="@{/buyer/order/details/{orderID}(orderID=${previous.getOrderID()})}">View Order</a></td>
+    <td><a th:href="@{/buyer/order/details/{orderID}/{orderStatus}(orderID=${previous.getOrderID()},orderStatus=${'buyer-previous'})}">View Order</a></td>
   </tr>
   </tbody>
 </table>
