@@ -29,11 +29,11 @@
             </tr>
             <tr class="form-group">
                 <td>Password:</td>
-                <td><input type=”Password” placeholder=”Password” name="password" class="form-control"></td>
+                <td><input type=”password” placeholder=”Password” name="password" class="form-control"></td>
             </tr>
             <tr class="form-group">
                 <td>Confirm Password:</td>
-                <td><input type=”Password” placeholder=”Password” name="confirmPassword" class="form-control"></td>
+                <td><input type=”password” placeholder=”Password” name="confirmPassword" class="form-control"></td>
             </tr>
             <tr class="form-group">
                 <td>Contact:</td>
@@ -62,10 +62,8 @@
             <tr class="form-group">
                 <td>City:</td>
                 <td>
-                    <select name="city" id="city" class="dropdown">
-                        <option value="Halifax">Halifax</option>
-                        <option value="Toronto">Toronto</option>
-                        <option value="Vancouver">Vancouver</option>
+                    <select id="city" name="city">
+                        <option th:each="city: ${cities}" th:value="${city}" th:text="${city}"/>
                     </select>
                 </td>
             </tr>

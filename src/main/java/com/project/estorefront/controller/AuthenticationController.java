@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpSession;
 
+import com.project.estorefront.model.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,14 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.project.estorefront.model.AuthenticationFactory;
-import com.project.estorefront.model.DatabaseFactory;
-import com.project.estorefront.model.IMailSender;
-import com.project.estorefront.model.IOTPGenerator;
-import com.project.estorefront.model.MailSenderFactory;
-import com.project.estorefront.model.Seller;
-import com.project.estorefront.model.User;
-import com.project.estorefront.model.UserFactory;
 import com.project.estorefront.model.validators.IPasswordValidator;
 import com.project.estorefront.model.validators.IValidator;
 import com.project.estorefront.model.validators.ValidatorFactory;
@@ -45,13 +38,18 @@ public class AuthenticationController {
     }
 
     @GetMapping("/register")
-    public String register() {
+    public String register(Model model) {
+        ArrayList<String> cities = new ArrayList<>();
+        for (CityEnum city : CityEnum.values()) {
+            cities.add(city.label.toString());
+        }
+        model.addAttribute("cities", cities);
         return "register-page";
     }
 
     @PostMapping("/validate-login")
     public ModelAndView validateLogin(@RequestParam("email") String email, @RequestParam("password") String password,
-            @RequestParam("role") String role, HttpSession session, RedirectAttributes redirectAttributes) {
+                                      @RequestParam("role") String role, HttpSession session, RedirectAttributes redirectAttributes) {
 
         IValidator emailValidator = ValidatorFactory.instance().makeEmailValidator();
         IPasswordValidator passwordValidator = ValidatorFactory.instance().makePasswordValidator();
@@ -94,13 +92,13 @@ public class AuthenticationController {
 
     @PostMapping("/validate-register")
     public ModelAndView validateRegister(@RequestParam("firstName") String firstName,
-            @RequestParam("lastName") String lastName,
-            @RequestParam("email") String email, @RequestParam("password") String password,
-            @RequestParam("confirmPassword") String confirmPassword,
-            @RequestParam("contact") String contact, @RequestParam("city") String city, @RequestParam String address,
-            @RequestParam("role") String role, @RequestParam("businessName") String businessName,
-            @RequestParam("businessDescription") String businessDescription, HttpSession session,
-            RedirectAttributes redirectAttributes) {
+                                         @RequestParam("lastName") String lastName,
+                                         @RequestParam("email") String email, @RequestParam("password") String password,
+                                         @RequestParam("confirmPassword") String confirmPassword,
+                                         @RequestParam("contact") String contact, @RequestParam("city") String city, @RequestParam String address,
+                                         @RequestParam("role") String role, @RequestParam("businessName") String businessName,
+                                         @RequestParam("businessDescription") String businessDescription, HttpSession session,
+                                         RedirectAttributes redirectAttributes) {
 
         IValidator nameValidator = ValidatorFactory.instance().makeNameValidator();
         IValidator emailValidator = ValidatorFactory.instance().makeEmailValidator();
@@ -132,8 +130,9 @@ public class AuthenticationController {
         }
 
         if (errors.size() == 0) {
-
             User user;
+
+            CityEnum cityEnum = CityEnum.valueOf(city.toUpperCase());
 
             if (role.contains("buyer")) {
                 user = UserFactory.instance().getUser("buyer");
@@ -142,7 +141,8 @@ public class AuthenticationController {
                 user = UserFactory.instance().getUser("seller");
                 user.setIsSeller(true);
                 ((Seller) user).setBusinessName(businessName);
-                ((Seller) user).setBusinessDescription(businessDescription);
+                ((Seller) user).setBusinessDescription(
+                        businessDescription);
             } else {
                 errors.add("Please select a role");
                 redirectAttributes.addFlashAttribute("error", "Please select a role");
@@ -154,7 +154,7 @@ public class AuthenticationController {
             user.setEmail(email);
             user.setPassword(password);
             user.setPhone(contact);
-            user.setCity(city);
+            user.setCity(cityEnum.label);
             user.setAddress(address);
 
             String userID;
@@ -208,7 +208,7 @@ public class AuthenticationController {
 
     @PostMapping("/reset-password/send-otp")
     public String sendOTP(@RequestParam("email") String email, Model model, RedirectAttributes redirectAttributes,
-            HttpSession session) {
+                          HttpSession session) {
         try {
             if (User.checkIfUserExists(authentication, email)) {
                 IMailSender mailSender = MailSenderFactory.instance().makeMailSender();
@@ -237,7 +237,7 @@ public class AuthenticationController {
 
     @PostMapping("/reset-password/verify-otp")
     public String verifyOTP(@RequestParam("otp") String otp, HttpSession session,
-            RedirectAttributes redirectAttributes) {
+                            RedirectAttributes redirectAttributes) {
         String otpFromSession = (String) session.getAttribute("resetPwdOTP");
         if (otp.equals(otpFromSession)) {
             return "new-password";
@@ -249,7 +249,7 @@ public class AuthenticationController {
 
     @PostMapping("/reset-password/reset")
     public String resetPassword(@RequestParam("password") String password, HttpSession session,
-            RedirectAttributes redirectAttributes) {
+                                RedirectAttributes redirectAttributes) {
         String email = (String) session.getAttribute("resetPwdEmail");
 
         IValidator passwordValidator = ValidatorFactory.instance().makePasswordValidator();
