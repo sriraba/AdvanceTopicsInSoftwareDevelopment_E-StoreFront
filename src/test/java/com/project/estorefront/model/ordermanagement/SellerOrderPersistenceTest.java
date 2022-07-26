@@ -46,4 +46,18 @@ public class SellerOrderPersistenceTest {
         assertSame(status, IPropertiesReader.PersistenceStatus.FAILURE);
     }
 
+    @Test
+    public void testUpdateOrderStatusForValidOrder() throws SQLException {
+        ISellerOrderPersistence orderPersistence = new SellerOrderPersistenceMock();
+        IPropertiesReader.PersistenceStatus status = orderPersistence.updateOrderStatus("OR12345");
+        assertSame(status, IPropertiesReader.PersistenceStatus.SUCCESS);
+    }
+
+    @Test
+    public void testUpdateOrderStatusForInvalidValidOrder() throws SQLException {
+        ISellerOrderPersistence orderPersistence = new SellerOrderPersistenceMock();
+        IPropertiesReader.PersistenceStatus status = orderPersistence.updateOrderStatus("OR1236566");
+        assertSame(status, IPropertiesReader.PersistenceStatus.FAILURE);
+    }
+
 }
