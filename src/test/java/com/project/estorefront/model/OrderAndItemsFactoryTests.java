@@ -1,5 +1,6 @@
 package com.project.estorefront.model;
 
+import com.project.estorefront.repository.Database;
 import com.project.estorefront.repository.IOrderPersistence;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +20,7 @@ public class OrderAndItemsFactoryTests {
 
     @Test
     public void testMakeOrderPersistence() {
-        IOrderPersistence orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence();
+        IOrderPersistence orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence(new Database());
         assertNotNull(orderPersistence);
     }
 }

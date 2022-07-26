@@ -15,6 +15,7 @@ public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrd
     private IDatabase database;
 
     public BuyerOrderPersistence(IDatabase database) {
+        super(database);
         this.database = database;
     }
 

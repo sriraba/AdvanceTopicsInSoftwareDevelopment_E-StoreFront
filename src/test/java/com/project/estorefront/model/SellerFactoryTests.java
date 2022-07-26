@@ -2,6 +2,7 @@ package com.project.estorefront.model;
 
 import static org.junit.Assert.assertNotNull;
 
+import com.project.estorefront.repository.Database;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,7 +34,7 @@ public class SellerFactoryTests {
 
     @Test
     public void testMakeSellerOrderPersistence() {
-        ISellerOrderPersistence orderPersistence = SellerFactory.instance().makeSellerOrderPersistence();
+        ISellerOrderPersistence orderPersistence = SellerFactory.instance().makeSellerOrderPersistence(new Database());
         assertNotNull(orderPersistence);
     }
 

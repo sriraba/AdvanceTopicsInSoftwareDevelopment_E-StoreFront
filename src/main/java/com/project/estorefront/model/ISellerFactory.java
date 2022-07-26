@@ -10,7 +10,7 @@ public interface ISellerFactory {
 
     ISellerOrderManagement makeSellerOrderManagement();
 
-    ISellerOrderPersistence makeSellerOrderPersistence();
+    ISellerOrderPersistence makeSellerOrderPersistence(IDatabase database);
 
     User makeSeller();
 

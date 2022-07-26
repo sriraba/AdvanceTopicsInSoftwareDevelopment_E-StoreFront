@@ -36,4 +36,9 @@ public class BuyerFactory implements IBuyerFactory {
         return new BuyerOrderPersistence(database);
     }
 
+    @Override
+    public IBuyerOrderManagement makeBuyerOrderManagement() {
+        return new OrderDetails();
+    }
+
 }
