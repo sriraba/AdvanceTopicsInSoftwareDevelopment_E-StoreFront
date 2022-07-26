@@ -1,5 +1,6 @@
 package com.project.estorefront.controller;
 
+import com.project.estorefront.model.IPropertiesReader;
 import com.project.estorefront.model.analytics.AnalyticsPersistence;
 import com.project.estorefront.model.analytics.IAnalyticsPersistence;
 import com.project.estorefront.model.coupons.Coupon;
@@ -252,8 +253,10 @@ public class SellerController {
         return modelAndView;
     }
 
-    @GetMapping("/seller/orders/assign_delivery_person/{sellerID}")
-    public ModelAndView assignDeliveryPerson(@PathVariable String sellerID, RedirectAttributes redirectAttributes) throws SQLException {
+    @GetMapping("/seller/orders/assign_delivery_person/{orderID}")
+    public ModelAndView assignDeliveryPerson(@PathVariable String orderID, RedirectAttributes redirectAttributes,HttpSession session) throws SQLException {
+        String sellerID = getUserID(session);
+        ModelAndView modelAndView = null;
         IDeliveryPerson deliveryPerson = SellerFactory.instance().makeDeliveryPerson();
         ArrayList<IDeliveryPerson> deliveryPersonDetails = deliveryPerson.getDeliveryPersonDetails(sellerID, deliveryPersonPersistence);
 
@@ -261,12 +264,26 @@ public class SellerController {
             redirectAttributes.addFlashAttribute("error", "Something went wrong, please try again.");
             return new ModelAndView("redirect:/seller/orders/view");
         }
-        return new ModelAndView("assign-delivery-person", "delivery_persons", deliveryPersonDetails);
+        modelAndView = new ModelAndView("assign-delivery-person", "delivery_persons", deliveryPersonDetails);
+        modelAndView.addObject("orderID", orderID);
+        return modelAndView;
     }
 
-    @GetMapping("/seller/orders/assigned")
-    public String deliveryPersonAssigned(Model model) {
-        model.addAttribute("page", "seller");
+    @GetMapping("/seller/orders/assigned/{orderID}")
+    public String deliveryPersonAssigned(Model model,@PathVariable String orderID,RedirectAttributes redirectAttributes) {
+        ISellerOrderManagement sellerOrder = SellerFactory.instance().makeSellerOrderManagement();
+        try{
+            model.addAttribute("page", "seller");
+            IPropertiesReader.PersistenceStatus status = sellerOrder.updateOrderStatus(orderID, sellerOrderPersistence);
+            if (status == IPropertiesReader.PersistenceStatus.SUCCESS) {
+                return "submit-success";
+            } else {
+                return "redirect:/seller/orders/view";
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error Assigning delivery person");
+        }
         return "submit-success";
     }
 

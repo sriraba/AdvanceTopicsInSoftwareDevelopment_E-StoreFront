@@ -177,4 +177,9 @@ public class OrderDetails implements ISellerOrderManagement, IBuyerOrderManageme
     public OrderDetails getOrderAndItemDetails(String orderID, IOrderPersistence orderPersistence) throws SQLException {
         return (orderID == null || orderID.isEmpty()) ? null : orderPersistence.loadOrderAndItems(orderID);
     }
+
+    @Override
+    public IPropertiesReader.PersistenceStatus updateOrderStatus(String orderID, ISellerOrderPersistence orderPersistence){
+        return (orderID == null || orderID.isEmpty()) ? null : orderPersistence.updateOrderStatus(orderID);
+    }
 }

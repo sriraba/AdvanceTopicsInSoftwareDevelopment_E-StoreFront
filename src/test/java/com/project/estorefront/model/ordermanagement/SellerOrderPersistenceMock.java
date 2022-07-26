@@ -81,4 +81,9 @@ public class SellerOrderPersistenceMock extends OrderPersistence implements ISel
         }
         return IPropertiesReader.PersistenceStatus.FAILURE;
     }
+
+    @Override
+    public IPropertiesReader.PersistenceStatus updateOrderStatus(String orderID) {
+        return null;
+    }
 }

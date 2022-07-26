@@ -73,7 +73,7 @@ public class AuthenticationController {
                         return new ModelAndView("redirect:/buyer");
                     } else if (role.contains("seller")) {
                         if (User.checkIfUserIsSeller(authentication, email)) {
-                            return new ModelAndView("redirect:/seller");
+                            return new ModelAndView("redirect:/seller/orders/view");
                         } else {
                             redirectAttributes.addFlashAttribute("error", "You are not a seller");
                             return new ModelAndView("redirect:/login");

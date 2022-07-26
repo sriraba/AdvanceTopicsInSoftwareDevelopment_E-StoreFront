@@ -72,4 +72,27 @@ public class SellerOrderPersistence extends OrderPersistence implements ISellerO
         }
     }
 
+    @Override
+    public IPropertiesReader.PersistenceStatus updateOrderStatus(String orderID){
+        PreparedStatement preparedStatement = null;
+        try {
+            Connection connection = database.getConnection();
+            preparedStatement = connection.prepareStatement(
+                    "UPDATE buyer_orders SET buyer_orders.order_status = ? WHERE buyer_orders.order_id = ? ");
+            preparedStatement.setString(1, "Delivered");
+            preparedStatement.setString(2, orderID);
+            int status = preparedStatement.executeUpdate();
+            if (status > 0) {
+                return IPropertiesReader.PersistenceStatus.SUCCESS;
+            } else {
+                return IPropertiesReader.PersistenceStatus.FAILURE;
+            }
+        } catch (SQLException e) {
+            return IPropertiesReader.PersistenceStatus.SQL_EXCEPTION;
+        } finally {
+            database.closeConnection();
+        }
+
+    }
+
 }

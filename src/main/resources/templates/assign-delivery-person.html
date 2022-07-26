@@ -18,7 +18,7 @@
     <tbody>
     <tr>
         <td>
-            <form th:action="@{/seller/orders/assigned}" th:object="${selectedOption}">
+            <form th:action="@{/seller/orders/assigned/{orderID}(orderID=${orderID})}" th:object="${selectedOption}">
                 <select name="name" id="name">
                     <option value="0">select option</option>
                     <option th:each="delivery_person : ${delivery_persons}"
