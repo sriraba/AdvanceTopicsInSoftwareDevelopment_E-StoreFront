@@ -114,7 +114,7 @@ public abstract class User {
         this.isUserEnabled = isUserEnabled;
     }
 
-    public static String login(IAuthentication authentication, String email, String password) throws SQLException {
+    public static User login(IAuthentication authentication, String email, String password) throws SQLException {
         return authentication.login(email, password);
     };
 
