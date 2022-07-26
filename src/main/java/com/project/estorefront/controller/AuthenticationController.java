@@ -60,15 +60,16 @@ public class AuthenticationController {
 
         if (emailValidator.validate(email) && passwordValidator.validate(password)) {
 
-            String userID = null;
+            User user;
             try {
-                userID = User.login(authentication, email, password);
-                if (userID == null || userID.isEmpty()) {
+                user = User.login(authentication, email, password);
+                if (user.getUserID() == null || user.getUserID().isEmpty()) {
                     redirectAttributes.addFlashAttribute("error", "Invalid email or password");
                     return new ModelAndView("redirect:/login");
                 } else {
-                    session.setAttribute("userID", userID.toString());
+                    session.setAttribute("userID", user.getUserID());
                     session.setAttribute("role", role);
+                    session.setAttribute("city", user.getCity());
                     if (role.contains("buyer")) {
                         return new ModelAndView("redirect:/buyer");
                     } else if (role.contains("seller")) {
@@ -182,6 +183,7 @@ public class AuthenticationController {
 
             session.setAttribute("userID", userID);
             session.setAttribute("role", role);
+            session.setAttribute("city", city);
 
             if (userID.isEmpty()) {
                 errors.add("Email already exists");
