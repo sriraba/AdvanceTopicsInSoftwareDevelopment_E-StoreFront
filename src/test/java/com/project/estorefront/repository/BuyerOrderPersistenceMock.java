@@ -8,6 +8,9 @@ public class BuyerOrderPersistenceMock extends OrderPersistence implements IBuye
 
     private ArrayList<OrderDetails> buyerOrders = new ArrayList<>();
     private ArrayList<OrderDetails> orderReviews = new ArrayList<>();
+    public BuyerOrderPersistenceMock() {
+        super();
+    }
 
     private void addMockOrderReviews(){
         OrderDetails orderDetail = new OrderDetails();

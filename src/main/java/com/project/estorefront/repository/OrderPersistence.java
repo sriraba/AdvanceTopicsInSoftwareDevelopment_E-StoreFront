@@ -11,11 +11,20 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class OrderPersistence implements IOrderPersistence {
+
+    private IDatabase database;
+
+    public OrderPersistence(IDatabase database) {
+        this.database = database;
+    }
+
+    public OrderPersistence() {
+
+    }
+
     @Override
     public OrderDetails loadOrderAndItems(String orderID) throws SQLException {
         PreparedStatement preparedStatement;
-
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
         OrderDetails orderDetail = new OrderDetails();
         ArrayList<ItemDetails> itemDetails = new ArrayList<>();

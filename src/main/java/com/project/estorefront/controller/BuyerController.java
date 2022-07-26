@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 
 @Controller
 public class BuyerController {
@@ -22,6 +23,7 @@ public class BuyerController {
     private IBuyerPersistence buyerPersistence;
     private IInventoryItemPersistence inventoryItemPersistence;
     private IBuyerOrderPersistence buyerOrderPersistence;
+    private IOrderPersistence orderPersistence;
 
     public BuyerController() {
         database = DatabaseFactory.instance().makeDatabase();
@@ -29,6 +31,7 @@ public class BuyerController {
         buyerPersistence = BuyerFactory.instance().makeBuyerPersistence(database);
         inventoryItemPersistence = InventoryFactory.instance().makeInventoryItemPersistence(database);
         buyerOrderPersistence = BuyerFactory.instance().makeBuyerOrderPersistence(database);
+        orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence(database);
     }
 
     private static final String notLoggedInRedirect = "redirect:/login";
@@ -162,10 +165,15 @@ public class BuyerController {
         if (userID == null || userID.isEmpty()) {
             return new ModelAndView("redirect:/login");
         }
+        IBuyerOrderManagement buyerOrder = BuyerFactory.instance().makeBuyerOrderManagement();
 
-        IBuyerOrderManagement buyerOrder = new OrderDetails();
         try {
-            return new ModelAndView("buyer-orders", "orders", buyerOrder.getBuyerOrders(userID, buyerOrderPersistence));
+            Map<String, ArrayList<OrderDetails>> buyerOrders = buyerOrder.getBuyerOrders(userID, buyerOrderPersistence);
+            if(buyerOrders == null){
+                redirectAttributes.addFlashAttribute("error", "No orders to show");
+                return new ModelAndView("redirect:/buyer");
+            }
+            return new ModelAndView("buyer-orders", "orders", buyerOrders);
         } catch (SQLException e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Error fetching orders");
@@ -175,12 +183,15 @@ public class BuyerController {
 
     @GetMapping("/buyer/order/details/{orderID}")
     public ModelAndView buyerItems(@PathVariable String orderID, RedirectAttributes redirectAttributes) {
-        IBuyerOrderManagement buyerOrder = new OrderDetails();
-        IOrderPersistence orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence();
+        IBuyerOrderManagement buyerOrder = BuyerFactory.instance().makeBuyerOrderManagement();
         ModelAndView modelAndView = null;
         try {
-            modelAndView = new ModelAndView("view-selected-order", "order",
-                    buyerOrder.getOrderAndItemDetails(orderID, orderPersistence));
+            OrderDetails orderDetails = buyerOrder.getOrderAndItemDetails(orderID,orderPersistence);
+            if(orderDetails == null){
+                redirectAttributes.addFlashAttribute("error", "Something went wrong, please try again.");
+                return new ModelAndView("redirect:/buyer","orders", orderDetails);
+            }
+            modelAndView = new ModelAndView("view-selected-order", "order",orderDetails);
         } catch (SQLException e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Error fetching order");
@@ -201,7 +212,7 @@ public class BuyerController {
     @GetMapping("/buyer/order/submit-review/{userID}/{orderID}")
     public String submitReview(@PathVariable("userID") String userID, @PathVariable("orderID") String orderID,
                                @RequestParam("review") String description, Model model, RedirectAttributes redirectAttributes) {
-        IBuyerOrderManagement buyerOrder = new OrderDetails();
+        IBuyerOrderManagement buyerOrder = BuyerFactory.instance().makeBuyerOrderManagement();
         try {
             PersistenceStatus status = buyerOrder.submitReview(userID, orderID, description, buyerOrderPersistence);
             model.addAttribute("page", "buyer");
