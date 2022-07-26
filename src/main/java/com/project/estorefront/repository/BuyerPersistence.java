@@ -1,7 +1,5 @@
 package com.project.estorefront.repository;
 
-import com.project.estorefront.model.DatabaseFactory;
-import com.project.estorefront.model.Seller;
 import com.project.estorefront.model.User;
 import com.project.estorefront.model.UserFactory;
 
@@ -13,9 +11,14 @@ import java.util.ArrayList;
 
 public class BuyerPersistence implements IBuyerPersistence {
 
+    private IDatabase database;
+
+    public BuyerPersistence(IDatabase database) {
+        this.database = database;
+    }
+
     @Override
-    public User getBuyerByID(String buyerID) {
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    public User getBuyerByID(String buyerID) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement preparedStatement;
         try {
@@ -48,10 +51,10 @@ public class BuyerPersistence implements IBuyerPersistence {
     }
 
     @Override
-    public boolean updateBuyerAccount(User buyer) {
-        PreparedStatement preparedStatement = null;
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    public boolean updateBuyerAccount(User buyer) throws SQLException {
         Connection connection = database.getConnection();
+
+        PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement("UPDATE user SET first_name = ?, last_name = ?, contact_num = ?, address  =? WHERE user_id = ?");
             preparedStatement.setString(1, buyer.getFirstName());
@@ -69,10 +72,10 @@ public class BuyerPersistence implements IBuyerPersistence {
 
 
     @Override
-    public boolean deactivateBuyerAccount(User buyer) {
-        PreparedStatement preparedStatement = null;
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    public boolean deactivateBuyerAccount(User buyer) throws SQLException {
         Connection connection = database.getConnection();
+
+        PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement("UPDATE user SET isUserEnabled =? WHERE user_id = ?");
             preparedStatement.setBoolean(1, buyer.getIsUserEnabled());

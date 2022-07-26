@@ -8,6 +8,7 @@
 <body>
 <div th:replace="fragments/buyer-header.html"></div>
 <table class="table table-striped">
+  <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
   <thead>
   <h2>Current orders:</h2>
   <br/>

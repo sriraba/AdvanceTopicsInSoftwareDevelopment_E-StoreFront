@@ -6,6 +6,7 @@
 </head>
 <body>
 <form th:action="@{/buyer/account/update/} + ${buyer.getUserID}" method="POST">
+    <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
     <table>
         <h1>Edit Details</h1>
         <tr>

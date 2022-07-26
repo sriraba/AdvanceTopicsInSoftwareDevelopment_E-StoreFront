@@ -1,5 +1,6 @@
 package com.project.estorefront.model;
 
+import com.project.estorefront.repository.Database;
 import com.project.estorefront.repository.IOrderPersistence;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -10,10 +11,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.junit.Assert.assertNotNull;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@SpringBootTest
-@TestPropertySource(properties = {"SPRING_DATASOURCE_URL=jdbc:mysql://db-5308.cs.dal.ca:3306/CSCI5308_1_DEVINT?autoreconnect=true", "SPRING_DATASOURCE_USERNAME=CSCI5308_1_DEVINT_USER", "SPRING_DATASOURCE_PASSWORD=uB8c3mUaMW"})
 public class OrderAndItemsFactoryTests {
 
     @Test
@@ -21,9 +18,9 @@ public class OrderAndItemsFactoryTests {
         assertNotNull(OrderAndItemsFactory.instance());
     }
 
-    @Test
+/*    @Test
     public void testMakeOrderPersistence() {
-        IOrderPersistence orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence();
+        IOrderPersistence orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence(new Database());
         assertNotNull(orderPersistence);
-    }
+    }*/
 }

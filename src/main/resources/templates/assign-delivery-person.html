@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Assign Delivery Person</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 </head>
 <body>
 <div th:replace="fragments/seller-header.html"></div>
-<table >
+<table>
+    <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
     <thead>
     <tr>
-        <th> Names </th>
+        <th> Names</th>
     </tr>
     </thead>
     <tbody>
@@ -19,10 +21,12 @@
             <form th:action="@{/seller/orders/assigned}" th:object="${selectedOption}">
                 <select name="name" id="name">
                     <option value="0">select option</option>
-                    <option th:each="delivery_person : ${delivery_persons}" th:value="${delivery_person.getPersonName()}" th:text="${delivery_person.getPersonName()}"></option>
+                    <option th:each="delivery_person : ${delivery_persons}"
+                            th:value="${delivery_person.getPersonName()}"
+                            th:text="${delivery_person.getPersonName()}"></option>
                 </select>
                 <input type="submit" value="submit">
-<!--                <button type="submit">submit</button>-->
+                <!--                <button type="submit">submit</button>-->
             </form>
         </td>
     </tr>

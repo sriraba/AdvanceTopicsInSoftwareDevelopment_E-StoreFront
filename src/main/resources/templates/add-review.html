@@ -9,6 +9,7 @@
 <div th:replace="fragments/buyer-header.html"></div>
 <form th:action="@{/buyer/order/submit-review/{userID}/{orderID}(userID=${userID}, orderID=${orderID})}">
 <!--    <form th:action="@{/buyer/order/submit-review/{userID}/{orderID}(userID=${userID}, orderID=${orderID})}">-->
+    <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
     <div style="display: flex; align-items: center; justify-content: center;">
     <table>
         <tr class="form-group">

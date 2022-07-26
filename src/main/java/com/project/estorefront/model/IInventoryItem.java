@@ -24,25 +24,11 @@ public interface IInventoryItem {
 
     Integer getItemQuantity();
 
-    void setItemID(String itemID);
-
-    void setUserID(String userID);
-
-    void setItemCategory(ItemCategory itemCategory);
-
-    void setItemName(String itemName);
-
-    void setItemDescription(String itemDescription);
-
-    void setItemPrice(Double itemPrice);
-
-    void setItemQuantity(Integer itemQuantity);
-
     IInventoryItemPersistence.InventoryItemPersistenceOperationStatus save(IInventoryItemPersistence persistence) throws SQLException;
 
-    IInventoryItemPersistence.InventoryItemPersistenceOperationStatus delete(IInventoryItemPersistence persistence);
+    IInventoryItemPersistence.InventoryItemPersistenceOperationStatus delete(IInventoryItemPersistence persistence) throws SQLException;
 
-    IInventoryItemPersistence.InventoryItemPersistenceOperationStatus update(IInventoryItemPersistence persistence);
+    IInventoryItemPersistence.InventoryItemPersistenceOperationStatus update(IInventoryItemPersistence persistence) throws SQLException;
 
     InventoryItemValidationStatus validate(IInventoryItemValidator validator);
 

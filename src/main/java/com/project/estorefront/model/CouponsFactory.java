@@ -4,8 +4,9 @@ import com.project.estorefront.model.validators.CouponValidator;
 import com.project.estorefront.model.validators.ICouponValidator;
 import com.project.estorefront.repository.CouponsPersistence;
 import com.project.estorefront.repository.ICouponsPersistence;
+import com.project.estorefront.repository.IDatabase;
 
-public class CouponsFactory implements ICouponsFactory{
+public class CouponsFactory implements ICouponsFactory {
 
     private static CouponsFactory instance;
 
@@ -20,8 +21,8 @@ public class CouponsFactory implements ICouponsFactory{
     }
 
     @Override
-    public ICouponsPersistence makeCouponsPersistence() {
-        return new CouponsPersistence();
+    public ICouponsPersistence makeCouponsPersistence(IDatabase database) {
+        return new CouponsPersistence(database);
     }
 
     @Override

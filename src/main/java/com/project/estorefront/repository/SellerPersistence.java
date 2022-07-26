@@ -13,11 +13,16 @@ import com.project.estorefront.model.*;
 
 public class SellerPersistence implements ISellerPersistence {
 
+    private IDatabase database;
+
+    public SellerPersistence(IDatabase database) {
+        this.database = database;
+    }
+
     @Override
-    public ArrayList<User> getAllSellers() {
-        ArrayList<User> sellerList = new ArrayList<>();
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    public ArrayList<User> getAllSellers() throws SQLException {
         Connection connection = database.getConnection();
+        ArrayList<User> sellerList = new ArrayList<>();
 
         PreparedStatement preparedStatement;
         try {
@@ -34,18 +39,8 @@ public class SellerPersistence implements ISellerPersistence {
                 String address = rs.getString("address");
                 String businessDescription = rs.getString("business_description");
 
-                User seller = UserFactory.instance().getUser("seller");
-                seller.setFirstName(firstName);
-                seller.setLastName(lastName);
-                seller.setEmail(email);
-                seller.setAddress(address);
-                seller.setPhone(contactNumber);
-                seller.setCity(city);
-                seller.setIsSeller(true);
-                ((ISeller) seller).setBusinessName(businessName);
-                ((ISeller) seller).setBusinessDescription(businessDescription);
+                User seller = UserFactory.instance().makeUserWithAllFields(userID, firstName, lastName, email, address, contactNumber, city, true, businessName, businessDescription);
 
-                seller.setUserID(userID);
                 sellerList.add(seller);
             }
             return sellerList;
@@ -58,9 +53,8 @@ public class SellerPersistence implements ISellerPersistence {
     }
 
     @Override
-    public ArrayList<User> getAllSellersByCity(String city) {
+    public ArrayList<User> getAllSellersByCity(String city) throws SQLException {
         ArrayList<User> sellerList = new ArrayList<>();
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
 
         PreparedStatement preparedStatement;
@@ -79,18 +73,8 @@ public class SellerPersistence implements ISellerPersistence {
                 String address = rs.getString("address");
                 String businessDescription = rs.getString("business_description");
 
-                User seller = UserFactory.instance().getUser("seller");
-                seller.setFirstName(firstName);
-                seller.setLastName(lastName);
-                seller.setEmail(email);
-                seller.setAddress(address);
-                seller.setPhone(contactNumber);
-                seller.setCity(sellerCity);
-                seller.setIsSeller(true);
-                ((ISeller) seller).setBusinessName(businessName);
-                ((ISeller) seller).setBusinessDescription(businessDescription);
+                User seller = UserFactory.instance().makeUserWithAllFields(userID, firstName, lastName, email, address, contactNumber, sellerCity, true, businessName, businessDescription);
 
-                seller.setUserID(userID);
                 sellerList.add(seller);
             }
             return sellerList;
@@ -103,9 +87,8 @@ public class SellerPersistence implements ISellerPersistence {
     }
 
     @Override
-    public ArrayList<User> getAllSellersByCategory(ItemCategory itemCategory, String city) {
+    public ArrayList<User> getAllSellersByCategory(ItemCategory itemCategory, String city) throws SQLException {
         ArrayList<User> sellerList = new ArrayList<>();
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
 
         PreparedStatement preparedStatement;
@@ -123,18 +106,9 @@ public class SellerPersistence implements ISellerPersistence {
                 String rsCity = rs.getString("city");
                 String address = rs.getString("address");
                 String businessDescription = rs.getString("business_description");
-                ItemCategory category = ItemCategory.valueOf(rs.getString("category_id"));
 
-                User seller = UserFactory.instance().getUser("seller");
-                seller.setEmail(email);
-                seller.setAddress(address);
-                seller.setPhone(contactNumber);
-                seller.setCity(rsCity);
-                seller.setIsSeller(true);
-                ((ISeller) seller).setBusinessName(businessName);
-                ((ISeller) seller).setBusinessDescription(businessDescription);
+                User seller = UserFactory.instance().makeUserWithAllFields(userID, null, null, email, address, contactNumber, rsCity, true, businessName, businessDescription);
 
-                seller.setUserID(userID);
                 sellerList.add(seller);
             }
             return sellerList;
@@ -147,8 +121,7 @@ public class SellerPersistence implements ISellerPersistence {
     }
 
     @Override
-    public User getSellerByID(String sellerID) {
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    public User getSellerByID(String sellerID) throws SQLException {
         Connection connection = database.getConnection();
 
         PreparedStatement preparedStatement;
@@ -167,18 +140,8 @@ public class SellerPersistence implements ISellerPersistence {
                 String address = rs.getString("address");
                 String businessDescription = rs.getString("business_description");
 
-                User seller = UserFactory.instance().getUser("seller");
-                seller.setFirstName(firstName);
-                seller.setLastName(lastName);
-                seller.setEmail(email);
-                seller.setAddress(address);
-                seller.setPhone(contactNumber);
-                seller.setCity(city);
-                seller.setIsSeller(true);
-                ((ISeller) seller).setBusinessName(businessName);
-                ((ISeller) seller).setBusinessDescription(businessDescription);
+                User seller = UserFactory.instance().makeUserWithAllFields(userID, firstName, lastName, email, address, contactNumber, city, true, businessName, businessDescription);
 
-                seller.setUserID(userID);
                 return seller;
             }
             return null;
@@ -191,9 +154,8 @@ public class SellerPersistence implements ISellerPersistence {
     }
 
     @Override
-    public boolean deactivateSellerAccount(User seller) {
+    public boolean deactivateSellerAccount(User seller) throws SQLException {
         PreparedStatement preparedStatement = null;
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
 
         try {
@@ -208,9 +170,8 @@ public class SellerPersistence implements ISellerPersistence {
     }
 
     @Override
-    public boolean updateSellerAccount(User seller) {
+    public boolean updateSellerAccount(User seller) throws SQLException {
         PreparedStatement preparedStatement = null;
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
 
         try {

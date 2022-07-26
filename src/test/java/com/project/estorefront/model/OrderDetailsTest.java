@@ -8,20 +8,17 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 
 import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@SpringBootTest
-@TestPropertySource(properties = {"SPRING_DATASOURCE_URL=jdbc:mysql://db-5308.cs.dal.ca:3306/CSCI5308_1_DEVINT?autoreconnect=true", "SPRING_DATASOURCE_USERNAME=CSCI5308_1_DEVINT_USER", "SPRING_DATASOURCE_PASSWORD=uB8c3mUaMW"})
 class OrderDetailsTest {
 
     @Test
-    void testGetSellerOrdersForSellerID() {
+    void testGetSellerOrdersForSellerID() throws SQLException {
         ISellerOrderManagement orderManagement = new OrderDetails();
         ISellerOrderPersistence orderPersistence = new SellerOrderPersistenceMock();
         Map<String, ArrayList<OrderDetails>> orderDetails = orderManagement.getSellerOrders("5",orderPersistence);
@@ -29,7 +26,7 @@ class OrderDetailsTest {
     }
 
     @Test
-    void testGetSellerOrdersForNullSellerID() {
+    void testGetSellerOrdersForNullSellerID() throws SQLException {
         ISellerOrderManagement orderManagement = new OrderDetails();
         ISellerOrderPersistence orderPersistence = new SellerOrderPersistenceMock();
         Map<String, ArrayList<OrderDetails>> orderDetails = orderManagement.getSellerOrders("",orderPersistence);
@@ -37,7 +34,7 @@ class OrderDetailsTest {
     }
 
     @Test
-    void testGetSellerOrdersForSellerIDNotPresent() {
+    void testGetSellerOrdersForSellerIDNotPresent() throws SQLException {
         ISellerOrderManagement orderManagement = new OrderDetails();
         ISellerOrderPersistence orderPersistence = new SellerOrderPersistenceMock();
         Map<String, ArrayList<OrderDetails>> orderDetails = orderManagement.getSellerOrders("8", orderPersistence);
@@ -45,7 +42,7 @@ class OrderDetailsTest {
     }
 
     @Test
-    void testBuyerOrdersForBuyerID() {
+    void testBuyerOrdersForBuyerID() throws SQLException {
         IBuyerOrderManagement orderManagement = new OrderDetails();
         IBuyerOrderPersistence buyerOrderPersistence = new BuyerOrderPersistenceMock();
         Map<String, ArrayList<OrderDetails>> orderDetails = orderManagement.getBuyerOrders("1",buyerOrderPersistence);
@@ -53,7 +50,7 @@ class OrderDetailsTest {
     }
 
     @Test
-    void testBuyerOrdersForNullBuyerID() {
+    void testBuyerOrdersForNullBuyerID() throws SQLException {
         IBuyerOrderManagement orderManagement = new OrderDetails();
         IBuyerOrderPersistence buyerOrderPersistence = new BuyerOrderPersistenceMock();
         Map<String, ArrayList<OrderDetails>> orderDetails = orderManagement.getBuyerOrders("", buyerOrderPersistence);
@@ -61,7 +58,7 @@ class OrderDetailsTest {
     }
 
     @Test
-    void testBuyerOrdersForBuyerIDNotPresent() {
+    void testBuyerOrdersForBuyerIDNotPresent() throws SQLException {
         IBuyerOrderManagement orderManagement = new OrderDetails();
         IBuyerOrderPersistence buyerOrderPersistence = new BuyerOrderPersistenceMock();
         Map<String, ArrayList<OrderDetails>> orderDetails = orderManagement.getBuyerOrders("9",buyerOrderPersistence);
@@ -69,7 +66,7 @@ class OrderDetailsTest {
     }
 
     @Test
-    void submitReviewForValidOrder() {
+    void submitReviewForValidOrder() throws SQLException {
         IBuyerOrderManagement orderManagement = new OrderDetails();
         IBuyerOrderPersistence buyerOrderPersistence = new BuyerOrderPersistenceMock();
         PersistenceStatus status = orderManagement.submitReview("1","OR12365","Good service",buyerOrderPersistence);
@@ -77,7 +74,7 @@ class OrderDetailsTest {
     }
 
     @Test
-    void submitReviewForInValidOrder() {
+    void submitReviewForInValidOrder() throws SQLException {
         IBuyerOrderManagement orderManagement = new OrderDetails();
         IBuyerOrderPersistence buyerOrderPersistence = new BuyerOrderPersistenceMock();
         PersistenceStatus status = orderManagement.submitReview("1","OR1236789","Good service",buyerOrderPersistence);
@@ -85,7 +82,7 @@ class OrderDetailsTest {
     }
 
     @Test
-    void testGetOrderAndItemDetailsForOrderID() {
+    void testGetOrderAndItemDetailsForOrderID() throws SQLException {
         IOrderManagement orderManagement = new OrderDetails();
         IOrderPersistence orderPersistence = new OrderPersistenceMock();
         OrderDetails orderDetail = orderManagement.getOrderAndItemDetails("OR12365",orderPersistence);
@@ -93,7 +90,7 @@ class OrderDetailsTest {
     }
 
     @Test
-    void testGetOrderAndItemDetailsForNotPresentOrderID() {
+    void testGetOrderAndItemDetailsForNotPresentOrderID() throws SQLException {
         IOrderManagement orderManagement = new OrderDetails();
         IOrderPersistence orderPersistence = new OrderPersistenceMock();
         OrderDetails orderDetail = orderManagement.getOrderAndItemDetails("OR1238",orderPersistence);
@@ -101,7 +98,7 @@ class OrderDetailsTest {
     }
 
     @Test
-    void testGetOrderAndItemDetailsForEmptyOrderID() {
+    void testGetOrderAndItemDetailsForEmptyOrderID() throws SQLException {
         IOrderManagement orderManagement = new OrderDetails();
         IOrderPersistence orderPersistence = new OrderPersistenceMock();
         OrderDetails orderDetail = orderManagement.getOrderAndItemDetails("",orderPersistence);

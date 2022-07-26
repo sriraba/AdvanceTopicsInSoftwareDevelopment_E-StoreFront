@@ -5,6 +5,7 @@
     <title>Coupon Details</title>
 </head>
 <body>
+<div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
     <h2>Coupon Details</h2>
     Coupon Name: <label th:text="${coupon.getName()}" /><br>
     Maximum Amount: CAD <label th:text="${coupon.getMaxAmount()}" /><br>

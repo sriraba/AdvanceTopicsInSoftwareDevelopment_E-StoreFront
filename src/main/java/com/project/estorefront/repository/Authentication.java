@@ -12,9 +12,14 @@ import com.project.estorefront.model.User;
 
 public class Authentication implements IAuthentication {
 
+    private final IDatabase database;
+
+    public Authentication(IDatabase database) {
+        this.database = database;
+    }
+
     @Override
-    public String login(String email, String password) {
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    public String login(String email, String password) throws SQLException {
         Connection connection = database.getConnection();
         try {
             String userDetailsQuery = "select * from user where email =?";
@@ -37,8 +42,7 @@ public class Authentication implements IAuthentication {
     }
 
     @Override
-    public String register(User user) {
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    public String register(User user) throws SQLException {
         Connection connection = database.getConnection();
 
         try {
@@ -71,9 +75,9 @@ public class Authentication implements IAuthentication {
     }
 
     @Override
-    public boolean resetPassword(String email, String password) {
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    public boolean resetPassword(String email, String password) throws SQLException {
         Connection connection = database.getConnection();
+
         try {
             String resetPasswordQuery = "update user set password = ? where email = ?";
             PreparedStatement preparedStmt = connection.prepareStatement(resetPasswordQuery);
@@ -90,12 +94,28 @@ public class Authentication implements IAuthentication {
     }
 
     @Override
-    public boolean checkIfUserExists(String email) {
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    public boolean checkIfUserExists(String email) throws SQLException {
         Connection connection = database.getConnection();
         try {
             String checkIfUserExistsQuery = "select * from user where email = ?";
             PreparedStatement preparedStmt = connection.prepareStatement(checkIfUserExistsQuery);
+            preparedStmt.setString(1, email);
+            ResultSet resultSet = preparedStmt.executeQuery();
+            return resultSet.next();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            database.closeConnection();
+        }
+    }
+
+    @Override
+    public boolean checkIfUserIsSeller(String email) throws SQLException {
+        Connection connection = database.getConnection();
+
+        try {
+            String checkIfUserIsSellerQuery = "select * from user where email = ? and seller = 1";
+            PreparedStatement preparedStmt = connection.prepareStatement(checkIfUserIsSellerQuery);
             preparedStmt.setString(1, email);
             ResultSet resultSet = preparedStmt.executeQuery();
             return resultSet.next();

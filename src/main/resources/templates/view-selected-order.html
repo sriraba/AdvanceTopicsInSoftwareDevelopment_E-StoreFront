@@ -10,6 +10,7 @@
 <div th:if="${page == 'previous'}"><div th:replace="fragments/seller-header.html"></div></div>
 <div th:if="${page == 'buyer'}" > <div th:replace="fragments/buyer-header.html"></div></div>
 <table class="table table-striped">
+    <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
     <thead>
     <h2>Order Details:</h2></br>
     <tr>

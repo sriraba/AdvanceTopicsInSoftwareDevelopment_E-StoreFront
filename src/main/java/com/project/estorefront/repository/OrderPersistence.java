@@ -2,6 +2,7 @@ package com.project.estorefront.repository;
 
 import com.project.estorefront.model.DatabaseFactory;
 import com.project.estorefront.model.ItemDetails;
+import com.project.estorefront.model.OrderAndItemsFactory;
 import com.project.estorefront.model.OrderDetails;
 
 import java.sql.Connection;
@@ -11,13 +12,22 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class OrderPersistence implements IOrderPersistence {
-    @Override
-    public OrderDetails loadOrderAndItems(String orderID) {
-        PreparedStatement preparedStatement;
 
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
+    private IDatabase database;
+
+    public OrderPersistence(IDatabase database) {
+        this.database = database;
+    }
+
+    public OrderPersistence() {
+
+    }
+
+    @Override
+    public OrderDetails loadOrderAndItems(String orderID) throws SQLException {
+        PreparedStatement preparedStatement;
         Connection connection = database.getConnection();
-        OrderDetails orderDetail = new OrderDetails();
+        OrderDetails orderDetail = OrderAndItemsFactory.instance().makeOrderDetails();
         ArrayList<ItemDetails> itemDetails = new ArrayList<>();
         try {
             preparedStatement = connection.prepareStatement(

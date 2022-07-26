@@ -10,6 +10,7 @@
 <body>
 <div th:replace="fragments/seller-header.html"></div>
 <table class="table table-striped">
+    <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
     <div class="alert alert-success" role="alert" th:text="${success}" th:if="${success}"></div>
     <h1>Inventory</h1>
     <a th:href="@{/seller/items/add}" class="btn btn-primary">Add Item</a>

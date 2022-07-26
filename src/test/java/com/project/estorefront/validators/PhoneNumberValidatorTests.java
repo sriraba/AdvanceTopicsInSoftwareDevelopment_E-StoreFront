@@ -10,31 +10,30 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-@SpringBootTest
-@TestPropertySource(properties = {"SPRING_DATASOURCE_URL=jdbc:mysql://db-5308.cs.dal.ca:3306/CSCI5308_1_DEVINT?autoreconnect=true", "SPRING_DATASOURCE_USERNAME=CSCI5308_1_DEVINT_USER", "SPRING_DATASOURCE_PASSWORD=uB8c3mUaMW"})class PhoneNumberValidatorTests {
+class PhoneNumberValidatorTests {
 
-	@Test
-	void testValidPhone() {
-		String validPhone = "9029895569";
-		IValidator phoneNumberValidator = new PhoneNumberValidator();
+    @Test
+    void testValidPhone() {
+        String validPhone = "9029895569";
+        IValidator phoneNumberValidator = new PhoneNumberValidator();
 
-		assertTrue(phoneNumberValidator.validate(validPhone));
-	}
+        assertTrue(phoneNumberValidator.validate(validPhone));
+    }
 
-	@Test
-	void testInvalidPhoneWithALetter() {
-		String invalidPhone = "9029895569a";
-		IValidator phoneNumberValidator = new PhoneNumberValidator();
+    @Test
+    void testInvalidPhoneWithALetter() {
+        String invalidPhone = "9029895569a";
+        IValidator phoneNumberValidator = new PhoneNumberValidator();
 
-		assertFalse(phoneNumberValidator.validate(invalidPhone));
-	}
+        assertFalse(phoneNumberValidator.validate(invalidPhone));
+    }
 
-	@Test
-	void testInvalidPhoneLessThan10Digits() {
-		String invalidPhone = "902989556";
-		IValidator phoneNumberValidator = new PhoneNumberValidator();
+    @Test
+    void testInvalidPhoneLessThan10Digits() {
+        String invalidPhone = "902989556";
+        IValidator phoneNumberValidator = new PhoneNumberValidator();
 
-		assertFalse(phoneNumberValidator.validate(invalidPhone));
-	}
+        assertFalse(phoneNumberValidator.validate(invalidPhone));
+    }
 
 }
