@@ -343,7 +343,7 @@ public class SellerController {
     }
 
     @GetMapping("/seller/add-coupon/{error}")
-    public String add(Model model, @PathVariable("error") String error) {
+    public String addCoupon(Model model, @PathVariable("error") String error) {
         model.addAttribute("error", error);
         return "add-coupon";
     }

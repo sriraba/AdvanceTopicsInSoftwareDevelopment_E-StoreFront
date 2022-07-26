@@ -109,7 +109,7 @@ public class BuyerController {
     }
 
     @GetMapping("/buyer/account/edit/{userID}")
-    public String editSellerAccount(@PathVariable String userID, Model model, RedirectAttributes redirectAttributes) {
+    public String editBuyerAccount(@PathVariable String userID, Model model, RedirectAttributes redirectAttributes) {
         User buyer = BuyerFactory.instance().makeBuyer();
         try {
             buyer = ((Buyer) buyer).getBuyerByID(buyerPersistence, userID);
