@@ -1,17 +1,10 @@
 package com.project.estorefront.repository;
 
-import java.sql.SQLException;
+import com.project.estorefront.model.InventoryItem;
+import com.project.estorefront.model.User;
 
 public interface IAuthentication {
-    String login(String email, String password) throws SQLException;
+    String login(String email, String password);
 
-    String register(String firstName, String lastName, String email, String password, String phone, boolean isSeller,
-            String city, String businessName, String address, String businessDescription, boolean isUserEnabled)
-            throws SQLException;
-
-    boolean resetPassword(String email, String password) throws SQLException;
-
-    boolean checkIfUserExists(String email) throws SQLException;
-
-    boolean checkIfUserIsSeller(String email) throws SQLException;
+    String register(User user);
 }

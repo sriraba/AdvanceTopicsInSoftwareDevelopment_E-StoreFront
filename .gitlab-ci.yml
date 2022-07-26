@@ -5,8 +5,8 @@ variables:
 test:
   stage: test
   tags:
-    - dalfcs_docker_autoscale
-  image: gradle:7.3.3-jdk17-alpine
+    - dalfcs_docker_kvm
+  image: gradle:alpine
   script: 
   - chmod +x gradlew
   - ./gradlew check
@@ -17,7 +17,7 @@ test:
 build:
   stage: build
   tags:
-    - dalfcs_docker_autoscale
+    - dalfcs_docker_kvm
   image: gradle:7.3.3-jdk17-alpine
   script:
   - chmod +x gradlew 
@@ -29,7 +29,7 @@ build:
 deploy-int:
   stage: deploy
   tags: 
-    - dalfcs_docker_autoscale
+    - dalfcs_docker_kvm
   image: ruby:3.2-rc
   script: 
   - apt-get update -qy
@@ -43,7 +43,7 @@ deploy-int:
 deploy-prod:
   stage: deploy
   tags: 
-    - dalfcs_docker_autoscale
+    - dalfcs_docker_kvm
   image: ruby:3.2-rc
   script: 
   - apt-get update -qy

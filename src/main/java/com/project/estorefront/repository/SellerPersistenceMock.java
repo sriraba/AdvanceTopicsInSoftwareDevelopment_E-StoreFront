@@ -1,14 +1,15 @@
 package com.project.estorefront.repository;
 
-import com.project.estorefront.model.*;
+import com.project.estorefront.model.Seller;
+import com.project.estorefront.model.User;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class SellerPersistenceMock implements ISellerPersistence {
 
     ArrayList<User> sellers = new ArrayList<>();
     ArrayList<User> sellersByCity = new ArrayList<>();
-    ArrayList<User> sellersByCategory = new ArrayList<>();
 
     public SellerPersistenceMock() {
     }
@@ -20,7 +21,6 @@ public class SellerPersistenceMock implements ISellerPersistence {
         seller.setBusinessName("ASD");
         seller.setBusinessDescription("ASD");
         sellers.add(seller);
-
     }
 
     public void addMockSellerWithCity(String cityName) {
@@ -32,17 +32,8 @@ public class SellerPersistenceMock implements ISellerPersistence {
         sellersByCity.add(seller);
     }
 
-    public void addMockSellerForCategoryTest() {
-        Seller seller = new Seller();
-        seller.setEmail("hrishipatel99@gmail.com");
-        seller.setBusinessName("ASD");
-        seller.setBusinessDescription("ASD");
-        seller.setCity("Halifax");
-        sellersByCategory.add(seller);
-    }
-
     @Override
-    public ArrayList<User> getAllSellers() {
+    public ArrayList<User> getAllSellers() throws SQLException {
         for (User seller : sellers) {
             System.out.println(seller.getEmail());
         }
@@ -67,11 +58,6 @@ public class SellerPersistenceMock implements ISellerPersistence {
     }
 
     @Override
-    public ArrayList<User> getAllSellersByCategory(ItemCategory itemCategory, String city) {
-        return sellersByCategory.size() > 0 ? sellersByCategory : null;
-    }
-
-    @Override
     public User getSellerByID(String sellerID) {
         for (User seller : sellers) {
             if (seller.getUserID().equalsIgnoreCase(sellerID)) {
@@ -79,34 +65,5 @@ public class SellerPersistenceMock implements ISellerPersistence {
             }
         }
         return null;
-    }
-
-    @Override
-    public boolean deactivateSellerAccount(User seller) {
-        //User seller = new Seller();
-        for (User u: sellers){
-            if(u.getIsSeller() == seller.getIsSeller()){
-                seller.setIsSeller(false);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean updateSellerAccount(User seller) {
-        Seller currentSeller;
-        for (User u: sellers ) {
-            if (u.getUserID().equals(seller.getUserID())){
-                currentSeller = (Seller) u;
-                currentSeller.setFirstName(seller.getFirstName());
-                currentSeller.setLastName(seller.getLastName());
-                currentSeller.setBusinessName(((Seller)seller).getBusinessName());
-                currentSeller.setPhone(seller.getPhone());
-                currentSeller.setEmail(seller.getEmail());
-                return true;
-            }
-        }
-        return false;
     }
 }

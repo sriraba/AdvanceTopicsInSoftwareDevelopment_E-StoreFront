@@ -2,18 +2,10 @@ package com.project.estorefront.model;
 
 import com.project.estorefront.repository.ISellerPersistence;
 
-import java.sql.SQLException;
+import java.util.ArrayList;
 
 public interface ISeller {
 
-    String getBusinessName();
-
-    String getBusinessDescription();
-
-    boolean updateSellerAccount(ISellerPersistence persistence) throws SQLException;
-
-    boolean deactivateSellerAccount(ISellerPersistence persistence) throws SQLException;
-
-    User getSellerByID(ISellerPersistence persistence, String sellerID) throws SQLException;
+    ArrayList<User> getAllSellers(ISellerPersistence persistence, String city);
 
 }

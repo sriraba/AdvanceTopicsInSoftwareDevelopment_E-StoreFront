@@ -7,29 +7,18 @@
           integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 </head>
 <body>
-    <div th:replace="fragments/buyer-header.html"></div>
-    <h1>Sellers Nearby</h1>
-    <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
-    <form th:action="@{'/buyer?categoryFilter=' + ${category}}" >
-        <div class="col-md-8">
-            <label>Category</label>
-            <select id="category" name="category">
-                <option th:text="Select"/>
-                <option th:each="category: ${categories}" th:value="${category}" th:text="${category}"/>
-            </select>
-            <input type="submit" value="Show Category">
-        </div>
-    </form>
-    <tr th:each="seller: ${sellers}">
-        <div class="col-sm-6 mb-4 ml-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${seller.getBusinessName()}"/>
-                    <p clawss="card-text" th:text="${seller.getBusinessDescription()}"/>
-                    <a th:href="@{/buyer/view-seller/} + ${seller.getUserID()}">View</a>
-                </div>
+<div th:replace="fragments/buyer-header.html"></div>
+<h1>Sellers Nearby</h1>
+<tr th:each="seller: ${sellers}">
+    <div class="col-sm-6 mb-4 ml-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${seller.getBusinessName()}"/>
+                <p class="card-text" th:text="${seller.getBusinessDescription()}"/>
+                <a th:href="@{/buyer/view-seller/} + ${seller.getUserID()}">View</a>
             </div>
         </div>
-    </tr>
+    </div>
+</tr>
 </body>
 </html>

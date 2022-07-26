@@ -4,45 +4,73 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import com.project.estorefront.model.PropertiesReader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-public class Database implements IDatabase {
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
-    private Connection connection;
+@Component
+public class Database {
 
-    private final String springDataSourceUrl;
-    private final String springDataSourceUsername;
-    private final String springDataSourcePassword;
+    private static Connection connection;
 
-    public Database() {
-        springDataSourceUrl = PropertiesReader.instance().getSpringDatasourceURL();
-        springDataSourceUsername = PropertiesReader.instance().getSpringDatasourceUsername();
-        springDataSourcePassword = PropertiesReader.instance().getSpringDatasourcePassword();
-        init();
+    private static Database establishDatabaseConnection = new Database();
+
+    private static final String driverClassName = "com.mysql.jdbc.Driver";
+
+    private static String dataSourceUrl;
+
+    public static String getDriverClassName() {
+        return driverClassName;
     }
 
-    private void init() {
+    private static String dataSourceUsername;
+
+    private static String dataSourcePassword;
+
+    @Autowired
+    public Database(
+            @Value("${spring.datasource.url}") String dataSourceUrl,
+            @Value("${spring.datasource.username}") String dataSourceUsername,
+            @Value("${spring.datasource.password}") String dataSourcePassword) {
+        this.dataSourceUrl = dataSourceUrl;
+        this.dataSourceUsername = dataSourceUsername;
+        this.dataSourcePassword = dataSourcePassword;
+    }
+
+    public Database() {
+    }
+
+    @PostConstruct
+    public static void init() {
+        createDataBaseConnection();
+    }
+
+    private static void createDataBaseConnection() {
         try {
-            connection = DriverManager.getConnection(springDataSourceUrl,
-                    springDataSourceUsername,
-                    springDataSourcePassword);
+            connection = DriverManager.getConnection(dataSourceUrl, dataSourceUsername,
+                    dataSourcePassword);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public Connection getConnection() throws SQLException {
-        if (connection.isClosed()) {
-            init();
-        }
+    public static Connection getConnection() {
         return connection;
     }
 
-    public void closeConnection() {
+    private void closeConnection() {
         try {
             connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @PreDestroy
+    public void destroy() {
+        this.closeConnection();
     }
 }

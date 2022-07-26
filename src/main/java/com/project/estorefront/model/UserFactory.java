@@ -17,30 +17,13 @@ public class UserFactory implements IUserFactory {
     public User getUser(String userType) {
 
         if (userType.equalsIgnoreCase("buyer")) {
-            return BuyerFactory.instance().makeBuyer();
+            return new Buyer();
         } else if (userType.equalsIgnoreCase("seller")) {
-            return SellerFactory.instance().makeSeller();
+            return new Seller();
         } else {
             return null;
         }
 
-    }
-
-    @Override
-    public User makeUserWithAllFields(String userID, String firstName, String lastName, String email, String address, String phone, String city, boolean isSeller, String businessName, String businessDescription) {
-        User seller = new Seller();
-        seller.setUserID(userID);
-        seller.setFirstName(firstName);
-        seller.setLastName(lastName);
-        seller.setEmail(email);
-        seller.setAddress(address);
-        seller.setPhone(phone);
-        seller.setCity(city);
-        seller.setIsSeller(isSeller);
-        ((Seller) seller).setBusinessName(businessName);
-        ((Seller) seller).setBusinessDescription(businessDescription);
-
-        return seller;
     }
 }
 

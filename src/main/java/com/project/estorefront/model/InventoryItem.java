@@ -1,7 +1,6 @@
 package com.project.estorefront.model;
 
 import com.project.estorefront.model.validators.IInventoryItemValidator;
-import com.project.estorefront.model.validators.InventoryItemValidationStatus;
 import com.project.estorefront.repository.IInventoryItemPersistence;
 
 import java.sql.SQLException;
@@ -17,10 +16,6 @@ public class InventoryItem implements IInventoryItem {
     private Double itemPrice;
     private Integer itemQuantity;
 
-    public InventoryItem() {
-        this.itemID = UUID.randomUUID().toString();
-    }
-
     public InventoryItem(String userID, ItemCategory itemCategory, String itemName, String itemDescription, Double itemPrice, Integer itemQuantity) {
         this.itemID = UUID.randomUUID().toString();
         this.userID = userID;
@@ -31,18 +26,7 @@ public class InventoryItem implements IInventoryItem {
         this.itemQuantity = itemQuantity;
     }
 
-    public InventoryItem(String itemID, String userID, ItemCategory itemCategory, int itemQuantity, double price, String itemName, String itemDescription) {
-        this.itemID = itemID;
-        this.userID = userID;
-        this.itemCategory = itemCategory;
-        this.itemName = itemName;
-        this.itemDescription = itemDescription;
-        this.itemPrice = price;
-        this.itemQuantity = itemQuantity;
-    }
-
-    public InventoryItem(String itemID) {
-        this.itemID = itemID;
+    public InventoryItem() {
     }
 
     @Override
@@ -70,17 +54,9 @@ public class InventoryItem implements IInventoryItem {
         return itemName;
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
     @Override
     public String getItemDescription() {
         return itemDescription;
-    }
-
-    public void setItemDescription(String itemDescription) {
-        this.itemDescription = itemDescription;
     }
 
     @Override
@@ -93,39 +69,58 @@ public class InventoryItem implements IInventoryItem {
         return itemQuantity;
     }
 
-    public void setItemQuantity(Integer itemQuantity) {
-        this.itemQuantity = itemQuantity;
+    @Override
+    public void setItemID(String itemID) {
+        this.itemID = itemID;
     }
 
+    @Override
     public void setUserID(String userID) {
         this.userID = userID;
     }
 
+    @Override
     public void setItemCategory(ItemCategory itemCategory) {
         this.itemCategory = itemCategory;
     }
 
+    @Override
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    @Override
+    public void setItemDescription(String itemDescription) {
+        this.itemDescription = itemDescription;
+    }
+
+    @Override
     public void setItemPrice(Double itemPrice) {
         this.itemPrice = itemPrice;
     }
 
     @Override
-    public IInventoryItemPersistence.InventoryItemPersistenceOperationStatus save(IInventoryItemPersistence persistence) throws SQLException {
-        return persistence.save(itemID, userID, itemCategory, itemQuantity, itemPrice, itemName, itemDescription);
+    public void setItemQuantity(Integer itemQuantity) {
+        this.itemQuantity = itemQuantity;
     }
 
     @Override
-    public IInventoryItemPersistence.InventoryItemPersistenceOperationStatus delete(IInventoryItemPersistence persistence) throws SQLException {
-        return persistence.delete(itemID);
+    public boolean save(IInventoryItemPersistence persistence) throws SQLException {
+        return persistence.save(this);
     }
 
     @Override
-    public IInventoryItemPersistence.InventoryItemPersistenceOperationStatus update(IInventoryItemPersistence persistence) throws SQLException {
-        return persistence.update(userID, itemCategory, itemQuantity, itemPrice, itemName, itemDescription, itemID);
+    public boolean delete(IInventoryItemPersistence persistence) {
+        return persistence.delete(this);
     }
 
     @Override
-    public InventoryItemValidationStatus validate(IInventoryItemValidator validator) {
+    public boolean update(IInventoryItemPersistence persistence) {
+        return persistence.update(this);
+    }
+
+    @Override
+    public IInventoryItemValidator.InventoryItemValidationStatus validate(IInventoryItemValidator validator) {
         return validator.validate(this);
     }
 }

@@ -1,12 +1,10 @@
 package com.project.estorefront.model;
 
-import com.project.estorefront.repository.ISellerOrderPersistence;
-
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 
-public interface ISellerOrderManagement extends IOrderManagement{
-    Map<String, ArrayList<OrderDetails>> getSellerOrders(String userID,ISellerOrderPersistence orderPersistence) throws SQLException;
+public interface ISellerOrderManagement {
 
+    Map<String, ArrayList<OrderDetails>> getSellerOrders(String userID);
+    OrderDetails getOrderAndItemDetails(String orderID);
 }
