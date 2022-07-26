@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 
 @Controller
 public class SellerController {
@@ -22,12 +23,18 @@ public class SellerController {
     private ISellerPersistence sellerPersistence;
     private IInventoryItemPersistence inventoryItemPersistence;
     private ICouponsPersistence couponsPersistence;
+    private IOrderPersistence orderPersistence;
+    private ISellerOrderPersistence sellerOrderPersistence;
+    private IDeliveryPersonPersistence deliveryPersonPersistence;
 
     public SellerController() {
         database = DatabaseFactory.instance().makeDatabase();
         sellerPersistence = SellerFactory.instance().makeSellerPersistence(database);
         inventoryItemPersistence = InventoryFactory.instance().makeInventoryItemPersistence(database);
         couponsPersistence = CouponsFactory.instance().makeCouponsPersistence(database);
+        orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence(database);
+        sellerOrderPersistence = SellerFactory.instance().makeSellerOrderPersistence(database);
+        deliveryPersonPersistence = DeliveryPersonFactory.instance().makeDeliveryPersonPersistence(database);
     }
 
     private static final String notLoggedInRedirect = "redirect:/login";
@@ -178,26 +185,33 @@ public class SellerController {
             return new ModelAndView(notLoggedInRedirect);
         }
 
-        ISellerOrderManagement sellerOrder = new OrderDetails();
-        ISellerOrderPersistence orderPersistence = SellerFactory.instance().makeSellerOrderPersistence();
+        ISellerOrderManagement sellerOrder = SellerFactory.instance().makeSellerOrderManagement();
 
         try {
-            return new ModelAndView("seller-orders", "orders", sellerOrder.getSellerOrders(userID, orderPersistence));
+            Map<String, ArrayList<OrderDetails>> sellerOrders = sellerOrder.getSellerOrders(userID, sellerOrderPersistence);
+            if(sellerOrders == null){
+                redirectAttributes.addFlashAttribute("error", "No orders to show");
+                return new ModelAndView("redirect:/seller");
+            }
+            return new ModelAndView("seller-orders", "orders", sellerOrders);
         } catch (SQLException e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Error getting orders");
-            return new ModelAndView("redirect:/seller/orders/view");
+            return new ModelAndView("redirect:/seller");
         }
     }
 
     @GetMapping("/seller/orders/current/{orderID}")
     public ModelAndView sellerCurrentOrderView(@PathVariable String orderID, RedirectAttributes redirectAttributes) {
-        ISellerOrderManagement sellerOrder = new OrderDetails();
-        IOrderPersistence orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence();
+        ISellerOrderManagement sellerOrder = SellerFactory.instance().makeSellerOrderManagement();
         ModelAndView modelAndView = null;
         try {
-            modelAndView = new ModelAndView("view-selected-order", "order",
-                    sellerOrder.getOrderAndItemDetails(orderID, orderPersistence));
+            OrderDetails orderDetails = sellerOrder.getOrderAndItemDetails(orderID,orderPersistence);
+            if(orderDetails == null){
+                redirectAttributes.addFlashAttribute("error", "Something went wrong, please try again.");
+                return new ModelAndView("redirect:/seller");
+            }
+            modelAndView = new ModelAndView("view-selected-order", "order",orderDetails);
         } catch (SQLException e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Error getting order");
@@ -209,12 +223,15 @@ public class SellerController {
 
     @GetMapping("/seller/orders/previous/{orderID}")
     public ModelAndView sellerPreviousOrderView(@PathVariable String orderID, RedirectAttributes redirectAttributes) {
-        ISellerOrderManagement sellerOrder = new OrderDetails();
-        IOrderPersistence orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence();
+        ISellerOrderManagement sellerOrder = SellerFactory.instance().makeSellerOrderManagement();
         ModelAndView modelAndView = null;
         try {
-            modelAndView = new ModelAndView("view-selected-order", "order",
-                    sellerOrder.getOrderAndItemDetails(orderID, orderPersistence));
+            OrderDetails orderDetails = sellerOrder.getOrderAndItemDetails(orderID,orderPersistence);
+            if(orderDetails == null){
+                redirectAttributes.addFlashAttribute("error", "Something went wrong, please try again.");
+                return new ModelAndView("redirect:/seller","orders", orderDetails);
+            }
+            modelAndView = new ModelAndView("view-selected-order", "order", orderDetails);
         } catch (SQLException e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Error getting order");
@@ -225,12 +242,15 @@ public class SellerController {
     }
 
     @GetMapping("/seller/orders/assign_delivery_person/{sellerID}")
-    public ModelAndView assignDeliveryPerson(@PathVariable String sellerID) throws SQLException {
-        IDeliveryPerson deliveryPersons = new DeliveryPerson();
-        IDeliveryPersonPersistence deliveryPersonPersistence = DeliveryPersonFactory.instance()
-                .makeDeliveryPersonPersistence();
-        return new ModelAndView("assign-delivery-person", "delivery_persons",
-                deliveryPersons.getDeliveryPersonDetails(sellerID, deliveryPersonPersistence));
+    public ModelAndView assignDeliveryPerson(@PathVariable String sellerID, RedirectAttributes redirectAttributes) throws SQLException {
+        IDeliveryPerson deliveryPerson = SellerFactory.instance().makeDeliveryPerson();
+        ArrayList<IDeliveryPerson> deliveryPersonDetails = deliveryPerson.getDeliveryPersonDetails(sellerID,deliveryPersonPersistence);
+
+        if(deliveryPersonDetails == null){
+            redirectAttributes.addFlashAttribute("error", "Something went wrong, please try again.");
+            return new ModelAndView("redirect:/seller/orders/view");
+        }
+        return new ModelAndView("assign-delivery-person", "delivery_persons", deliveryPersonDetails);
     }
 
     @GetMapping("/seller/orders/assigned")

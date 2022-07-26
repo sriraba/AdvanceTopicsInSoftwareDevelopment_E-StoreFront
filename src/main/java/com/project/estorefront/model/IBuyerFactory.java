@@ -13,4 +13,5 @@ public interface IBuyerFactory {
     User makeBuyer(String buyerID);
 
     IBuyerOrderPersistence makeBuyerOrderPersistence(IDatabase database);
+    IBuyerOrderManagement makeBuyerOrderManagement();
 }

@@ -97,7 +97,6 @@ public class Authentication implements IAuthentication {
 
     @Override
     public boolean checkIfUserExists(String email) throws SQLException {
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
         try {
             String checkIfUserExistsQuery = "select * from user where email = ?";

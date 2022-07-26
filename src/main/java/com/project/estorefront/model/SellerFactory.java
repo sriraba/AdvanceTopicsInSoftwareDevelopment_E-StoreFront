@@ -21,16 +21,14 @@ public class SellerFactory implements ISellerFactory {
         return new SellerPersistence(database);
     }
 
-
-
     @Override
     public ISellerOrderManagement makeSellerOrderManagement() {
         return new OrderDetails();
     }
 
     @Override
-    public ISellerOrderPersistence makeSellerOrderPersistence() {
-        return new SellerOrderPersistence();
+    public ISellerOrderPersistence makeSellerOrderPersistence(IDatabase database) {
+        return new SellerOrderPersistence(database);
     }
 
     @Override
@@ -42,5 +40,8 @@ public class SellerFactory implements ISellerFactory {
     public User makeSeller(String sellerID) {
         return new Seller(sellerID);
     }
+
+    @Override
+    public IDeliveryPerson makeDeliveryPerson(){return new DeliveryPerson();};
 
 }
