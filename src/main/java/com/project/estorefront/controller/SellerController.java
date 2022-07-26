@@ -20,12 +20,12 @@ import java.util.Map;
 public class SellerController {
 
     private IDatabase database;
-    private ISellerPersistence sellerPersistence;
-    private IInventoryItemPersistence inventoryItemPersistence;
-    private ICouponsPersistence couponsPersistence;
-    private IOrderPersistence orderPersistence;
-    private ISellerOrderPersistence sellerOrderPersistence;
-    private IDeliveryPersonPersistence deliveryPersonPersistence;
+    private final ISellerPersistence sellerPersistence;
+    private final IInventoryItemPersistence inventoryItemPersistence;
+    private final ICouponsPersistence couponsPersistence;
+    private final IOrderPersistence orderPersistence;
+    private final ISellerOrderPersistence sellerOrderPersistence;
+    private final IDeliveryPersonPersistence deliveryPersonPersistence;
 
     public SellerController() {
         database = DatabaseFactory.instance().makeDatabase();
@@ -79,10 +79,11 @@ public class SellerController {
 
     @PostMapping("/seller/account/update/{userID}")
     public String updateSellerAccount(@RequestParam("firstName") String firstName,
-            @RequestParam("lastName") String lastName, @RequestParam("businessName") String businessName,
-            @RequestParam("businessDescription") String businessDescription,
-            @RequestParam("email") String email, @RequestParam("phone") String phone, @PathVariable String userID,
-            HttpSession session, RedirectAttributes redirectAttributes) {
+                                      @RequestParam("lastName") String lastName, @RequestParam("businessName") String businessName,
+                                      @RequestParam("businessDescription") String businessDescription,
+                                      @RequestParam("email") String email, @RequestParam("phone") String phone, @PathVariable String userID,
+                                      RedirectAttributes redirectAttributes) {
+
         User seller = new Seller();
         seller.setFirstName(firstName);
         seller.setLastName(lastName);
@@ -144,10 +145,10 @@ public class SellerController {
 
     @PostMapping("/seller/items/create")
     public String createSellerItem(@RequestParam("itemName") String itemName,
-            @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
-            @RequestParam(value = "quantity", defaultValue = "0") int itemQuantity,
-            @RequestParam(value = "price", defaultValue = "0") double itemPrice, HttpSession session,
-            RedirectAttributes redirectAttributes)
+                                   @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
+                                   @RequestParam(value = "quantity", defaultValue = "0") int itemQuantity,
+                                   @RequestParam(value = "price", defaultValue = "0") double itemPrice, HttpSession session,
+                                   RedirectAttributes redirectAttributes)
             throws SQLException {
         String userID = getUserID(session);
         if (userID == null || userID.isEmpty()) {
@@ -188,7 +189,7 @@ public class SellerController {
 
         try {
             Map<String, ArrayList<OrderDetails>> sellerOrders = sellerOrder.getSellerOrders(userID, sellerOrderPersistence);
-            if(sellerOrders == null){
+            if (sellerOrders == null) {
                 redirectAttributes.addFlashAttribute("error", "No orders to show");
                 return new ModelAndView("redirect:/seller");
             }
@@ -205,12 +206,12 @@ public class SellerController {
         ISellerOrderManagement sellerOrder = SellerFactory.instance().makeSellerOrderManagement();
         ModelAndView modelAndView = null;
         try {
-            OrderDetails orderDetails = sellerOrder.getOrderAndItemDetails(orderID,orderPersistence);
-            if(orderDetails == null){
+            OrderDetails orderDetails = sellerOrder.getOrderAndItemDetails(orderID, orderPersistence);
+            if (orderDetails == null) {
                 redirectAttributes.addFlashAttribute("error", "Something went wrong, please try again.");
                 return new ModelAndView("redirect:/seller");
             }
-            modelAndView = new ModelAndView("view-selected-order", "order",orderDetails);
+            modelAndView = new ModelAndView("view-selected-order", "order", orderDetails);
         } catch (SQLException e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Error getting order");
@@ -225,10 +226,10 @@ public class SellerController {
         ISellerOrderManagement sellerOrder = SellerFactory.instance().makeSellerOrderManagement();
         ModelAndView modelAndView = null;
         try {
-            OrderDetails orderDetails = sellerOrder.getOrderAndItemDetails(orderID,orderPersistence);
-            if(orderDetails == null){
+            OrderDetails orderDetails = sellerOrder.getOrderAndItemDetails(orderID, orderPersistence);
+            if (orderDetails == null) {
                 redirectAttributes.addFlashAttribute("error", "Something went wrong, please try again.");
-                return new ModelAndView("redirect:/seller","orders", orderDetails);
+                return new ModelAndView("redirect:/seller", "orders", orderDetails);
             }
             modelAndView = new ModelAndView("view-selected-order", "order", orderDetails);
         } catch (SQLException e) {
@@ -243,9 +244,9 @@ public class SellerController {
     @GetMapping("/seller/orders/assign_delivery_person/{sellerID}")
     public ModelAndView assignDeliveryPerson(@PathVariable String sellerID, RedirectAttributes redirectAttributes) throws SQLException {
         IDeliveryPerson deliveryPerson = SellerFactory.instance().makeDeliveryPerson();
-        ArrayList<IDeliveryPerson> deliveryPersonDetails = deliveryPerson.getDeliveryPersonDetails(sellerID,deliveryPersonPersistence);
+        ArrayList<IDeliveryPerson> deliveryPersonDetails = deliveryPerson.getDeliveryPersonDetails(sellerID, deliveryPersonPersistence);
 
-        if(deliveryPersonDetails == null){
+        if (deliveryPersonDetails == null) {
             redirectAttributes.addFlashAttribute("error", "Something went wrong, please try again.");
             return new ModelAndView("redirect:/seller/orders/view");
         }
@@ -279,9 +280,9 @@ public class SellerController {
 
     @PostMapping("/seller/items/update/{itemID}")
     public String updateSellerItem(@RequestParam("itemName") String itemName,
-            @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
-            @RequestParam("quantity") int itemQuantity, @RequestParam("price") double itemPrice,
-            @PathVariable String itemID, HttpSession session, RedirectAttributes redirectAttributes)
+                                   @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
+                                   @RequestParam("quantity") int itemQuantity, @RequestParam("price") double itemPrice,
+                                   @PathVariable String itemID, HttpSession session, RedirectAttributes redirectAttributes)
             throws SQLException {
         String userID = getUserID(session);
         if (userID == null || userID.isEmpty()) {
@@ -350,7 +351,7 @@ public class SellerController {
 
     @PostMapping("/seller/create-coupon")
     public String create(@RequestParam("name") String couponName, @RequestParam("amount") String amount,
-            @RequestParam("percent") String percent, RedirectAttributes redirectAttributes) {
+                         @RequestParam("percent") String percent, RedirectAttributes redirectAttributes) {
         int id = 0;
         try {
             id = couponsPersistence.getCoupons().size() + 1;
@@ -424,8 +425,8 @@ public class SellerController {
 
     @RequestMapping(value = "/seller/coupons/update/{id}", method = RequestMethod.POST)
     public String update(@PathVariable("id") int id, @RequestParam("name") String couponName,
-            @RequestParam("amount") String amount, @RequestParam("percent") String percent,
-            RedirectAttributes redirectAttributes) {
+                         @RequestParam("amount") String amount, @RequestParam("percent") String percent,
+                         RedirectAttributes redirectAttributes) {
         CouponValidator validator = new CouponValidator();
         if (validator.isValidPercent(percent) && validator.isValidAmount(amount)) {
             Coupon coupon = new Coupon(id, couponName, Double.parseDouble(amount), Double.parseDouble(percent));
