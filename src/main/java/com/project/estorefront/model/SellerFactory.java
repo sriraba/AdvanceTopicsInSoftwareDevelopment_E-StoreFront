@@ -41,4 +41,7 @@ public class SellerFactory implements ISellerFactory {
         return new Seller(sellerID);
     }
 
+    @Override
+    public IDeliveryPerson makeDeliveryPerson(){return new DeliveryPerson();};
+
 }

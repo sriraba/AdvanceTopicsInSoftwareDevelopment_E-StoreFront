@@ -12,11 +12,15 @@ import com.project.estorefront.model.IDeliveryPerson;
 
 public class DeliveryPersonPersistence implements IDeliveryPersonPersistence {
 
+    private IDatabase database;
+
+    public DeliveryPersonPersistence(IDatabase database) {
+        this.database = database;
+    }
 
     @Override
     public ArrayList<IDeliveryPerson> getAll(String sellerID) throws SQLException {
         PreparedStatement preparedStatement;
-        IDatabase database = DatabaseFactory.instance().makeDatabase();
         Connection connection = database.getConnection();
 
         ArrayList<IDeliveryPerson> deliveryPersonDetails = new ArrayList<>();

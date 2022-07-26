@@ -25,6 +25,7 @@ public class SellerController {
     private ICouponsPersistence couponsPersistence;
     private IOrderPersistence orderPersistence;
     private ISellerOrderPersistence sellerOrderPersistence;
+    private IDeliveryPersonPersistence deliveryPersonPersistence;
 
     public SellerController() {
         database = DatabaseFactory.instance().makeDatabase();
@@ -33,6 +34,7 @@ public class SellerController {
         couponsPersistence = CouponsFactory.instance().makeCouponsPersistence(database);
         orderPersistence = OrderAndItemsFactory.instance().makeOrderPersistence(database);
         sellerOrderPersistence = SellerFactory.instance().makeSellerOrderPersistence(database);
+        deliveryPersonPersistence = DeliveryPersonFactory.instance().makeDeliveryPersonPersistence(database);
     }
 
     private static final String notLoggedInRedirect = "redirect:/login";
@@ -241,14 +243,12 @@ public class SellerController {
 
     @GetMapping("/seller/orders/assign_delivery_person/{sellerID}")
     public ModelAndView assignDeliveryPerson(@PathVariable String sellerID, RedirectAttributes redirectAttributes) throws SQLException {
-        IDeliveryPerson deliveryPersons = new DeliveryPerson();
-        IDeliveryPersonPersistence deliveryPersonPersistence = DeliveryPersonFactory.instance()
-                .makeDeliveryPersonPersistence();
-        ArrayList<IDeliveryPerson> deliveryPersonDetails = deliveryPersons.getDeliveryPersonDetails(sellerID,deliveryPersonPersistence);
+        IDeliveryPerson deliveryPerson = SellerFactory.instance().makeDeliveryPerson();
+        ArrayList<IDeliveryPerson> deliveryPersonDetails = deliveryPerson.getDeliveryPersonDetails(sellerID,deliveryPersonPersistence);
 
         if(deliveryPersonDetails == null){
             redirectAttributes.addFlashAttribute("error", "Something went wrong, please try again.");
-            return new ModelAndView("redirect:/seller/orders/view","delivery_persons", deliveryPersonDetails);
+            return new ModelAndView("redirect:/seller/orders/view");
         }
         return new ModelAndView("assign-delivery-person", "delivery_persons", deliveryPersonDetails);
     }
