@@ -181,8 +181,8 @@ public class BuyerController {
         }
     }
 
-    @GetMapping("/buyer/order/details/{orderID}")
-    public ModelAndView buyerItems(@PathVariable String orderID, RedirectAttributes redirectAttributes) {
+    @GetMapping("/buyer/order/details/{orderID}/{orderStatus}")
+    public ModelAndView buyerItems(@PathVariable String orderID, @PathVariable String orderStatus,RedirectAttributes redirectAttributes) {
         IBuyerOrderManagement buyerOrder = BuyerFactory.instance().makeBuyerOrderManagement();
         ModelAndView modelAndView = null;
         try {
@@ -197,7 +197,7 @@ public class BuyerController {
             redirectAttributes.addFlashAttribute("error", "Error fetching order");
             return new ModelAndView("redirect:/error");
         }
-        modelAndView.addObject("page", "buyer");
+        modelAndView.addObject("page", orderStatus);
         return modelAndView;
     }
 
