@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import com.project.estorefront.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,14 +34,6 @@ import com.project.estorefront.model.Seller;
 import com.project.estorefront.model.SellerFactory;
 import com.project.estorefront.model.User;
 import com.project.estorefront.model.validators.ICartValidator;
-import com.project.estorefront.repository.IBuyerOrderPersistence;
-import com.project.estorefront.repository.IBuyerPersistence;
-import com.project.estorefront.repository.IDatabase;
-import com.project.estorefront.repository.IInventoryItemPersistence;
-import com.project.estorefront.repository.IOrderPersistence;
-import com.project.estorefront.repository.IPlaceOrderPersistence;
-import com.project.estorefront.repository.ISellerPersistence;
-import com.project.estorefront.repository.PersistenceStatus;
 
 @Controller
 public class BuyerController {
@@ -357,16 +350,17 @@ public class BuyerController {
 
     @RequestMapping(value = "/buyer/checkout", method = RequestMethod.POST)
     public String checkout(@RequestParam("address") String address, @RequestParam("pincode") String pincode,
-            HttpSession session) throws SQLException {
+                           HttpSession session) throws SQLException {
         ICart cart = getCart(session);
         ICartValidator validator = CartFactory.instance().makeCartValidator();
-        String error = validator.validateCart(cart);
+        IInventoryItemPersistence obj = new InventoryItemPersistence(DatabaseFactory.instance().makeDatabase());
+        String error = validator.validateCart(cart, obj);
         String userID = (String) session.getAttribute("userID");
         if (!error.matches("")) {
             return "redirect:/buyer/cart/view/" + error;
         }
-        IPlaceOrderPersistence obj = CartFactory.instance().makeCartPersistence();
-        if (obj.placeOrder(cart, userID, address, pincode)) {
+        IPlaceOrderPersistence orderObj = CartFactory.instance().makeCartPersistence();
+        if (orderObj.placeOrder(cart, userID, address, pincode)) {
             session.setAttribute("cart", "");
             return "thank-you";
         }
