@@ -72,10 +72,10 @@ public class SellerController {
 
     @PostMapping("/seller/account/update/{userID}")
     public String updateSellerAccount(@RequestParam("firstName") String firstName,
-                                      @RequestParam("lastName") String lastName, @RequestParam("businessName") String businessName,
-                                      @RequestParam("businessDescription") String businessDescription,
-                                      @RequestParam("email") String email, @RequestParam("phone") String phone, @PathVariable String userID,
-                                      HttpSession session, RedirectAttributes redirectAttributes) {
+            @RequestParam("lastName") String lastName, @RequestParam("businessName") String businessName,
+            @RequestParam("businessDescription") String businessDescription,
+            @RequestParam("email") String email, @RequestParam("phone") String phone, @PathVariable String userID,
+            HttpSession session, RedirectAttributes redirectAttributes) {
         User seller = new Seller();
         seller.setFirstName(firstName);
         seller.setLastName(lastName);
@@ -138,9 +138,10 @@ public class SellerController {
 
     @PostMapping("/seller/items/create")
     public String createSellerItem(@RequestParam("itemName") String itemName,
-                                   @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
-                                   @RequestParam(value = "quantity", defaultValue = "0") int itemQuantity, @RequestParam(value = "price", defaultValue = "0") double itemPrice, HttpSession session,
-                                   RedirectAttributes redirectAttributes)
+            @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
+            @RequestParam(value = "quantity", defaultValue = "0") int itemQuantity,
+            @RequestParam(value = "price", defaultValue = "0") double itemPrice, HttpSession session,
+            RedirectAttributes redirectAttributes)
             throws SQLException {
         String userID = getUserID(session);
         if (userID == null || userID.isEmpty()) {
@@ -226,7 +227,8 @@ public class SellerController {
     @GetMapping("/seller/orders/assign_delivery_person/{sellerID}")
     public ModelAndView assignDeliveryPerson(@PathVariable String sellerID) throws SQLException {
         IDeliveryPerson deliveryPersons = new DeliveryPerson();
-        IDeliveryPersonPersistence deliveryPersonPersistence = DeliveryPersonFactory.instance().makeDeliveryPersonPersistence();
+        IDeliveryPersonPersistence deliveryPersonPersistence = DeliveryPersonFactory.instance()
+                .makeDeliveryPersonPersistence();
         return new ModelAndView("assign-delivery-person", "delivery_persons",
                 deliveryPersons.getDeliveryPersonDetails(sellerID, deliveryPersonPersistence));
     }
@@ -258,15 +260,17 @@ public class SellerController {
 
     @PostMapping("/seller/items/update/{itemID}")
     public String updateSellerItem(@RequestParam("itemName") String itemName,
-                                   @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
-                                   @RequestParam("quantity") int itemQuantity, @RequestParam("price") double itemPrice,
-                                   @PathVariable String itemID, HttpSession session, RedirectAttributes redirectAttributes) throws SQLException {
+            @RequestParam("description") String itemDescription, @RequestParam("category") String itemCategory,
+            @RequestParam("quantity") int itemQuantity, @RequestParam("price") double itemPrice,
+            @PathVariable String itemID, HttpSession session, RedirectAttributes redirectAttributes)
+            throws SQLException {
         String userID = getUserID(session);
         if (userID == null || userID.isEmpty()) {
             return notLoggedInRedirect;
         }
 
-        IInventoryItem item = InventoryFactory.instance().makeInventoryItem(itemID, userID, ItemCategory.valueOf(itemCategory), itemQuantity, itemPrice, itemName, itemDescription);
+        IInventoryItem item = InventoryFactory.instance().makeInventoryItem(itemID, userID,
+                ItemCategory.valueOf(itemCategory), itemQuantity, itemPrice, itemName, itemDescription);
 
         IInventoryItemValidator validator = InventoryFactory.instance().makeValidator();
         InventoryItemValidationStatus validationStatus = validator.validate(item);
@@ -327,7 +331,7 @@ public class SellerController {
 
     @PostMapping("/seller/create-coupon")
     public String create(@RequestParam("name") String couponName, @RequestParam("amount") String amount,
-                         @RequestParam("percent") String percent, RedirectAttributes redirectAttributes) {
+            @RequestParam("percent") String percent, RedirectAttributes redirectAttributes) {
         int id = 0;
         try {
             id = couponsPersistence.getCoupons().size() + 1;
@@ -401,7 +405,8 @@ public class SellerController {
 
     @RequestMapping(value = "/seller/coupons/update/{id}", method = RequestMethod.POST)
     public String update(@PathVariable("id") int id, @RequestParam("name") String couponName,
-                         @RequestParam("amount") String amount, @RequestParam("percent") String percent, RedirectAttributes redirectAttributes) {
+            @RequestParam("amount") String amount, @RequestParam("percent") String percent,
+            RedirectAttributes redirectAttributes) {
         CouponValidator validator = new CouponValidator();
         if (validator.isValidPercent(percent) && validator.isValidAmount(amount)) {
             Coupon coupon = new Coupon(id, couponName, Double.parseDouble(amount), Double.parseDouble(percent));
@@ -421,6 +426,16 @@ public class SellerController {
 
     private String getUserID(HttpSession session) {
         return (String) session.getAttribute("userID");
+    }
+
+    @RequestMapping(value = "/seller/analytics", method = RequestMethod.GET)
+    public String viewAnalytics(Model model) {
+        IAnalyticsPersistence obj = new AnalyticsPersistence();
+        model.addAttribute("totalSales", obj.getTotalSales());
+        model.addAttribute("totalOrders", obj.getTotalOrders());
+        model.addAttribute("totalReturningCustomers", obj.getTotalReturningBuyers());
+        model.addAttribute("totalNewBuyers", obj.getNewBuyers());
+        return "view-analytics";
     }
 
 }

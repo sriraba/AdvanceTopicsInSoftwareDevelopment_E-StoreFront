@@ -1,12 +1,10 @@
 package com.project.estorefront.model;
 
-import com.project.estorefront.repository.IBuyerPersistence;
-import com.project.estorefront.repository.ISellerPersistence;
-
 import java.sql.SQLException;
 
-public class Buyer extends User implements IBuyer {
+import com.project.estorefront.repository.IBuyerPersistence;
 
+public class Buyer extends User implements IBuyer {
 
     public Buyer() {
         super();
@@ -17,7 +15,9 @@ public class Buyer extends User implements IBuyer {
         this.userID = buyerID;
     }
 
-    public Buyer(String firstName, String lastName, String email, String address, String contact, String password, String city) {
+    public Buyer(String firstName, String lastName, String email, String address, String contact, String password,
+            String city) {
+        super(firstName, lastName, email, address, "", password, city, false, false);
     }
 
     @Override

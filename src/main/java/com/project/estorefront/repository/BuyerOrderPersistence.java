@@ -3,7 +3,6 @@ package com.project.estorefront.repository;
 import com.project.estorefront.model.DatabaseFactory;
 import com.project.estorefront.model.OrderDetails;
 
-import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,7 +25,8 @@ public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrd
         PreparedStatement preparedStatement = null;
         ArrayList<OrderDetails> sellerOrderDetails = new ArrayList<>();
         try {
-            preparedStatement = connection.prepareStatement("SELECT * FROM buyer_orders WHERE buyer_orders.user_id = ?");
+            preparedStatement = connection
+                    .prepareStatement("SELECT * FROM buyer_orders WHERE buyer_orders.user_id = ?");
             preparedStatement.setString(1, buyerID);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
@@ -52,11 +52,11 @@ public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrd
     }
 
     @Override
-    public void submitReview(String userID, String orderID, String description) throws SQLException {
+    public PersistenceStatus submitReview(String userID, String orderID, String description) throws SQLException {
         Connection connection = database.getConnection();
 
         PreparedStatement preparedStatement;
-        try{
+        try {
 
             String persistReview = "insert into reviews (review_id, description, user_id, order_id ) " +
                     "values (?, ?, ?, ?)";
@@ -67,10 +67,17 @@ public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrd
             preparedStatement.setString(2, description);
             preparedStatement.setString(3, userID);
             preparedStatement.setString(4, orderID);
-            preparedStatement.execute();
-        }catch (SQLException e){
+            boolean status = preparedStatement.execute();
+            if (status) {
+                return PersistenceStatus.SUCCESS;
+            } else {
+                return PersistenceStatus.FAILURE;
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
+            return PersistenceStatus.SQL_EXCEPTION;
+        } finally {
+            database.closeConnection();
         }
-
     }
 }

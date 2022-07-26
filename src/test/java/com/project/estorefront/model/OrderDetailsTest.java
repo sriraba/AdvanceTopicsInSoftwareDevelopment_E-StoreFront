@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 
+import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.*;
 
 class OrderDetailsTest {
@@ -65,7 +66,19 @@ class OrderDetailsTest {
     }
 
     @Test
-    void submitReview() {
+    void submitReviewForValidOrder() {
+        IBuyerOrderManagement orderManagement = new OrderDetails();
+        IBuyerOrderPersistence buyerOrderPersistence = new BuyerOrderPersistenceMock();
+        PersistenceStatus status = orderManagement.submitReview("1","OR12365","Good service",buyerOrderPersistence);
+        assertSame(status, PersistenceStatus.SUCCESS);
+    }
+
+    @Test
+    void submitReviewForInValidOrder() {
+        IBuyerOrderManagement orderManagement = new OrderDetails();
+        IBuyerOrderPersistence buyerOrderPersistence = new BuyerOrderPersistenceMock();
+        PersistenceStatus status = orderManagement.submitReview("1","OR1236789","Good service",buyerOrderPersistence);
+        assertSame(status, PersistenceStatus.FAILURE);
     }
 
     @Test

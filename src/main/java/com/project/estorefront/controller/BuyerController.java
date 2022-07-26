@@ -1,6 +1,8 @@
 package com.project.estorefront.controller;
 
 import com.project.estorefront.model.*;
+import com.project.estorefront.model.validators.CartValidator;
+import com.project.estorefront.model.validators.ICartValidator;
 import com.project.estorefront.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,11 +31,11 @@ public class BuyerController {
         buyerOrderPersistence = BuyerFactory.instance().makeBuyerOrderPersistence(database);
     }
 
-
     private static final String notLoggedInRedirect = "redirect:/login";
 
     @GetMapping("/buyer")
-    public String buyerHome(@RequestParam(required = false, name = "category") String categoryFilter, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String buyerHome(@RequestParam(required = false, name = "category") String categoryFilter, Model model,
+                            HttpSession session, RedirectAttributes redirectAttributes) {
         String userID = getUserID(session);
         if (userID == null || userID.isEmpty()) {
             return notLoggedInRedirect;
@@ -44,14 +46,14 @@ public class BuyerController {
             if (categoryFilter == null || categoryFilter.isEmpty()) {
                 sellers = Seller.getAllSellersByCity(sellerPersistence, "Halifax");
             } else {
-                sellers = Seller.getAllSellersByCategory(sellerPersistence, ItemCategory.valueOf(categoryFilter), "Halifax");
+                sellers = Seller.getAllSellersByCategory(sellerPersistence, ItemCategory.valueOf(categoryFilter),
+                        "Halifax");
             }
         } catch (SQLException e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Error fetching nearby sellers");
             return "redirect:/error";
         }
-
 
         model.addAttribute("sellers", sellers);
 
@@ -100,7 +102,8 @@ public class BuyerController {
     @PostMapping("/buyer/account/update/{userID}")
     public String updateBuyerAccount(@RequestParam("firstName") String firstName,
                                      @RequestParam("lastName") String lastName,
-                                     @RequestParam("phone") String phone, @RequestParam("address") String address, @PathVariable String userID, HttpSession session, RedirectAttributes redirectAttributes) {
+                                     @RequestParam("phone") String phone, @RequestParam("address") String address, @PathVariable String userID,
+                                     HttpSession session, RedirectAttributes redirectAttributes) {
         User buyer = BuyerFactory.instance().makeBuyer();
         buyer.setFirstName(firstName);
         buyer.setLastName(lastName);
@@ -134,7 +137,6 @@ public class BuyerController {
         }
         return "redirect:/login";
     }
-
 
     @GetMapping("/buyer/view-seller/{sellerID}")
     public String sellerDetails(Model model, @PathVariable String sellerID, RedirectAttributes redirectAttributes) {
@@ -201,20 +203,25 @@ public class BuyerController {
                                @RequestParam("review") String description, Model model, RedirectAttributes redirectAttributes) {
         IBuyerOrderManagement buyerOrder = new OrderDetails();
         try {
-            buyerOrder.submitReview(buyerOrderPersistence, userID, orderID, description);
+            PersistenceStatus status = buyerOrder.submitReview(userID, orderID, description, buyerOrderPersistence);
+            model.addAttribute("page", "buyer");
+            if (status == PersistenceStatus.SUCCESS) {
+                return "submit-success";
+            } else {
+                return "redirect:/buyer/orders/view";
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Error submitting review");
             return "redirect:/buyer-orders/view";
         }
-        model.addAttribute("page", "buyer");
-        return "submit-success";
+
     }
 
     private ICart getCart(HttpSession session) {
         ICart cart = null;
         if (session.getAttribute("cart") == null) {
-            cart = Cart.instance();
+            cart = CartFactory.instance().makeCart();
         } else {
             cart = (ICart) session.getAttribute("cart");
         }
@@ -230,7 +237,8 @@ public class BuyerController {
     }
 
     @RequestMapping(value = "/buyer/cart/add/{itemID}", method = RequestMethod.POST)
-    public String addToCart(@PathVariable String itemID, @RequestParam("quantity") String qty, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String addToCart(@PathVariable String itemID, @RequestParam("quantity") String qty, HttpSession session,
+                            RedirectAttributes redirectAttributes) {
         ICart cart = getCart(session);
 
         IInventoryItem inventory = null;
@@ -259,7 +267,8 @@ public class BuyerController {
     }
 
     @RequestMapping(value = "/buyer/cart/delete/{itemID}", method = RequestMethod.GET)
-    public String deleteItemFromCart(@PathVariable String itemID, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String deleteItemFromCart(@PathVariable String itemID, Model model, HttpSession session,
+                                     RedirectAttributes redirectAttributes) {
         ICart cart = getCart(session);
         IInventoryItem inventory = null;
         try {
@@ -305,5 +314,23 @@ public class BuyerController {
 
     private String getUserID(HttpSession session) {
         return (String) session.getAttribute("userID");
+    }
+
+    @RequestMapping(value = "/buyer/checkout", method = RequestMethod.POST)
+    public String checkout(@RequestParam("address") String address, @RequestParam("pincode") String pincode,
+                           HttpSession session) throws SQLException {
+        ICart cart = getCart(session);
+        ICartValidator validator = CartFactory.instance().makeCartValidator();
+        String error = validator.validateCart(cart);
+        String userID = (String) session.getAttribute("userID");
+        if (!error.matches("")) {
+            return "redirect:/buyer/cart/view/" + error;
+        }
+        IPlaceOrderPersistence obj = CartFactory.instance().makeCartPersistence();
+        if (obj.placeOrder(cart, userID, address, pincode)) {
+            session.setAttribute("cart", "");
+            return "thank-you";
+        }
+        return "redirect:/buyer/cart/view/" + "Error: Unable to place order right now, please try again later!";
     }
 }

@@ -18,6 +18,16 @@ public class OrderDetails implements ISellerOrderManagement, IBuyerOrderManageme
     private String pincode;
     private String buyerID;
 
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getBuyerID() {
         return buyerID;
     }
@@ -109,7 +119,8 @@ public class OrderDetails implements ISellerOrderManagement, IBuyerOrderManageme
     }
 
     @Override
-    public Map<String, ArrayList<OrderDetails>> getSellerOrders(String sellerID, ISellerOrderPersistence orderPersistence) throws SQLException {
+    public Map<String, ArrayList<OrderDetails>> getSellerOrders(String sellerID,
+            ISellerOrderPersistence orderPersistence) throws SQLException {
         ArrayList<OrderDetails> allOrderDetails = orderPersistence.loadOrders(sellerID);
         ArrayList<OrderDetails> currentOrderDetails = new ArrayList<>();
         ArrayList<OrderDetails> previousOrderDetails = new ArrayList<>();
@@ -132,14 +143,16 @@ public class OrderDetails implements ISellerOrderManagement, IBuyerOrderManageme
     }
 
     @Override
-    public Map<String, ArrayList<OrderDetails>> getBuyerOrders(String buyerID, IBuyerOrderPersistence orderPersistence) throws SQLException {
+    public Map<String, ArrayList<OrderDetails>> getBuyerOrders(String buyerID, IBuyerOrderPersistence orderPersistence)
+            throws SQLException {
         ArrayList<OrderDetails> allOrderDetails = orderPersistence.loadOrders(buyerID);
         ArrayList<OrderDetails> currentOrderDetails = new ArrayList<>();
         ArrayList<OrderDetails> previousOrderDetails = new ArrayList<>();
         Map<String, ArrayList<OrderDetails>> sellerOrders = new HashMap<>();
         if (allOrderDetails != null && allOrderDetails.size() > 0) {
             allOrderDetails.forEach(orderdetail -> {
-                if (orderdetail.getOrderStatus().equalsIgnoreCase(String.valueOf(OrderStatus.PLACED)) || orderdetail.getOrderStatus().equalsIgnoreCase(String.valueOf(OrderStatus.DELIVERY_PERSON_ASSIGNED))) {
+                if (orderdetail.getOrderStatus().equalsIgnoreCase(String.valueOf(OrderStatus.PLACED)) || orderdetail
+                        .getOrderStatus().equalsIgnoreCase(String.valueOf(OrderStatus.DELIVERY_PERSON_ASSIGNED))) {
                     currentOrderDetails.add(orderdetail);
                 } else {
                     previousOrderDetails.add(orderdetail);
@@ -156,8 +169,9 @@ public class OrderDetails implements ISellerOrderManagement, IBuyerOrderManageme
     }
 
     @Override
-    public void submitReview(IBuyerOrderPersistence persistence, String userID, String orderID, String description) throws SQLException {
-        persistence.submitReview(userID, orderID, description);
+    public PersistenceStatus submitReview(String userID, String orderID, String description,
+            IBuyerOrderPersistence orderPersistence) throws SQLException {
+        return orderPersistence.submitReview(userID, orderID, description);
     }
 
     public OrderDetails getOrderAndItemDetails(String orderID, IOrderPersistence orderPersistence) throws SQLException {

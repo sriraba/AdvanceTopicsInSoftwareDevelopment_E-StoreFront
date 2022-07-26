@@ -3,33 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        .cart{
+            width: 40%;
+            display: inline-block;
+            float: left;
+        }
+        .checkout-form{
+            width: 55%;
+            display: inline-block;
+            padding-left: 20%;
+        }
+        form{
+            text-align: center;
+        }
+        h2{
+            text-align: center;
+        }
+        h3{
+            text-align: center;
+            color: red;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-<div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
-<table border="1" style="border-collapse:collapse">
-    <tr>
-        <th>Product Name</th>
-        <th>Item Price</th>
-        <th>Item Quantity</th>
-        <th>Sub Total</th>
-        <th>Action</th>
-    </tr>
-    <tr th:each="item: ${inventory}">
-        <td  th:text="${item.getItemName()}"/>
-        <td  th:text="${item.getItemPrice()}"/>
-        <td  th:text="${item.getItemQuantity()}"/>
-        <td  th:text="${item.getItemPrice() * item.getItemQuantity()}"/>
-        <td>
-            <button type="button" value="Edit" th:onclick="|window.location.href='@{'/buyer/cart/edit/' + ${item.getItemID()}}'|">Edit</button>
-            <button type="button" value="Delete" th:onclick="|window.location.href='@{'/buyer/cart/delete/' + ${item.getItemID()}}'|">Delete</button>
-        </td>
-    </tr>
-    <tr>
-        <th colspan="3">Cart Total</th>
-        <td colspan="2">CAD <span th:text="${cartTotal}" /></td>
-    </tr>
-</table>
-<input type="submit" value="Continue Shopping" class="btn btn-primary">
-<input type="submit" value="Place Order" class="btn btn-primary">
+<div class="cart">
+    <table border="1" style="border-collapse:collapse">
+        <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
+        <tr>
+            <th>Product Name</th>
+            <th>Item Price</th>
+            <th>Item Quantity</th>
+            <th>Sub Total</th>
+            <th>Action</th>
+        </tr>
+        <tr th:each="item: ${inventory}">
+            <td  th:text="${item.getItemName()}"/>
+            <td  th:text="${item.getItemPrice()}"/>
+            <td  th:text="${item.getItemQuantity()}"/>
+            <td  th:text="${item.getItemPrice() * item.getItemQuantity()}"/>
+            <td>
+                <button type="button" value="Edit" th:onclick="|window.location.href='@{'/buyer/cart/edit/' + ${item.getItemID()}}'|">Edit</button>
+                <button type="button" value="Delete" th:onclick="|window.location.href='@{'/buyer/cart/delete/' + ${item.getItemID()}}'|">Delete</button>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="3">Cart Total</th>
+            <td colspan="2">CAD <span th:text="${cartTotal}" /></td>
+        </tr>
+    </table>
+</div>
+<div class="checkout-form">
+    <h2>Delivery Details</h2>
+    <form th:action="@{/buyer/checkout}" method="post">
+        <label for="address">Delivery Address: </label>
+        <textarea rows="5" name="address" id="address" required></textarea><br><br>
+        <label for="pincode">Pincode: </label>
+        <input type="text" name="pincode" id="pincode" required><br><br>
+        <input type="button" value="Continue Shopping" class="btn btn-primary" th:onclick="|window.location.href='/buyer'|">
+        <input type="submit" value="Place Order" class="btn btn-primary">
+    </form><br><br>
+    <h3 th:text="${error}"></h3>
+</div>
 </body>
 </html>

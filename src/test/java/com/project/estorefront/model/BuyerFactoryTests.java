@@ -1,8 +1,8 @@
 package com.project.estorefront.model;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertNotNull;
+
+import org.junit.Test;
 
 public class BuyerFactoryTests {
     @Test
