@@ -125,9 +125,7 @@ public abstract class User {
         return authentication.login(email, password);
     };
 
-    public String register(IAuthentication authentication) throws SQLException {
-        return authentication.register(this);
-    };
+    public abstract String register(IAuthentication authentication) throws SQLException;
 
     public static boolean sendResetEmail(IMailSender mailSender, String email, String otp) {
         return mailSender.sendMail(email, otp);

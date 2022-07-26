@@ -90,7 +90,7 @@ public class AuthenticationController {
                                          @RequestParam("email") String email, @RequestParam("password") String password,
                                          @RequestParam("confirmPassword") String confirmPassword,
                                          @RequestParam("contact") String contact, @RequestParam("city") String city, @RequestParam String address,
-                                         @RequestParam("role") String role, HttpSession session, RedirectAttributes redirectAttributes) {
+                                         @RequestParam("role") String role, @RequestParam("businessName") String businessName, @RequestParam("businessDescription") String businessDescription, HttpSession session, RedirectAttributes redirectAttributes) {
 
         IValidator nameValidator = ValidatorFactory.instance().makeNameValidator();
         IValidator emailValidator = ValidatorFactory.instance().makeEmailValidator();
@@ -106,7 +106,7 @@ public class AuthenticationController {
         if (nameValidator.validate(city) == false) {
             errors.add("Invalid City");
         }
-        // phone number
+
         if (phoneNumberValidator.validate(contact) == false) {
             errors.add("Invalid Phone Number");
         }
@@ -131,6 +131,8 @@ public class AuthenticationController {
             } else if (role.contains("seller")) {
                 user = UserFactory.instance().getUser("seller");
                 user.setIsSeller(true);
+                ((Seller) user).setBusinessName(businessName);
+                ((Seller) user).setBusinessDescription(businessDescription);
             } else {
                 errors.add("Please select a role");
                 redirectAttributes.addFlashAttribute("error", "Please select a role");
@@ -144,9 +146,8 @@ public class AuthenticationController {
             user.setPhone(contact);
             user.setCity(city);
             user.setAddress(address);
-            user.setIsSeller(false);
 
-            String userID = null;
+            String userID;
             try {
                 userID = user.register(authentication);
             } catch (SQLException e) {

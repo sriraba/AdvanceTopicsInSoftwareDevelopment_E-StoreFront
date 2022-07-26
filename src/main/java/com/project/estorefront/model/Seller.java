@@ -1,5 +1,6 @@
 package com.project.estorefront.model;
 
+import com.project.estorefront.repository.IAuthentication;
 import com.project.estorefront.repository.ISellerPersistence;
 
 import java.sql.SQLException;
@@ -49,6 +50,11 @@ public class Seller extends User implements ISeller {
     @Override
     public void updateProfile() {
 
+    }
+
+    @Override
+    public String register(IAuthentication authentication) throws SQLException {
+        return authentication.register(firstName, lastName, email, password, phone, isSeller, city, businessName, address, businessDescription, isUserEnabled);
     }
 
     public User getSellerByID(ISellerPersistence persistence, String sellerID) throws SQLException {

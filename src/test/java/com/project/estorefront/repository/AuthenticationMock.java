@@ -1,6 +1,5 @@
 package com.project.estorefront.repository;
 
-import com.project.estorefront.model.Buyer;
 import com.project.estorefront.model.User;
 
 import java.sql.SQLException;
@@ -8,29 +7,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class AuthenticationMock implements IAuthentication{
-    private static User user = null;
-    private static Map<String, User> userMap = new HashMap<>();
+public class AuthenticationMock implements IAuthentication {
+    private User user = null;
+    private Map<String, User> userMap = new HashMap<>();
 
-    public User createUser(){
-        user = new Buyer("Sri Ramya", "Basam", "sriramya7666@gmail.com", "133 South Park Street ", "9875432466", "ramya@09876", "halifax");
-        return user;
+    public void addMockUser(User user) {
+        userMap.put("ASD", user);
     }
 
-    public User getUser(String type){
-        user = new Buyer("Sri Ramya", "Basam", "sriramya@gmail.com", "133 South Park Street ", "9875432466", "ramya@09876", "halifax");
-        String userID = UUID.randomUUID().toString();
-        userMap.put(userID, user);
-        if("old".equalsIgnoreCase(type)){
-            return user;
-        }
-        else{
-            return null;
-        }
-    }
     @Override
     public String login(String email, String password) {
-        if(userMap.size()>0) {
+        if (email == null || password == null) {
+            return null;
+        }
+        if (userMap.size() > 0) {
             for (Map.Entry<String, User> entry : userMap.entrySet()) {
                 User userDetail = entry.getValue();
                 if (userDetail.getEmail().equalsIgnoreCase(email) && userDetail.getPassword().equalsIgnoreCase(password)) {
@@ -40,12 +30,16 @@ public class AuthenticationMock implements IAuthentication{
         }
         return null;
     }
+
     @Override
-    public String register(User user) {
-        if(userMap.size()>0){
-            for (Map.Entry<String,User> entry : userMap.entrySet()){
+    public String register(String firstName, String lastName, String email, String password, String phone, boolean isSeller, String city, String businessName, String address, String businessDescription, boolean isUserEnabled) {
+        if (email == null || password == null) {
+            return null;
+        }
+        if (userMap.size() > 0) {
+            for (Map.Entry<String, User> entry : userMap.entrySet()) {
                 User userDetail = entry.getValue();
-                if (user == null || userDetail.getEmail().equalsIgnoreCase(user.getEmail()) && userDetail.getPassword().equalsIgnoreCase(user.getPassword())){
+                if (userDetail.getEmail().equalsIgnoreCase(email) || userDetail.getPassword().equalsIgnoreCase(password)) {
                     return null;
                 }
             }
