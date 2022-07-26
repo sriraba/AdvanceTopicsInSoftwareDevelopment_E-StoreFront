@@ -14,6 +14,7 @@
 <body>
 <h2>Add New Coupon</h2>
 <form th:action="@{/seller/create-coupon}" method="post">
+    <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
     <label for="name">Coupon Name:</label>
     <input type="text" name="name" id="Name"><br><br>
     <label for="amount">Maximum Amount: </label>

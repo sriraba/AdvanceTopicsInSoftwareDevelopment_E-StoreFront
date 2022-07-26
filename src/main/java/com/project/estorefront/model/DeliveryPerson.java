@@ -2,6 +2,7 @@ package com.project.estorefront.model;
 
 import com.project.estorefront.repository.IDeliveryPersonPersistence;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class DeliveryPerson implements IDeliveryPerson{
@@ -26,7 +27,7 @@ public class DeliveryPerson implements IDeliveryPerson{
         this.personName = personName;
     }
 
-    public ArrayList<IDeliveryPerson> getDeliveryPersonDetails(String sellerID, IDeliveryPersonPersistence deliveryPersonPersistence){
+    public ArrayList<IDeliveryPerson> getDeliveryPersonDetails(String sellerID, IDeliveryPersonPersistence deliveryPersonPersistence) throws SQLException {
         return (sellerID == null || sellerID.isEmpty()) ? null : deliveryPersonPersistence.getAll(sellerID);
     }
 

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class OrderPersistence implements IOrderPersistence {
     @Override
-    public OrderDetails loadOrderAndItems(String orderID) {
+    public OrderDetails loadOrderAndItems(String orderID) throws SQLException {
         PreparedStatement preparedStatement;
 
         IDatabase database = DatabaseFactory.instance().makeDatabase();

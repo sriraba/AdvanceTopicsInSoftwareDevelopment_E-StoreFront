@@ -9,6 +9,7 @@
 <body>
     <div th:replace="fragments/buyer-header.html"></div>
     <h1>Sellers Nearby</h1>
+    <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
     <form th:action="@{'/buyer?categoryFilter=' + ${category}}" >
         <div class="col-md-8">
             <label>Category</label>

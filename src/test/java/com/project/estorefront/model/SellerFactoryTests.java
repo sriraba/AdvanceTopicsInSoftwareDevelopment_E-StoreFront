@@ -12,12 +12,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.project.estorefront.repository.ISellerOrderPersistence;
 import com.project.estorefront.repository.ISellerPersistence;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@SpringBootTest
-@TestPropertySource(properties = {
-        "SPRING_DATASOURCE_URL=jdbc:mysql://db-5308.cs.dal.ca:3306/CSCI5308_1_DEVINT?autoreconnect=true",
-        "SPRING_DATASOURCE_USERNAME=CSCI5308_1_DEVINT_USER", "SPRING_DATASOURCE_PASSWORD=uB8c3mUaMW" })
 public class SellerFactoryTests {
 
     @Test
@@ -25,11 +19,11 @@ public class SellerFactoryTests {
         assertNotNull(SellerFactory.instance());
     }
 
-    @Test
-    public void testMakeSellerPersistence() {
-        ISellerPersistence persistence = SellerFactory.instance().makeSellerPersistence();
-        assertNotNull(persistence);
-    }
+//    @Test
+//    public void testMakeSellerPersistence() {
+//        ISellerPersistence persistence = SellerFactory.instance().makeSellerPersistence();
+//        assertNotNull(persistence);
+//    }
 
     @Test
     public void testMakeSellerOrderManagement() {

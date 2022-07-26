@@ -5,11 +5,12 @@ import com.project.estorefront.model.OrderDetails;
 
 import java.util.ArrayList;
 
-public class OrderPersistenceMock implements IOrderPersistence{
+public class OrderPersistenceMock implements IOrderPersistence {
 
     private OrderDetails orderDetail = new OrderDetails();
     private ArrayList<ItemDetails> itemDetails = new ArrayList<>();
-    public void addMockOrderDetails(){
+
+    public void addMockOrderDetails() {
         com.project.estorefront.model.ItemDetails itemDetail = new ItemDetails();
         orderDetail.setOrderID("OR12365");
         orderDetail.setOrderStatus("Delivered");
@@ -19,7 +20,8 @@ public class OrderPersistenceMock implements IOrderPersistence{
         orderDetail.setDeliveryAddress("133 South Park Street");
         orderDetail.setPincode("B3J2K9");
         orderDetail.setBuyerID("2");
-        orderDetail.setSellerID("6");;
+        orderDetail.setSellerID("6");
+        ;
         itemDetail.setItemID("ITEM3");
         itemDetail.setQuantity(1);
         itemDetail.setItemPrice(60.0F);
@@ -28,10 +30,11 @@ public class OrderPersistenceMock implements IOrderPersistence{
         orderDetail.setItemDetails(itemDetails);
 
     }
+
     @Override
     public OrderDetails loadOrderAndItems(String orderID) {
         addMockOrderDetails();
-        if(orderID.isEmpty() || orderID == null || orderDetail==null){
+        if (orderID.isEmpty() || orderID == null || orderDetail == null) {
             return null;
         }
         return orderDetail.getOrderID().equalsIgnoreCase(orderID) ? orderDetail : null;

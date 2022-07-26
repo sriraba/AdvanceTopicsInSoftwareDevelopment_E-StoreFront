@@ -6,6 +6,7 @@
 </head>
 <body>
 <form th:action="@{'/buyer/cart/update/' + ${item.getItemID()}}" method="post">
+    <div class="alert alert-danger" role="alert" th:text="${error}" th:if="${error}"></div>
     <label>Item Name: <span th:text="${item.getItemName()}" /></label><br><br>
     <label>Item Description: <span th:text="${item.getItemDescription()}" /></label><br><br>
     <label for="quantity">Quantity: </label>
