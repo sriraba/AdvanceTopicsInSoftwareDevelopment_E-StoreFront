@@ -1,6 +1,8 @@
 package com.project.estorefront.repository;
 
+import com.project.estorefront.model.BuyerFactory;
 import com.project.estorefront.model.DatabaseFactory;
+import com.project.estorefront.model.OrderAndItemsFactory;
 import com.project.estorefront.model.OrderDetails;
 
 import java.sql.Connection;
@@ -31,7 +33,7 @@ public class BuyerOrderPersistence extends OrderPersistence implements IBuyerOrd
             preparedStatement.setString(1, buyerID);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                OrderDetails orderDetail = new OrderDetails();
+                OrderDetails orderDetail = OrderAndItemsFactory.instance().makeOrderDetails();
                 orderDetail.setOrderID(rs.getString("order_id"));
                 orderDetail.setOrderStatus(rs.getString("order_status"));
                 orderDetail.setCouponID(rs.getString("coupon_id"));

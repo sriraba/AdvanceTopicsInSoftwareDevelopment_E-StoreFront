@@ -1,6 +1,7 @@
 package com.project.estorefront.model;
 
 import com.project.estorefront.repository.DeliveryPersonPersistence;
+import com.project.estorefront.repository.IDatabase;
 import com.project.estorefront.repository.IDeliveryPersonPersistence;
 
 public class DeliveryPersonFactory implements IDeliveryPersonFactory{
@@ -18,7 +19,11 @@ public class DeliveryPersonFactory implements IDeliveryPersonFactory{
     }
 
     @Override
-    public IDeliveryPersonPersistence makeDeliveryPersonPersistence() {
-        return new DeliveryPersonPersistence();
+    public IDeliveryPersonPersistence makeDeliveryPersonPersistence(IDatabase database) {
+        return new DeliveryPersonPersistence(database);
+    }
+    @Override
+    public IDeliveryPerson makeDeliveryPerson() {
+        return new DeliveryPerson();
     }
 }
