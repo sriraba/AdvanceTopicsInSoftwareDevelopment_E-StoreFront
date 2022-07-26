@@ -19,6 +19,7 @@ public class AuthenticationMock implements IAuthentication{
 
     public User getUser(String type){
         user = new Buyer("Sri Ramya", "Basam", "sriramya@gmail.com", "133 South Park Street ", "9875432466", "ramya@09876", "halifax");
+
         String userID = UUID.randomUUID().toString();
         userMap.put(userID, user);
         if("old".equalsIgnoreCase(type)){
@@ -27,6 +28,10 @@ public class AuthenticationMock implements IAuthentication{
         else{
             return null;
         }
+    }
+
+    public void makeUserAsSeller(){
+        user.setIsSeller(true);
     }
     @Override
     public String login(String email, String password) {
@@ -57,16 +62,41 @@ public class AuthenticationMock implements IAuthentication{
 
     @Override
     public boolean resetPassword(String email, String password) {
+        if(userMap.size()>0) {
+            for (Map.Entry<String, User> entry : userMap.entrySet()) {
+                User userDetail = entry.getValue();
+                if (userDetail.getEmail().equalsIgnoreCase(email)) {
+                    userDetail.setPassword(password);
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
     @Override
     public boolean checkIfUserExists(String email) {
+        if(userMap.size()>0) {
+            for (Map.Entry<String, User> entry : userMap.entrySet()) {
+                User userDetail = entry.getValue();
+                if (userDetail.getEmail().equalsIgnoreCase(email)) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
     @Override
     public boolean checkIfUserIsSeller(String email) throws SQLException {
-        return true;
+        if(userMap.size()>0) {
+            for (Map.Entry<String, User> entry : userMap.entrySet()) {
+                User userDetail = entry.getValue();
+                if (userDetail.getEmail().equalsIgnoreCase(email) && userDetail.getIsSeller()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
