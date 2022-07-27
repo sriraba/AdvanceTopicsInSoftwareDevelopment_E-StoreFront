@@ -84,6 +84,13 @@ public class SellerOrderPersistenceMock extends OrderPersistence implements ISel
 
     @Override
     public IPropertiesReader.PersistenceStatus updateOrderStatus(String orderID) {
-        return null;
+        addAllMockSellerOrders();
+        for (OrderDetails sellerOrder : sellerOrders) {
+            if(sellerOrder.getOrderID().equalsIgnoreCase(orderID)){
+                sellerOrder.setOrderStatus("Delivered");
+                return IPropertiesReader.PersistenceStatus.SUCCESS;
+            }
+        }
+        return IPropertiesReader.PersistenceStatus.FAILURE;
     }
 }
