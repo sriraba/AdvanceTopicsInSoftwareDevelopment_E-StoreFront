@@ -477,12 +477,12 @@ public class SellerController {
     }
 
     @RequestMapping(value = "/seller/analytics", method = RequestMethod.GET)
-    public String viewAnalytics(Model model) {
+    public String viewAnalytics(Model model, HttpSession session) {
+        String userID = getUserID(session);
         IAnalyticsPersistence obj = new AnalyticsPersistence();
-        model.addAttribute("totalSales", obj.getTotalSales());
-        model.addAttribute("totalOrders", obj.getTotalOrders());
-        model.addAttribute("totalReturningCustomers", obj.getTotalReturningBuyers());
-        model.addAttribute("totalNewBuyers", obj.getNewBuyers());
+        model.addAttribute("totalSales", obj.getTotalSales(userID));
+        model.addAttribute("totalOrders", obj.getTotalOrders(userID));
+        model.addAttribute("totalReturningCustomers", obj.getTotalReturningBuyers(userID));
         return "view-analytics";
     }
 
