@@ -2,8 +2,7 @@ package com.project.estorefront.model.analytics;
 
 public interface IAnalyticsPersistence {
 
-    int getTotalOrders();
-    int getTotalSales();
-    int getTotalReturningBuyers();
-    int getNewBuyers();
+    int getTotalOrders(String userID);
+    int getTotalSales(String userID);
+    int getTotalReturningBuyers(String userID);
 }
